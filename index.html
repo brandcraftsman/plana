@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLANA Co. Brain — Wireframe Prototype v2</title>
+<style>
+  :root{
+    --ink:#111; --ink2:#444; --ink3:#777;
+    --line:#d5d5d5; --line2:#e8e8e8;
+    --bg:#fff; --panel:#f6f6f6; --panel2:#efefef;
+    --r:6px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:var(--bg); font-size:14px; line-height:1.45;}
+  button{font:inherit; cursor:pointer;}
+
+  /* ============ HEADER ============ */
+  header{display:flex; align-items:center; gap:16px; padding:10px 20px; border-bottom:2px solid var(--ink);}
+  .brand{font-weight:800; letter-spacing:.5px; white-space:nowrap;}
+  .brand span{font-weight:400; color:var(--ink3); font-size:12px;}
+  .ask-global{flex:1; display:flex; max-width:640px; margin:0 auto;}
+  .ask-global input{flex:1; padding:8px 12px; border:1.5px solid var(--ink); border-radius:20px 0 0 20px; font:inherit; outline:none;}
+  .ask-global button{padding:8px 16px; border:1.5px solid var(--ink); border-left:none; border-radius:0 20px 20px 0; background:var(--ink); color:#fff; font-weight:600;}
+  .ingest{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink2); white-space:nowrap; cursor:default;}
+  .dot{width:8px; height:8px; border-radius:50%; background:var(--ink); animation:pulse 2s infinite;}
+  @keyframes pulse{50%{opacity:.3;}}
+  .user{white-space:nowrap; font-size:13px; color:var(--ink2); cursor:pointer;}
+
+  /* ============ NAV TABS ============ */
+  nav{display:flex; gap:4px; padding:0 20px; border-bottom:1px solid var(--line);}
+  nav button{padding:10px 18px; border:none; background:none; color:var(--ink3); border-bottom:3px solid transparent; font-weight:600;}
+  nav button.active{color:var(--ink); border-bottom-color:var(--ink);}
+  nav button:hover{color:var(--ink);}
+
+  /* ============ CONTROL BAR ============ */
+  .controls{display:flex; align-items:center; gap:20px; padding:12px 20px; flex-wrap:wrap; border-bottom:1px solid var(--line2); background:var(--panel);}
+  .seg{display:flex; border:1.5px solid var(--ink); border-radius:var(--r); overflow:hidden;}
+  .seg button{padding:6px 14px; border:none; background:#fff; font-weight:600; color:var(--ink2); border-right:1px solid var(--line);}
+  .seg button:last-child{border-right:none;}
+  .seg button.on{background:var(--ink); color:#fff;}
+  .ctrl-label{font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink3); margin-right:6px;}
+  .daterange{margin-left:auto; font-size:13px; color:var(--ink2);}
+
+  main{padding:20px; max-width:1280px; margin:0 auto;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* ============ DASHBOARD ============ */
+  .signoff{display:flex; align-items:center; gap:12px; border:1.5px solid var(--ink); border-radius:var(--r); padding:10px 16px; margin-bottom:14px; background:var(--panel2);}
+  .signoff b{font-size:14px;}
+  .signoff button{margin-left:auto; padding:6px 14px; background:var(--ink); color:#fff; border:none; border-radius:var(--r); font-weight:600;}
+
+  .news-strip{border:1px solid var(--line); border-radius:var(--r); margin-bottom:8px; overflow:hidden;}
+  .news-head{display:flex; align-items:center; gap:10px; padding:8px 14px; cursor:pointer; background:#fff;}
+  .news-head:hover{background:var(--panel);}
+  .news-tag{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; border:1px solid var(--ink); border-radius:3px; padding:1px 6px; white-space:nowrap;}
+  .news-oneliner{color:var(--ink2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;}
+  .news-caret{color:var(--ink3); font-size:11px;}
+  .news-body{display:none; padding:10px 14px 14px; color:var(--ink2); border-top:1px solid var(--line2); font-size:13px;}
+  .news-strip.open .news-body{display:block;}
+  .news-strip.open .news-oneliner{white-space:normal; display:none;}
+
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px;}
+  @media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:660px){.grid{grid-template-columns:1fr;}}
+  .card{border:1px solid var(--line); border-radius:var(--r); background:#fff; display:flex; flex-direction:column;}
+  .card-head{display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--line2); font-weight:700;}
+  .count{font-size:12px; font-weight:700; background:var(--panel2); border-radius:10px; padding:1px 8px; color:var(--ink2);}
+  .badge{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; background:var(--ink); color:#fff; border-radius:3px; padding:2px 6px; margin-left:auto;}
+  .badge.outline{background:#fff; color:var(--ink); border:1px solid var(--ink);}
+  .item{padding:9px 14px; border-bottom:1px solid var(--line2); position:relative; transition:opacity .3s;}
+  .item:last-of-type{border-bottom:none;}
+  .item .id{font-weight:700; font-size:12px; margin-right:6px;}
+  .item .meta{font-size:11px; color:var(--ink3); margin-top:3px;}
+  .item .acts{display:none; position:absolute; right:8px; top:7px; gap:4px;}
+  .item:hover .acts{display:flex;}
+  .item:hover{background:var(--panel);}
+  .acts button{font-size:11px; padding:3px 8px; border:1px solid var(--ink); background:#fff; border-radius:4px; font-weight:600;}
+  .acts button:hover{background:var(--ink); color:#fff;}
+  .card-foot{padding:8px 14px; margin-top:auto;}
+  .card-foot a{font-size:12px; color:var(--ink2); font-weight:600; text-decoration:underline; cursor:pointer;}
+  .overdue-flag{font-size:10px; font-weight:700; background:var(--ink); color:#fff; border-radius:3px; padding:1px 5px; margin-left:6px; vertical-align:1px;}
+
+  .savedviews{margin-top:22px;}
+  .savedviews h3{font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink3); margin-bottom:8px;}
+  .sv-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .sv-chip{border:1px solid var(--ink); border-radius:var(--r); padding:8px 14px; background:#fff; font-size:13px; font-weight:600; cursor:pointer;}
+  .sv-chip small{display:block; font-weight:400; color:var(--ink3); font-size:11px;}
+  .sv-chip:hover{background:var(--panel);}
+  .sv-chip.ghost{border-style:dashed; color:var(--ink3); font-weight:400;}
+
+  /* ============ FILTER & FIND ============ */
+  .find-layout{display:grid; grid-template-columns:250px 1fr; gap:20px;}
+  @media(max-width:860px){.find-layout{grid-template-columns:1fr;}}
+  .rail{border:1px solid var(--line); border-radius:var(--r); padding:12px; background:#fff; align-self:start;}
+  .facet{margin-bottom:16px;}
+  .facet h4{font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink3); margin-bottom:6px; display:flex; align-items:center;}
+  .facet h4 .clear-one{margin-left:auto; font-size:10px; text-transform:none; letter-spacing:0; cursor:pointer; text-decoration:underline; color:var(--ink3); font-weight:400;}
+  .facet label{display:flex; align-items:center; gap:7px; padding:3px 2px; font-size:13px; cursor:pointer; border-radius:4px;}
+  .facet label:hover{background:var(--panel);}
+  .facet .indent1{padding-left:16px;}
+  .facet .indent2{padding-left:32px;}
+  .tree-toggle{cursor:pointer; font-size:10px; color:var(--ink3); width:12px; display:inline-block;}
+  .seg.small button{padding:4px 10px; font-size:12px;}
+  .rail .seg{flex-wrap:wrap; border-radius:var(--r);}
+  .clear-all{width:100%; margin-top:4px; padding:6px; border:1px solid var(--line); background:#fff; border-radius:var(--r); color:var(--ink2); font-size:12px; font-weight:600;}
+  .clear-all:hover{border-color:var(--ink); color:var(--ink);}
+
+  .results-head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;}
+  .results-head .rcount{font-weight:700;}
+  .results-head select{font:inherit; font-size:13px; padding:4px 6px; border:1px solid var(--line); border-radius:4px;}
+  .add-dash{margin-left:auto; padding:7px 14px; border:1.5px solid var(--ink); background:#fff; border-radius:var(--r); font-weight:700;}
+  .add-dash:hover{background:var(--ink); color:#fff;}
+  .chips{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; min-height:26px;}
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; border:1px solid var(--ink); border-radius:14px; padding:3px 10px; background:var(--panel2);}
+  .chip b{cursor:pointer;}
+  .chip-clear{font-size:12px; color:var(--ink3); text-decoration:underline; cursor:pointer; align-self:center;}
+
+  .rcard{display:flex; gap:12px; border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; margin-bottom:8px; background:#fff; align-items:flex-start;}
+  .rcard:hover{border-color:var(--ink);}
+  .tbadge{flex:none; width:84px; text-align:center; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; border:1.5px solid var(--ink); border-radius:4px; padding:3px 0;}
+  .tbadge.filled{background:var(--ink); color:#fff;}
+  .rcard .body{flex:1;}
+  .rcard .title{font-weight:600;}
+  .rcard .title .id{font-weight:800; font-size:12px; margin-right:6px;}
+  .rcard .meta{font-size:11.5px; color:var(--ink3); margin-top:4px; display:flex; gap:12px; flex-wrap:wrap;}
+  .rcard .src{font-size:12px; font-weight:600; text-decoration:underline; color:var(--ink2); white-space:nowrap; cursor:pointer;}
+  .empty{border:1px dashed var(--line); border-radius:var(--r); padding:30px; text-align:center; color:var(--ink3);}
+
+  /* ============ TIMELINE ============ */
+  .tl-day{margin-bottom:18px;}
+  .tl-day h3{font-size:13px; font-weight:800; border-bottom:2px solid var(--ink); padding-bottom:4px; margin-bottom:8px;}
+  .tl-entry{display:flex; gap:12px; padding:8px 4px; border-bottom:1px solid var(--line2); align-items:flex-start;}
+  .tl-time{flex:none; width:52px; font-size:11px; color:var(--ink3); padding-top:3px;}
+  .tl-entry .tbadge{width:76px;}
+  .tl-entry .txt{flex:1;}
+  .tl-entry .txt small{display:block; color:var(--ink3); font-size:11.5px; margin-top:2px;}
+  .quickchips{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px;}
+  .qchip{border:1px solid var(--line); border-radius:14px; padding:4px 12px; background:#fff; font-size:12px; font-weight:600; color:var(--ink2);}
+  .qchip.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+  /* ============ CALENDAR ============ */
+  .cal{display:grid; grid-template-columns:repeat(7,1fr); border:1px solid var(--line); border-radius:var(--r); overflow:hidden;}
+  .cal .dayhead{background:var(--panel2); font-size:11px; font-weight:700; text-transform:uppercase; padding:6px; text-align:center; border-right:1px solid var(--line2); border-bottom:1px solid var(--line);}
+  .cal .daycell{min-height:170px; border-right:1px solid var(--line2); padding:6px; background:#fff;}
+  .cal .daycell:nth-child(7n){border-right:none;}
+  .mtg{border:1px solid var(--ink); border-radius:4px; padding:6px 7px; margin-bottom:6px; font-size:11.5px; cursor:pointer; background:#fff;}
+  .mtg:hover{background:var(--panel);}
+  .mtg b{display:block; font-size:12px;}
+  .mtg .st{display:inline-block; margin-top:4px; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; border-radius:3px; padding:1px 5px;}
+  .st.ok{border:1px solid var(--ink); color:var(--ink);}
+  .st.proc{background:var(--panel2); color:var(--ink2); border:1px solid var(--line);}
+  .st.warn{background:var(--ink); color:#fff;}
+  .cal-legend{display:flex; gap:16px; margin-top:10px; font-size:11.5px; color:var(--ink2); align-items:center;}
+
+  /* ============ TOAST / ANNOTATION ============ */
+  #toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--ink); color:#fff; padding:10px 20px; border-radius:var(--r); font-weight:600; transition:transform .25s; z-index:99;}
+  #toast.show{transform:translateX(-50%) translateY(0);}
+  .wf-note{font-size:11px; color:var(--ink3); font-style:italic; margin-top:14px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">PLANA CO. BRAIN ▾<br><span>wireframe v2</span></div>
+  <div class="ask-global">
+    <input id="askInput" type="text" placeholder="Ask your company brain anything… (try: “risks from WP-02 last month”)" onkeydown="if(event.key==='Enter')askDemo()">
+    <button onclick="askDemo()">Ask</button>
+  </div>
+  <div class="ingest" title="Ingestion status — click for details">
+    <div class="dot"></div> Ingesting · last sync 2 min ago
+  </div>
+  <div class="user">Scout (WP-01) ▾</div>
+</header>
+
+<nav>
+  <button id="tab-dashboard" class="active" onclick="switchTab('dashboard')">Home Dashboard</button>
+  <button id="tab-find" onclick="switchTab('find')">Filter &amp; Find</button>
+  <button id="tab-timeline" onclick="switchTab('timeline')">Timeline</button>
+  <button id="tab-calendar" onclick="switchTab('calendar')">Calendar</button>
+</nav>
+
+<div class="controls" id="controlbar">
+  <div><span class="ctrl-label">Scope</span>
+    <span class="seg" id="scopeSeg">
+      <button class="on" onclick="setSeg(this)">Me</button>
+      <button onclick="setSeg(this)">My team (WP-01)</button>
+      <button onclick="setSeg(this)">Company</button>
+    </span>
+  </div>
+  <div><span class="ctrl-label">Horizon</span>
+    <span class="seg" id="horizonSeg">
+      <button class="on" onclick="setSeg(this); setRange(this)">Week</button>
+      <button onclick="setSeg(this); setRange(this)">Month</button>
+      <button onclick="setSeg(this); setRange(this)">Quarter</button>
+      <button onclick="setSeg(this); setRange(this)">Year</button>
+    </span>
+  </div>
+  <div class="daterange" id="daterange">Sun, Jul 5 → Sat, Jul 11, 2026</div>
+</div>
+
+<main>
+
+<!-- ==================== DASHBOARD ==================== -->
+<section id="view-dashboard" class="view active">
+
+  <div class="signoff">
+    ⚠ <b>2 decisions need your sign-off</b> before they become company truth.
+    <button onclick="toast('Opens the HITL validation queue (not in this prototype scope)')">Review &amp; sign off</button>
+  </div>
+
+  <div class="news-strip" onclick="this.classList.toggle('open')">
+    <div class="news-head">
+      <span class="news-tag">Company news</span>
+      <span class="news-oneliner">Q3 planning kickoff moved to Jul 14 · New vendor policy in effect · 2 more updates</span>
+      <span class="news-caret">▼ expand</span>
+    </div>
+    <div class="news-body">Full digest: Q3 planning kickoff moved to Jul 14 (decision D-310). New vendor onboarding policy effective this week — all new vendor contracts route through legal review first. Office closed Jul 20 for maintenance. All-hands recording from Jun 30 processed and searchable.</div>
+  </div>
+
+  <div class="news-strip" onclick="this.classList.toggle('open')">
+    <div class="news-head">
+      <span class="news-tag">WP-01 news</span>
+      <span class="news-oneliner">Lighting vendor switch approved · Entertainment sub-group blocked on budget · 1 more</span>
+      <span class="news-caret">▼ expand</span>
+    </div>
+    <div class="news-body">Full digest: Lighting vendor switch to Lumex approved in Monday sync (D-321). Entertainment sub-group blocked on budget sign-off from finance (B-118). Duc returns from PTO Thursday.</div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-head">Decisions affecting you <span class="count">3</span><span class="badge">1 needs sign-off</span></div>
+      <div class="item"><span class="id">D-321</span>Switch WP-01 lighting vendor to Lumex
+        <div class="meta">Decided Jun 29 · Owner: Scout · from GMeet: WP-01 sync</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Ack</button><button onclick="toast('Snoozed until next week')">Snooze</button><button onclick="toast('Opens source transcript at timestamp')">Source ↗</button></div>
+      </div>
+      <div class="item"><span class="id">D-456</span>Entertainment demo pushed to Jul 17
+        <div class="meta">Decided Jul 1 · Owner: Duc · from Email thread</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Ack</button><button onclick="toast('Snoozed until next week')">Snooze</button><button onclick="toast('Opens source email')">Source ↗</button></div>
+      </div>
+      <div class="item"><span class="id">D-789</span>Kitchen fixture spec frozen at v3 <span class="overdue-flag">SIGN-OFF</span>
+        <div class="meta">Proposed Jul 2 · Awaiting: You · from Doc upload</div>
+        <div class="acts"><button onclick="toast('Opens sign-off flow')">Review</button><button onclick="toast('Opens source document')">Source ↗</button></div>
+      </div>
+      <div class="card-foot"><a onclick="switchTab('find')">View all in Filter &amp; Find →</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">You're blocking <span class="count">2</span><span class="badge">2 people waiting</span></div>
+      <div class="item"><span class="id">B-112</span>Vu needs your fixture measurements to order materials
+        <div class="meta">Waiting 3 days · WP-02 · from Chat</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Resolve</button><button onclick="toast('Opens source chat')">Source ↗</button></div>
+      </div>
+      <div class="item"><span class="id">B-118</span>Entertainment group waiting on your budget review
+        <div class="meta">Waiting 1 day · WP-01 · from Meeting</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Resolve</button><button onclick="toast('Opens source transcript')">Source ↗</button></div>
+      </div>
+      <div class="card-foot"><a onclick="switchTab('find')">View all →</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">Issues affecting you <span class="count">3</span></div>
+      <div class="item"><span class="id">I-77</span>Lumex lead times slipped from 2 to 5 weeks
+        <div class="meta">Raised Jul 1 · from Outside link</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Ack</button><button onclick="toast('Opens source')">Source ↗</button></div>
+      </div>
+      <div class="item"><span class="id">I-81</span>Whiteboard notes from Jun 30 session missing owner tags
+        <div class="meta">Flagged by system · from Whiteboard</div>
+        <div class="acts"><button onclick="toast('Opens tagging flow')">Fix tags</button></div>
+      </div>
+      <div class="item"><span class="id">I-84</span>Duplicate task detected: T-133 vs T-140
+        <div class="meta">Flagged by system</div>
+        <div class="acts"><button onclick="toast('Opens merge flow')">Merge</button></div>
+      </div>
+      <div class="card-foot"><a onclick="switchTab('find')">View all →</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">Hot tasks <span class="count">4</span><span class="badge">2 overdue</span></div>
+      <div class="item"><span class="id">T-235</span>Send Lumex PO for lighting order <span class="overdue-flag">OVERDUE 2D</span>
+        <div class="meta">Due Jun 30 · Committed in WP-01 sync</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Done</button><button onclick="toast('Snoozed')">Snooze</button><button onclick="toast('Opens source')">Source ↗</button></div>
+      </div>
+      <div class="item"><span class="id">T-133</span>Review kitchen fixture spec v3 <span class="overdue-flag">OVERDUE 1D</span>
+        <div class="meta">Due Jul 1 · Committed via email</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Done</button><button onclick="toast('Snoozed')">Snooze</button><button onclick="toast('Opens source')">Source ↗</button></div>
+      </div>
+      <div class="item"><span class="id">T-35</span>Prep entertainment demo checklist
+        <div class="meta">Due Jul 8 · Owner: You + Duc</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Done</button><button onclick="toast('Opens source')">Source ↗</button></div>
+      </div>
+      <div class="item"><span class="id">T-140</span>Confirm bathroom tile delivery window
+        <div class="meta">Due Jul 10 · Depends on Vu (WP-02)</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Done</button><button onclick="toast('Opens source')">Source ↗</button></div>
+      </div>
+      <div class="card-foot"><a onclick="switchTab('find')">View all →</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">Open questions for you <span class="count">3</span></div>
+      <div class="item"><span class="id">Q-12</span>Mitch: "Which lighting temp did we settle on for the kitchen — 2700K or 3000K?"
+        <div class="meta">Asked yesterday · from Chat</div>
+        <div class="acts"><button onclick="ackItem(this)">Answer</button><button onclick="toast('Opens source chat')">Source ↗</button></div>
+      </div>
+      <div class="item"><span class="id">Q-14</span>Sally: "Is the demo on the 17th client-facing?"
+        <div class="meta">Asked today · from Meeting</div>
+        <div class="acts"><button onclick="ackItem(this)">Answer</button><button onclick="toast('Opens source')">Source ↗</button></div>
+      </div>
+      <div class="item"><span class="id">Q-15</span>System: "T-140 has no due-date owner — assign one?"
+        <div class="meta">Auto-detected gap</div>
+        <div class="acts"><button onclick="ackItem(this)">Assign</button></div>
+      </div>
+      <div class="card-foot"><a onclick="switchTab('find')">View all →</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">Risks <span class="count">2</span><span class="badge outline">1 new</span></div>
+      <div class="item"><span class="id">R-08</span>Lumex lead-time slip may push the Jul 17 demo
+        <div class="meta">Surfaced today · linked: I-77, D-456</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Ack</button><button onclick="toast('Opens linked items')">Linked ↗</button></div>
+      </div>
+      <div class="item"><span class="id">R-06</span>WP-02 budget unconfirmed past quarter close
+        <div class="meta">Surfaced Jun 27 · Owner: Vu</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Ack</button><button onclick="toast('Opens source')">Source ↗</button></div>
+      </div>
+      <div class="card-foot"><a onclick="switchTab('find')">View all →</a></div>
+    </div>
+
+  </div>
+
+  <div class="savedviews">
+    <h3>Your saved views</h3>
+    <div class="sv-row">
+      <div class="sv-chip" onclick="switchTab('find'); applySaved('risks')">Risks · WP-02 · Last 30 days<small>saved from Filter &amp; Find</small></div>
+      <div class="sv-chip" onclick="switchTab('find'); applySaved('decisions')">All decisions · Company · This quarter<small>saved from Filter &amp; Find</small></div>
+      <div class="sv-chip ghost" onclick="switchTab('find')">+ New view (build in Filter &amp; Find)</div>
+    </div>
+  </div>
+
+  <p class="wf-note">Wireframe notes: news collapsed to digest strips (expand on click) · all six object cards above the fold · per-item actions on hover · counts + overdue badges on every card · sign-off queue surfaces the human-in-the-loop step.</p>
+</section>
+
+<!-- ==================== FILTER & FIND ==================== -->
+<section id="view-find" class="view">
+  <div class="find-layout">
+    <aside class="rail">
+
+      <div class="facet">
+        <h4>People <span class="clear-one" onclick="clearFacet('people')">clear</span></h4>
+        <label><input type="checkbox" class="f-people" value="__all" checked onchange="allToggle(this,'people')"> Company-wide (all)</label>
+        <label class="indent1"><input type="checkbox" class="f-dept" data-team="WP-01" onchange="deptToggle(this)"> <b>WP-01</b>&nbsp;<span style="color:var(--ink3)">lighting · entertainment</span></label>
+        <label class="indent2"><input type="checkbox" class="f-people" data-team="WP-01" value="Scout" onchange="refresh()"> Scout</label>
+        <label class="indent2"><input type="checkbox" class="f-people" data-team="WP-01" value="Duc" onchange="refresh()"> Duc</label>
+        <label class="indent1"><input type="checkbox" class="f-dept" data-team="WP-02" onchange="deptToggle(this)"> <b>WP-02</b>&nbsp;<span style="color:var(--ink3)">bathroom · kitchen</span></label>
+        <label class="indent2"><input type="checkbox" class="f-people" data-team="WP-02" value="Vu" onchange="refresh()"> Vu</label>
+        <label class="indent2"><input type="checkbox" class="f-people" data-team="WP-02" value="Mitch" onchange="refresh()"> Mitch</label>
+        <label class="indent2"><input type="checkbox" class="f-people" data-team="WP-02" value="Sally" onchange="refresh()"> Sally</label>
+      </div>
+
+      <div class="facet">
+        <h4>Channel <span class="clear-one" onclick="clearFacet('channel')">clear</span></h4>
+        <label><input type="checkbox" class="f-channel" value="Meeting" onchange="refresh()"> Meetings (all assets)</label>
+        <label><input type="checkbox" class="f-channel" value="Email" onchange="refresh()"> Email</label>
+        <label><input type="checkbox" class="f-channel" value="Chat" onchange="refresh()"> Chat</label>
+        <label><input type="checkbox" class="f-channel" value="Doc" onchange="refresh()"> Docs &amp; uploads</label>
+        <label><input type="checkbox" class="f-channel" value="Note" onchange="refresh()"> Quick notes</label>
+        <label><input type="checkbox" class="f-channel" value="Link" onchange="refresh()"> Outside links</label>
+      </div>
+
+      <div class="facet">
+        <h4>Insight type <span class="clear-one" onclick="clearFacet('type')">clear</span></h4>
+        <label><input type="checkbox" class="f-type" value="Action" onchange="refresh()"> Action items</label>
+        <label><input type="checkbox" class="f-type" value="Decision" onchange="refresh()"> Decisions</label>
+        <label><input type="checkbox" class="f-type" value="Risk" onchange="refresh()"> Risks</label>
+        <label><input type="checkbox" class="f-type" value="Blocker" onchange="refresh()"> Blockers</label>
+        <label><input type="checkbox" class="f-type" value="Question" onchange="refresh()"> Questions</label>
+        <label><input type="checkbox" class="f-type" value="Info" onchange="refresh()"> Information</label>
+      </div>
+
+      <div class="facet">
+        <h4>When</h4>
+        <span class="seg small" id="whenSeg">
+          <button data-days="1" onclick="setWhen(this)">Today</button>
+          <button data-days="7" class="on" onclick="setWhen(this)">7d</button>
+          <button data-days="30" onclick="setWhen(this)">30d</button>
+          <button data-days="90" onclick="setWhen(this)">Quarter</button>
+          <button data-days="9999" onclick="setWhen(this)">All</button>
+        </span>
+      </div>
+
+      <button class="clear-all" onclick="clearAll()">Clear all filters</button>
+    </aside>
+
+    <div>
+      <div class="results-head">
+        <span class="rcount" id="rcount">0 results</span>
+        <select><option>Sort: Newest first</option><option>Sort: Oldest first</option><option>Sort: By type</option><option>Sort: By owner</option></select>
+        <button class="add-dash" onclick="toast('Saved — this view now appears on your Home Dashboard')">＋ Add view to Dashboard</button>
+      </div>
+      <div class="chips" id="chips"></div>
+      <div id="results"></div>
+      <p class="wf-note">Wireframe notes: results update live (no Done/Apply step) · applied filters shown as removable chips · results are typed cards, not prose · every card links to its source · asking a question in the top bar auto-populates these filters.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TIMELINE ==================== -->
+<section id="view-timeline" class="view">
+  <div class="quickchips">
+    <button class="qchip on" onclick="tlFilter(this,'all')">All changes</button>
+    <button class="qchip" onclick="tlFilter(this,'Decision')">Decisions</button>
+    <button class="qchip" onclick="tlFilter(this,'Action')">Tasks</button>
+    <button class="qchip" onclick="tlFilter(this,'Risk')">Risks</button>
+    <button class="qchip" onclick="tlFilter(this,'Blocker')">Blockers</button>
+  </div>
+  <div id="tl"></div>
+  <p class="wf-note">Wireframe notes: Timeline answers "what changed?" — a reverse-chronological feed of extracted objects, grouped by day, filtered by the same scope/horizon controls above.</p>
+</section>
+
+<!-- ==================== CALENDAR ==================== -->
+<section id="view-calendar" class="view">
+  <div class="cal" id="cal"></div>
+  <div class="cal-legend">
+    <span><span class="st ok">✓ Processed</span> extracted &amp; searchable</span>
+    <span><span class="st proc">… Processing</span> ingestion running</span>
+    <span><span class="st warn">! No capture</span> no transcript/notes found</span>
+  </div>
+  <p class="wf-note">Wireframe notes: Calendar doubles as ingestion visibility — every meeting shows whether it was captured and processed, building trust in what the brain knows (and flagging blind spots).</p>
+</section>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+/* ---------- tabs ---------- */
+function switchTab(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  document.getElementById('controlbar').style.display = (name==='find') ? 'none' : 'flex';
+}
+function setSeg(btn){
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function setRange(btn){
+  const map={'Week':'Sun, Jul 5 → Sat, Jul 11, 2026','Month':'Jul 1 → Jul 31, 2026','Quarter':'Q3: Jul 1 → Sep 30, 2026','Year':'Jan 1 → Dec 31, 2026'};
+  document.getElementById('daterange').textContent = map[btn.textContent] || '';
+}
+
+/* ---------- dashboard item actions ---------- */
+function ackItem(btn){
+  const item = btn.closest('.item');
+  item.style.opacity = .35;
+  btn.closest('.acts').innerHTML = '<span style="font-size:11px;color:var(--ink3);padding-top:4px;">✓ done</span>';
+  const head = item.closest('.card').querySelector('.count');
+  const n = parseInt(head.textContent)-1;
+  head.textContent = Math.max(n,0);
+  toast('Acknowledged — removed from your queue');
+}
+
+/* ---------- toast ---------- */
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ---------- Filter & Find data ---------- */
+const DATA=[
+ {id:'D-321',type:'Decision',text:'Switch WP-01 lighting vendor to Lumex',owner:'Scout',team:'WP-01',channel:'Meeting',date:'Jun 29',days:3,src:'GMeet: WP-01 sync'},
+ {id:'D-456',type:'Decision',text:'Entertainment demo pushed to Jul 17',owner:'Duc',team:'WP-01',channel:'Email',date:'Jul 1',days:1,src:'Email thread'},
+ {id:'D-789',type:'Decision',text:'Kitchen fixture spec frozen at v3 (awaiting sign-off)',owner:'Scout',team:'WP-01',channel:'Doc',date:'Jul 2',days:0,src:'Doc upload'},
+ {id:'D-290',type:'Decision',text:'Bathroom tile supplier confirmed: TileCo',owner:'Vu',team:'WP-02',channel:'Meeting',date:'Jun 12',days:20,src:'GMeet: WP-02 sync'},
+ {id:'T-235',type:'Action',text:'Send Lumex PO for lighting order (overdue)',owner:'Scout',team:'WP-01',channel:'Meeting',date:'Jun 30',days:2,src:'GMeet: WP-01 sync'},
+ {id:'T-133',type:'Action',text:'Review kitchen fixture spec v3 (overdue)',owner:'Scout',team:'WP-01',channel:'Email',date:'Jul 1',days:1,src:'Email thread'},
+ {id:'T-98',type:'Action',text:'Order bathroom vanity hardware',owner:'Mitch',team:'WP-02',channel:'Chat',date:'Jun 25',days:7,src:'Chat: #wp-02'},
+ {id:'R-08',type:'Risk',text:'Lumex lead-time slip may push the Jul 17 demo',owner:'Scout',team:'WP-01',channel:'Link',date:'Jul 2',days:0,src:'Outside link'},
+ {id:'R-06',type:'Risk',text:'WP-02 budget unconfirmed past quarter close',owner:'Vu',team:'WP-02',channel:'Meeting',date:'Jun 27',days:5,src:'GMeet: budget review'},
+ {id:'R-04',type:'Risk',text:'Kitchen counter template measurements unverified',owner:'Sally',team:'WP-02',channel:'Note',date:'Jun 8',days:24,src:'Quick note'},
+ {id:'B-112',type:'Blocker',text:'Vu blocked on fixture measurements from Scout',owner:'Vu',team:'WP-02',channel:'Chat',date:'Jun 29',days:3,src:'Chat: #wp-02'},
+ {id:'B-118',type:'Blocker',text:'Entertainment group blocked on budget review',owner:'Duc',team:'WP-01',channel:'Meeting',date:'Jul 1',days:1,src:'GMeet: WP-01 sync'},
+ {id:'Q-12',type:'Question',text:'Which lighting temp for the kitchen — 2700K or 3000K?',owner:'Mitch',team:'WP-02',channel:'Chat',date:'Jul 1',days:1,src:'Chat: #kitchen'},
+ {id:'Q-14',type:'Question',text:'Is the Jul 17 demo client-facing?',owner:'Sally',team:'WP-02',channel:'Meeting',date:'Jul 2',days:0,src:'GMeet: standup'},
+ {id:'N-51',type:'Info',text:'Lumex catalog + spec sheets attached to vendor record',owner:'Duc',team:'WP-01',channel:'Doc',date:'Jun 30',days:2,src:'Doc upload'},
+ {id:'N-49',type:'Info',text:'Site photos from Jun 26 walkthrough geotagged and filed',owner:'Vu',team:'WP-02',channel:'Doc',date:'Jun 26',days:6,src:'Image upload'}
+];
+let whenDays=7;
+
+function getChecked(cls){
+  return [...document.querySelectorAll('.'+cls+':checked')].map(c=>c.value).filter(v=>v!=='__all');
+}
+function allToggle(cb,facet){
+  if(cb.checked){
+    document.querySelectorAll('.f-people:not([value="__all"]), .f-dept').forEach(c=>c.checked=false);
+  }
+  refresh();
+}
+function deptToggle(cb){
+  const team=cb.dataset.team;
+  document.querySelectorAll('.f-people[data-team="'+team+'"]').forEach(c=>c.checked=cb.checked);
+  const all=document.querySelector('.f-people[value="__all"]'); if(cb.checked) all.checked=false;
+  refresh();
+}
+function setWhen(btn){
+  setSeg(btn); whenDays=parseInt(btn.dataset.days); refresh();
+}
+function clearFacet(f){
+  if(f==='people'){document.querySelectorAll('.f-people,.f-dept').forEach(c=>c.checked=false);document.querySelector('.f-people[value="__all"]').checked=true;}
+  if(f==='channel')document.querySelectorAll('.f-channel').forEach(c=>c.checked=false);
+  if(f==='type')document.querySelectorAll('.f-type').forEach(c=>c.checked=false);
+  refresh();
+}
+function clearAll(){
+  clearFacet('people'); clearFacet('channel'); clearFacet('type');
+  whenDays=7; document.querySelectorAll('#whenSeg button').forEach(b=>b.classList.toggle('on',b.dataset.days==='7'));
+  refresh();
+}
+function removeChip(kind,val){
+  if(kind==='people')document.querySelectorAll('.f-people[value="'+val+'"]').forEach(c=>c.checked=false);
+  if(kind==='channel')document.querySelectorAll('.f-channel[value="'+val+'"]').forEach(c=>c.checked=false);
+  if(kind==='type')document.querySelectorAll('.f-type[value="'+val+'"]').forEach(c=>c.checked=false);
+  refresh();
+}
+function refresh(){
+  const people=getChecked('f-people'), channels=getChecked('f-channel'), types=getChecked('f-type');
+  if(people.length===0) document.querySelector('.f-people[value="__all"]').checked=true;
+  const rows=DATA.filter(d=>
+    (people.length===0||people.includes(d.owner)) &&
+    (channels.length===0||channels.includes(d.channel)) &&
+    (types.length===0||types.includes(d.type)) &&
+    d.days<=whenDays
+  );
+  document.getElementById('rcount').textContent=rows.length+' result'+(rows.length===1?'':'s');
+  /* chips */
+  const chips=document.getElementById('chips');
+  let html='';
+  people.forEach(p=>html+=chip('people',p));
+  channels.forEach(c=>html+=chip('channel',c));
+  types.forEach(t=>html+=chip('type',t));
+  const whenLbl={1:'Today',7:'Last 7 days',30:'Last 30 days',90:'This quarter',9999:'All time'}[whenDays];
+  html+='<span class="chip">'+whenLbl+'</span>';
+  if(people.length+channels.length+types.length>0) html+='<span class="chip-clear" onclick="clearAll()">Clear all</span>';
+  chips.innerHTML=html;
+  /* results */
+  const res=document.getElementById('results');
+  if(rows.length===0){res.innerHTML='<div class="empty">No results for these filters.<br><br>Try widening the time window, or ask the company brain directly in the bar above.</div>';return;}
+  res.innerHTML=rows.map(d=>
+    '<div class="rcard"><div class="tbadge'+(d.type==='Risk'||d.type==='Blocker'?' filled':'')+'">'+d.type+'</div>'+
+    '<div class="body"><div class="title"><span class="id">'+d.id+'</span>'+d.text+'</div>'+
+    '<div class="meta"><span>Owner: '+d.owner+' ('+d.team+')</span><span>'+d.date+'</span><span>via '+d.channel+'</span></div></div>'+
+    '<a class="src" onclick="toast(\'Opens original source: '+d.src.replace(/'/g,'')+'\')">'+d.src+' ↗</a></div>'
+  ).join('');
+}
+function chip(kind,val){
+  return '<span class="chip">'+val+' <b onclick="removeChip(\''+kind+'\',\''+val+'\')">✕</b></span>';
+}
+
+/* ---------- ask bar demo: NL query auto-populates filters ---------- */
+function askDemo(){
+  const q=document.getElementById('askInput').value.toLowerCase();
+  switchTab('find');
+  clearAll();
+  let matched=false;
+  if(q.includes('risk')){document.querySelector('.f-type[value="Risk"]').checked=true;matched=true;}
+  if(q.includes('decision')){document.querySelector('.f-type[value="Decision"]').checked=true;matched=true;}
+  if(q.includes('block')){document.querySelector('.f-type[value="Blocker"]').checked=true;matched=true;}
+  if(q.includes('task')||q.includes('action')){document.querySelector('.f-type[value="Action"]').checked=true;matched=true;}
+  if(q.includes('wp-02')){document.querySelector('.f-dept[data-team="WP-02"]').checked=true;deptToggle(document.querySelector('.f-dept[data-team="WP-02"]'));}
+  if(q.includes('wp-01')){document.querySelector('.f-dept[data-team="WP-01"]').checked=true;deptToggle(document.querySelector('.f-dept[data-team="WP-01"]'));}
+  if(q.includes('month')){whenDays=30;document.querySelectorAll('#whenSeg button').forEach(b=>b.classList.toggle('on',b.dataset.days==='30'));}
+  if(q.includes('quarter')){whenDays=90;document.querySelectorAll('#whenSeg button').forEach(b=>b.classList.toggle('on',b.dataset.days==='90'));}
+  refresh();
+  toast(matched||q?'Query translated into filters below — same system, two ways in':'Showing default view');
+}
+function applySaved(kind){
+  clearAll();
+  if(kind==='risks'){
+    document.querySelector('.f-type[value="Risk"]').checked=true;
+    const d=document.querySelector('.f-dept[data-team="WP-02"]'); d.checked=true; deptToggle(d);
+    whenDays=30; document.querySelectorAll('#whenSeg button').forEach(b=>b.classList.toggle('on',b.dataset.days==='30'));
+  } else {
+    document.querySelector('.f-type[value="Decision"]').checked=true;
+    whenDays=90; document.querySelectorAll('#whenSeg button').forEach(b=>b.classList.toggle('on',b.dataset.days==='90'));
+  }
+  refresh();
+}
+
+/* ---------- timeline ---------- */
+const TL=[
+ {day:'Today · Thu, Jul 2',entries:[
+   {t:'10:05',type:'Risk',txt:'R-08 surfaced: Lumex lead-time slip may push the Jul 17 demo',src:'auto-linked from I-77 + D-456'},
+   {t:'09:40',type:'Decision',txt:'D-789 proposed: kitchen fixture spec frozen at v3 — awaiting your sign-off',src:'from Doc upload'},
+   {t:'09:12',type:'Question',txt:'Q-14 asked by Sally: is the Jul 17 demo client-facing?',src:'from GMeet: standup'}]},
+ {day:'Yesterday · Wed, Jul 1',entries:[
+   {t:'16:20',type:'Decision',txt:'D-456: entertainment demo pushed to Jul 17',src:'from Email thread'},
+   {t:'14:02',type:'Blocker',txt:'B-118: entertainment group blocked on your budget review',src:'from GMeet: WP-01 sync'},
+   {t:'11:30',type:'Action',txt:'T-133 became overdue: review kitchen fixture spec v3',src:'committed via email Jun 24'},
+   {t:'09:15',type:'Question',txt:'Q-12 asked by Mitch: 2700K or 3000K for kitchen lighting?',src:'from Chat: #kitchen'}]},
+ {day:'Tue, Jun 30',entries:[
+   {t:'15:45',type:'Action',txt:'T-235 became overdue: send Lumex PO for lighting order',src:'committed in WP-01 sync'},
+   {t:'10:00',type:'Info',txt:'All-hands recording processed — 14 items extracted, 3 assigned to WP-01',src:'from GMeet + hardware transcript'}]},
+ {day:'Mon, Jun 29',entries:[
+   {t:'11:20',type:'Decision',txt:'D-321: WP-01 lighting vendor switched to Lumex',src:'from GMeet: WP-01 sync'},
+   {t:'11:25',type:'Blocker',txt:'B-112: Vu waiting on fixture measurements from Scout',src:'from Chat: #wp-02'}]}
+];
+function renderTL(filter){
+  document.getElementById('tl').innerHTML = TL.map(day=>{
+    const rows=day.entries.filter(e=>filter==='all'||e.type===filter);
+    if(rows.length===0) return '';
+    return '<div class="tl-day"><h3>'+day.day+'</h3>'+rows.map(e=>
+      '<div class="tl-entry"><span class="tl-time">'+e.t+'</span><span class="tbadge'+(e.type==='Risk'||e.type==='Blocker'?' filled':'')+'">'+e.type+'</span><span class="txt">'+e.txt+'<small>'+e.src+'</small></span></div>'
+    ).join('')+'</div>';
+  }).join('');
+}
+function tlFilter(btn,type){
+  document.querySelectorAll('.qchip').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderTL(type);
+}
+
+/* ---------- calendar ---------- */
+const CAL={
+ 'Sun 5':[],
+ 'Mon 6':[{n:'WP-01 sync',t:'9:30',s:'ok'},{n:'Vendor call: Lumex',t:'14:00',s:'ok'}],
+ 'Tue 7':[{n:'WP-02 standup',t:'9:15',s:'ok'},{n:'Budget review',t:'15:00',s:'proc'}],
+ 'Wed 8':[{n:'Site walkthrough',t:'10:00',s:'warn'},{n:'Demo checklist prep',t:'13:30',s:'proc'}],
+ 'Thu 9':[{n:'WP-01 sync',t:'9:30',s:'proc'}],
+ 'Fri 10':[{n:'Client pre-brief',t:'11:00',s:'proc'},{n:'Tile delivery confirm',t:'16:00',s:'warn'}],
+ 'Sat 11':[]
+};
+function renderCal(){
+  const stLbl={ok:'✓ Processed',proc:'… Processing',warn:'! No capture'};
+  let heads='',cells='';
+  Object.keys(CAL).forEach(d=>{
+    heads+='<div class="dayhead">'+d+'</div>';
+    cells+='<div class="daycell">'+CAL[d].map(m=>
+      '<div class="mtg" onclick="toast(\'Opens merged meeting record: transcript + notes + assets\')"><b>'+m.n+'</b>'+m.t+'<br><span class="st '+m.s+'">'+stLbl[m.s]+'</span></div>'
+    ).join('')+'</div>';
+  });
+  document.getElementById('cal').innerHTML=heads+cells;
+}
+
+refresh(); renderTL('all'); renderCal();
+</script>
+</body>
+</html>
