@@ -154,6 +154,41 @@
   .st.warn{background:var(--ink); color:#fff;}
   .cal-legend{display:flex; gap:16px; margin-top:10px; font-size:11.5px; color:var(--ink2); align-items:center;}
 
+  /* ============ CAPTURE OVERLAY ============ */
+  .mtg-add{display:block; width:100%; margin-top:5px; font-size:10.5px; font-weight:700; padding:3px 4px; border:1px solid var(--ink); background:#fff; border-radius:4px;}
+  .mtg-add:hover{background:var(--ink); color:#fff;}
+  .mtg-add.recover{background:var(--ink); color:#fff;}
+  .mtg-add.recover:hover{background:#fff; color:var(--ink);}
+  #ovl{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; z-index:50;}
+  #ovl.show{display:block;}
+  .capture{position:fixed; top:0; right:0; width:360px; max-width:95vw; height:100%; background:#fff; border-left:2px solid var(--ink); z-index:51; display:flex; flex-direction:column; box-shadow:-6px 0 18px rgba(0,0,0,.15); transform:translateX(100%); transition:transform .25s;}
+  #ovl.show .capture{transform:none;}
+  .cap-titlebar{background:var(--ink); color:#fff; padding:8px 12px; font-size:11px; font-weight:700; letter-spacing:.5px; display:flex; align-items:center; gap:8px;}
+  .cap-dot{width:7px; height:7px; border-radius:50%; background:#fff; animation:pulse 2s infinite;}
+  .cap-sim{border:1px solid #888; color:#bbb; border-radius:3px; padding:0 5px; font-weight:400; font-size:10px;}
+  .cap-x{margin-left:auto; background:none; border:none; color:#fff; font-size:13px;}
+  .cap-meet{padding:10px 12px; border-bottom:1px solid var(--line);}
+  .cap-meet small{color:var(--ink3);}
+  .cap-body{flex:1; overflow:auto; padding:12px; display:flex; flex-direction:column; gap:10px;}
+  .cap-label{font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink3); font-weight:700;}
+  .cap-saved{text-transform:none; letter-spacing:0; font-weight:400; font-style:italic;}
+  #capNote{width:100%; height:90px; border:1.5px solid var(--ink); border-radius:var(--r); padding:8px; font:inherit; resize:vertical;}
+  .dropzone{border:1.5px dashed var(--ink3); border-radius:var(--r); padding:16px; text-align:center; color:var(--ink2); cursor:pointer; font-weight:600;}
+  .dropzone small{font-weight:400; color:var(--ink3);}
+  .dropzone:hover{background:var(--panel); border-color:var(--ink);}
+  #capUrl{width:100%; border:1px solid var(--line); border-radius:var(--r); padding:7px 9px; font:inherit;}
+  .cap-geo{background:var(--panel); border-radius:var(--r); padding:8px 10px; font-size:12.5px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+  .cap-geo button{margin-left:auto; font-size:11px; font-weight:700; padding:3px 10px; border:1px solid var(--ink); background:#fff; border-radius:4px;}
+  .cap-geo button:hover{background:var(--ink); color:#fff;}
+  .cap-check{font-size:12.5px; display:flex; gap:7px; align-items:flex-start; cursor:pointer;}
+  .cap-check small{display:block; color:var(--ink3);}
+  .cap-capturedhead{font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink3); font-weight:700; border-top:1px solid var(--line); padding-top:10px;}
+  #capList{list-style:none; font-size:12px;}
+  #capList li{padding:4px 0; border-bottom:1px solid var(--line2);}
+  #capList .cap-empty{color:var(--ink3); font-style:italic; border-bottom:none;}
+  .cap-foot{padding:10px 12px; border-top:1px solid var(--line);}
+  .cap-foot a{font-size:13px; font-weight:700; text-decoration:underline; cursor:pointer;}
+
   /* ============ TOAST / ANNOTATION ============ */
   #toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--ink); color:#fff; padding:10px 20px; border-radius:var(--r); font-weight:600; transition:transform .25s; z-index:99;}
   #toast.show{transform:translateX(-50%) translateY(0);}
@@ -427,10 +462,30 @@
     <span><span class="st proc">… Processing</span> ingestion running</span>
     <span><span class="st warn">! No capture</span> no transcript/notes found</span>
   </div>
-  <p class="wf-note">Wireframe notes: Calendar doubles as ingestion visibility — every meeting shows whether it was captured and processed, building trust in what the brain knows (and flagging blind spots).</p>
+  <p class="wf-note">Wireframe notes: Calendar doubles as ingestion visibility — every meeting shows whether it was captured and processed. "＋ Add assets" deep-links into the native capture companion (planabrain:// protocol) pre-scoped to that meeting; "No capture" meetings style it as a recovery CTA, turning blind spots into contributions.</p>
 </section>
 
 </main>
+
+<!-- ==================== CAPTURE PANEL (simulated native companion app) ==================== -->
+<div id="ovl" onclick="if(event.target===this)closeCapture()">
+  <div class="capture">
+    <div class="cap-titlebar"><span class="cap-dot"></span> PLANA CAPTURE · companion app <span class="cap-sim">simulated</span><button class="cap-x" onclick="closeCapture()" title="Close">✕</button></div>
+    <div class="cap-meet"><b id="capName">Meeting</b><br><small id="capMeta">Meeting ID M-1042 · Space WP-01/space-88 · linked automatically</small></div>
+    <div class="cap-body">
+      <label class="cap-label" for="capNote">Quick notes <span id="noteSaved" class="cap-saved"></span></label>
+      <textarea id="capNote" placeholder="Type notes here — saved automatically, no submit needed" oninput="noteAutosave()"></textarea>
+      <div class="dropzone" onclick="addCaptured('Screenshot','screenshot_2026-07-07.png')">Drop or paste anything here<br><small>files · screenshots · images — click to simulate a drop</small></div>
+      <label class="cap-label" for="capUrl">Reference URL</label>
+      <input id="capUrl" type="text" placeholder="Paste a URL, press Enter" onkeydown="if(event.key==='Enter'){addCaptured('URL',this.value||'https://lumex.example.com/spec'); this.value='';}">
+      <div class="cap-geo">📍 Detected: <b>Site A — 214 Main St</b> <button onclick="addCaptured('Geolocation','Site A — 214 Main St')">Confirm</button></div>
+      <label class="cap-check"><input type="checkbox" checked> <span>Link Meet chat space to this meeting<small>linked by default — uncheck to opt out</small></span></label>
+      <div class="cap-capturedhead">Captured this session</div>
+      <ul id="capList"><li class="cap-empty">Nothing yet — everything you add appears here instantly.</li></ul>
+    </div>
+    <div class="cap-foot"><a onclick="closeCapture(); toast('Portal meeting record updated: assets added ✓')">View this meeting in the dashboard →</a></div>
+  </div>
+</div>
 
 <div id="toast"></div>
 
@@ -640,10 +695,52 @@ function renderCal(){
   Object.keys(CAL).forEach(d=>{
     heads+='<div class="dayhead">'+d+'</div>';
     cells+='<div class="daycell">'+CAL[d].map(m=>
-      '<div class="mtg" onclick="toast(\'Opens merged meeting record: transcript + notes + assets\')"><b>'+m.n+'</b>'+m.t+'<br><span class="st '+m.s+'">'+stLbl[m.s]+'</span></div>'
+      '<div class="mtg" onclick="toast(\'Opens merged meeting record: transcript + notes + assets\')"><b>'+m.n+'</b>'+m.t+'<br><span class="st '+m.s+'">'+stLbl[m.s]+'</span>'+
+      (m.s==='warn'
+        ? '<button class="mtg-add recover" onclick="event.stopPropagation();openCapture(\''+m.n+'\',true)">! No capture — add what you have</button>'
+        : '<button class="mtg-add" onclick="event.stopPropagation();openCapture(\''+m.n+'\',false)">＋ Add assets</button>')+
+      '</div>'
     ).join('')+'</div>';
   });
   document.getElementById('cal').innerHTML=heads+cells;
+}
+
+/* ---------- capture panel (deep-link simulation) ---------- */
+function openCapture(name, recover){
+  toast('Deep link: planabrain://capture?meeting=M-1042'+(recover?'&mode=post':'')+' → launching companion app');
+  document.getElementById('capName').textContent=name;
+  document.getElementById('capMeta').textContent='Meeting ID M-1042 · Space WP-01/space-88 · '+(recover?'post-meeting capture — nothing was recorded live':'linked automatically');
+  document.getElementById('capList').innerHTML='<li class="cap-empty">Nothing yet — everything you add appears here instantly.</li>';
+  document.getElementById('capNote').value='';
+  document.getElementById('noteSaved').textContent='';
+  setTimeout(()=>{document.getElementById('ovl').classList.add('show');},400);
+  setTimeout(()=>{document.getElementById('capNote').focus();},750);
+}
+function closeCapture(){document.getElementById('ovl').classList.remove('show');}
+function addCaptured(kind,label){
+  const ul=document.getElementById('capList');
+  const empty=ul.querySelector('.cap-empty'); if(empty)empty.remove();
+  const li=document.createElement('li');
+  li.innerHTML='✓ <b>'+kind+'</b> — '+label;
+  ul.appendChild(li);
+  toast(kind+' added to meeting record ✓');
+}
+let noteT;
+function noteAutosave(){
+  const s=document.getElementById('noteSaved'); s.textContent='saving…';
+  clearTimeout(noteT);
+  noteT=setTimeout(()=>{
+    s.textContent='auto-saved ✓';
+    const v=document.getElementById('capNote').value.trim();
+    if(!v) return;
+    const ul=document.getElementById('capList');
+    let li=document.getElementById('capNoteItem');
+    if(!li){
+      const empty=ul.querySelector('.cap-empty'); if(empty)empty.remove();
+      li=document.createElement('li'); li.id='capNoteItem'; ul.appendChild(li);
+    }
+    li.innerHTML='✓ <b>Note</b> — '+v.slice(0,44)+(v.length>44?'…':'');
+  },800);
 }
 
 refresh(); renderTL('all'); renderCal();
