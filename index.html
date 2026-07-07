@@ -154,6 +154,58 @@
   .st.warn{background:var(--ink); color:#fff;}
   .cal-legend{display:flex; gap:16px; margin-top:10px; font-size:11.5px; color:var(--ink2); align-items:center;}
 
+  /* ============ HITL / LEADERSHIP DASHBOARD ============ */
+  .dashtoggle{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px;}
+  .hitl-legend{display:flex; align-items:center; gap:6px; font-size:11px; color:var(--ink3); margin-left:auto; flex-wrap:wrap;}
+  .hleg-note{font-style:italic; margin-left:8px;}
+  .hchip{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; border-radius:3px; padding:2px 7px; border:1.5px solid var(--ink); white-space:nowrap; background:#fff; color:var(--ink);}
+  .hchip.suggested{border-style:dashed; color:var(--ink2);}
+  .hchip.approved{background:var(--ink); color:#fff;}
+  .hchip.dismissed{border-color:var(--line); color:var(--ink3); text-decoration:line-through;}
+  .sec-head{font-size:15px; font-weight:800; margin:24px 0 10px; display:flex; align-items:center; gap:10px; border-bottom:2px solid var(--ink); padding-bottom:5px; flex-wrap:wrap;}
+  .sec-head:first-of-type{margin-top:16px;}
+  .sec-q{font-size:12px; color:var(--ink3); font-weight:400; margin-left:auto; font-style:italic;}
+  .reviewed-btn{font-size:11px; padding:3px 10px; border:1px solid var(--ink); background:#fff; border-radius:4px; font-weight:700;}
+  .reviewed-btn:hover{background:var(--ink); color:#fff;}
+  .issue{border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; margin-bottom:10px; background:#fff; transition:opacity .3s;}
+  .issue.suggested{border:1.5px dashed var(--ink2);}
+  .issue.official{border:1.5px solid var(--ink);}
+  .issue-top{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:8px;}
+  .aging{font-size:11px; color:var(--ink3);}
+  .trend{font-size:11px; color:var(--ink3);}
+  .trend.bad{color:var(--ink); font-weight:700;}
+  .issue-grid{display:grid; grid-template-columns:1fr 1fr; gap:6px 18px; font-size:12.5px; margin-bottom:10px;}
+  @media(max-width:700px){.issue-grid{grid-template-columns:1fr;}}
+  .issue-grid label{display:block; font-size:10px; text-transform:uppercase; letter-spacing:.4px; color:var(--ink3); font-weight:700;}
+  .issue-acts{display:flex; gap:6px; flex-wrap:wrap;}
+  .issue-acts button{font-size:11px; padding:4px 10px; border:1px solid var(--ink); background:#fff; border-radius:4px; font-weight:600;}
+  .issue-acts button:hover{background:var(--ink); color:#fff;}
+  .issue-acts .primary{background:var(--ink); color:#fff;}
+  .issue-acts .primary:hover{opacity:.8;}
+  .matrix{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  @media(max-width:700px){.matrix{grid-template-columns:1fr;}}
+  .quad{border:1px solid var(--line); border-radius:var(--r); padding:10px 12px; min-height:90px; background:#fff;}
+  .quad h5{font-size:10.5px; text-transform:uppercase; letter-spacing:.4px; margin-bottom:8px;}
+  .quad h5 small{color:var(--ink3); font-weight:600; text-transform:none; letter-spacing:0;}
+  .mitem{display:flex; align-items:center; gap:6px; font-size:12px; border:1px solid var(--ink); border-radius:4px; padding:4px 8px; margin-bottom:5px; background:#fff; transition:opacity .3s; flex-wrap:wrap;}
+  .mitem.suggested{border-style:dashed;}
+  .mitem button{font-size:10px; padding:2px 7px; border:1px solid var(--ink); border-radius:3px; background:#fff; font-weight:700;}
+  .mitem button:first-of-type{margin-left:auto;}
+  .mitem button:hover{background:var(--ink); color:#fff;}
+  .mitem .hchip{margin-left:auto;}
+  .chg-tag{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; border:1px solid var(--ink); border-radius:3px; padding:1px 6px; margin-right:8px; white-space:nowrap;}
+  .agenda-item{display:flex; align-items:center; gap:10px; border:1.5px dashed var(--ink2); border-radius:var(--r); padding:9px 12px; margin-bottom:6px; background:#fff; font-size:13px; transition:opacity .3s; flex-wrap:wrap;}
+  .agenda-item.accepted{border-style:solid; border-color:var(--ink);}
+  .agenda-num{font-weight:800; flex:none;}
+  .agenda-acts{margin-left:auto; display:flex; gap:5px;}
+  .agenda-acts button{font-size:10.5px; padding:3px 8px; border:1px solid var(--ink); background:#fff; border-radius:4px; font-weight:700;}
+  .agenda-acts button:hover{background:var(--ink); color:#fff;}
+  .stub-section{opacity:.85;}
+  .principle{font-size:12.5px; font-style:italic; color:var(--ink2); margin:4px 0 14px;}
+  .wp-table{width:100%; border-collapse:collapse; font-size:11.5px; background:#fff;}
+  .wp-table th,.wp-table td{border:1px solid var(--line); padding:6px 8px; text-align:left;}
+  .wp-table th{background:var(--panel2); font-size:10px; text-transform:uppercase; letter-spacing:.4px;}
+
   /* ============ CAPTURE OVERLAY ============ */
   .mtg-add{display:block; width:100%; margin-top:5px; font-size:10.5px; font-weight:700; padding:3px 4px; border:1px solid var(--ink); background:#fff; border-radius:4px;}
   .mtg-add:hover{background:var(--ink); color:#fff;}
@@ -210,7 +262,7 @@
 </header>
 
 <nav>
-  <button id="tab-dashboard" class="active" onclick="switchTab('dashboard')">Home Dashboard</button>
+  <button id="tab-dashboard" class="active" onclick="switchTab('dashboard')">Dashboards</button>
   <button id="tab-find" onclick="switchTab('find')">Filter &amp; Find</button>
   <button id="tab-timeline" onclick="switchTab('timeline')">Timeline</button>
   <button id="tab-calendar" onclick="switchTab('calendar')">Calendar</button>
@@ -240,10 +292,17 @@
 <!-- ==================== DASHBOARD ==================== -->
 <section id="view-dashboard" class="view active">
 
-  <div class="signoff">
-    ⚠ <b>2 decisions need your sign-off</b> before they become company truth.
-    <button onclick="toast('Opens the HITL validation queue (not in this prototype scope)')">Review &amp; sign off</button>
+  <div class="dashtoggle">
+    <span class="ctrl-label">Dashboard</span>
+    <span class="seg" id="dashSeg">
+      <button class="on" onclick="showDash(this,'lead')">Leadership</button>
+      <button onclick="showDash(this,'proj')">Project / Work Package</button>
+      <button onclick="showDash(this,'eng')">Engineering / Aircraft</button>
+    </span>
+    <span class="hitl-legend"><span class="hchip suggested">AI suggested</span> → review → <span class="hchip approved">Human approved</span><span class="hleg-note">AI surfaces the information. Human decides what matters.</span></span>
   </div>
+
+  <div id="dash-lead">
 
   <div class="news-strip" onclick="this.classList.toggle('open')">
     <div class="news-head">
@@ -263,106 +322,141 @@
     <div class="news-body">Full digest: Lighting vendor switch to Lumex approved in Monday sync (D-321). Entertainment sub-group blocked on budget sign-off from finance (B-118). Duc returns from PTO Thursday.</div>
   </div>
 
-  <div class="grid">
+  <!-- ========== TOP ISSUES ========== -->
+  <h2 class="sec-head">Top Issues <span class="count">1 official · 2 suggested</span><span class="sec-q">What deserves leadership attention right now?</span></h2>
 
-    <div class="card">
-      <div class="card-head">Decisions affecting you <span class="count">3</span><span class="badge">1 needs sign-off</span></div>
-      <div class="item"><span class="id">D-321</span>Switch WP-01 lighting vendor to Lumex
-        <div class="meta">Decided Jun 29 · Owner: Scout · from GMeet: WP-01 sync</div>
-        <div class="acts"><button onclick="ackItem(this)">✓ Ack</button><button onclick="toast('Snoozed until next week')">Snooze</button><button onclick="toast('Opens source transcript at timestamp')">Source ↗</button></div>
-      </div>
-      <div class="item"><span class="id">D-456</span>Entertainment demo pushed to Jul 17
-        <div class="meta">Decided Jul 1 · Owner: Duc · from Email thread</div>
-        <div class="acts"><button onclick="ackItem(this)">✓ Ack</button><button onclick="toast('Snoozed until next week')">Snooze</button><button onclick="toast('Opens source email')">Source ↗</button></div>
-      </div>
-      <div class="item"><span class="id">D-789</span>Kitchen fixture spec frozen at v3 <span class="overdue-flag">SIGN-OFF</span>
-        <div class="meta">Proposed Jul 2 · Awaiting: You · from Doc upload</div>
-        <div class="acts"><button onclick="toast('Opens sign-off flow')">Review</button><button onclick="toast('Opens source document')">Source ↗</button></div>
-      </div>
-      <div class="card-foot"><a onclick="switchTab('find')">View all in Filter &amp; Find →</a></div>
+  <div class="issue official">
+    <div class="issue-top"><span class="hchip approved">Approved · Scout</span><b>Lumex lead-time slip threatens the Jul 17 demo</b><span class="aging">open 5d</span><span class="trend bad">↘ worsening</span></div>
+    <div class="issue-grid">
+      <div><label>What is happening</label>Lead times slipped from 2 to 5 weeks; demo hardware may not arrive in time.</div>
+      <div><label>Impact if we do nothing</label>Demo slips into August; client pre-brief loses credibility.</div>
+      <div><label>Owner</label>Duc</div>
+      <div><label>Needed leadership action</label>Approve air-freight budget or re-scope the demo.</div>
     </div>
+    <div class="issue-acts"><button class="primary" onclick="toast('Opens linked decision D-791')">Open linked decision</button><button onclick="toast('Reassign owner')">Assign</button><button onclick="hitlDismiss(this)">Mark resolved</button></div>
+  </div>
 
+  <div class="issue suggested">
+    <div class="issue-top"><span class="hchip suggested">AI suggested</span><b>Supplier RFI criteria may be incomplete</b><span class="aging">open 6d</span><span class="trend">→ flat</span></div>
+    <div class="issue-grid">
+      <div><label>Why the AI surfaced it</label>Supplier discussion is moving forward, but commercial terms, certification evidence, and data-rights requirements are not clearly approved in any channel.</div>
+      <div><label>Impact if we do nothing</label>Supplier conversations move forward with weak criteria.</div>
+      <div><label>Owner</label>Vu (unconfirmed)</div>
+      <div><label>Needed leadership action</label>Approve the RFI criteria set (Decision D-790).</div>
+    </div>
+    <div class="issue-acts"><button class="primary" onclick="hitlApprove(this)">▲ Promote to official</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="toast('Assign owner')">Assign</button><button onclick="hitlDismiss(this)">Dismiss</button><button onclick="toast('Snoozed 1 week — will resurface')">Snooze</button></div>
+  </div>
+
+  <div class="issue suggested">
+    <div class="issue-top"><span class="hchip suggested">AI suggested</span><b>Battery vendor data-rights unresolved</b><span class="aging">open 12d</span><span class="trend">→ flat</span></div>
+    <div class="issue-grid">
+      <div><label>Why the AI surfaced it</label>Three chats and one meeting reference vendor test data PLANA may not own; no agreement found in any ingested channel.</div>
+      <div><label>Impact if we do nothing</label>Certification evidence may be unusable; rework at supplier-contract stage.</div>
+      <div><label>Owner</label>— none detected</div>
+      <div><label>Needed leadership action</label>Assign an owner; request data-rights clause review.</div>
+    </div>
+    <div class="issue-acts"><button class="primary" onclick="hitlApprove(this)">▲ Promote to official</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="toast('Assign owner')">Assign</button><button onclick="hitlDismiss(this)">Dismiss</button><button onclick="toast('Snoozed 1 week — will resurface')">Snooze</button></div>
+  </div>
+
+  <!-- ========== URGENT VS IMPORTANT ========== -->
+  <h2 class="sec-head">Urgent vs Important <span class="sec-q">AI suggests placement — you confirm. A deadline ≠ importance.</span></h2>
+  <div class="matrix">
+    <div class="quad"><h5>Important + Urgent <small>· act now</small></h5>
+      <div class="mitem">Lumex lead-time slip (demo) <span class="hchip approved">✓</span></div>
+      <div class="mitem suggested">Supplier RFI criteria <button onclick="confirmPlace(this)">✓ confirm</button><button onclick="toast('Drag to another quadrant (simulated)')">move</button></div>
+    </div>
+    <div class="quad"><h5>Important + Not urgent <small>· protect time</small></h5>
+      <div class="mitem suggested">Certification path assumptions <button onclick="confirmPlace(this)">✓ confirm</button><button onclick="toast('Move (simulated)')">move</button></div>
+      <div class="mitem suggested">Q3 hiring plan <button onclick="confirmPlace(this)">✓ confirm</button><button onclick="toast('Move (simulated)')">move</button></div>
+    </div>
+    <div class="quad"><h5>Urgent + Not important <small>· delegate</small></h5>
+      <div class="mitem suggested">Office maintenance reschedule <button onclick="confirmPlace(this)">✓ confirm</button><button onclick="toast('Delegated to ops')">delegate</button></div>
+    </div>
+    <div class="quad"><h5>Not urgent + Not important <small>· drop</small></h5>
+      <div class="mitem suggested">Legacy meeting-notes cleanup <button onclick="hitlDismiss(this)">drop</button></div>
+    </div>
+  </div>
+
+  <!-- ========== DECISION QUEUE ========== -->
+  <h2 class="sec-head">Decision Queue <span class="count">2</span><span class="sec-q">A decision changes direction, budget, ownership, or company truth.</span></h2>
+
+  <div class="issue suggested">
+    <div class="issue-top"><span class="hchip suggested">Awaiting you</span><b>D-790 · Approve supplier RFI criteria set</b><span class="aging">deadline Jul 10</span></div>
+    <div class="issue-grid">
+      <div><label>Requested by</label>Vu (WP-02 supplier lead)</div>
+      <div><label>Recommendation</label>Approve v2 with added data-rights clause</div>
+      <div><label>Options</label>Approve v2 · approve with edits · defer 2 weeks</div>
+      <div><label>Impact</label>Unblocks supplier outreach for 3 components</div>
+      <div><label>Evidence / source</label><a style="text-decoration:underline;cursor:pointer" onclick="toast('Opens RFI draft v2 + Jun 30 meeting extract')">RFI draft v2 + meeting extract ↗</a></div>
+      <div><label>If no decision</label>Supplier conversations slip ~2 weeks; criteria stay informal</div>
+    </div>
+    <div class="issue-acts"><button class="primary" onclick="toast('Opens decision flow — outcome recorded as company truth')">Decide now</button><button onclick="toast('30 min held tomorrow 9:00')">Schedule 30 min</button><button onclick="toast('Delegate with note')">Delegate</button></div>
+  </div>
+
+  <div class="issue suggested">
+    <div class="issue-top"><span class="hchip suggested">Awaiting you</span><b>D-789 · Freeze cabin fixture spec at v3</b><span class="aging">deadline Jul 9</span></div>
+    <div class="issue-grid">
+      <div><label>Requested by</label>Scout (WP-01)</div>
+      <div><label>Recommendation</label>Freeze at v3; changes go through change control</div>
+      <div><label>Options</label>Freeze v3 · one more iteration · escalate to engineering</div>
+      <div><label>Impact</label>Stabilizes interior layout for supplier quotes</div>
+      <div><label>Evidence / source</label><a style="text-decoration:underline;cursor:pointer" onclick="toast('Opens spec doc v3')">Spec doc v3 ↗</a></div>
+      <div><label>If no decision</label>Suppliers quote against a moving target</div>
+    </div>
+    <div class="issue-acts"><button class="primary" onclick="toast('Opens decision flow — outcome recorded as company truth')">Decide now</button><button onclick="toast('30 min held tomorrow 9:30')">Schedule 30 min</button><button onclick="toast('Delegate with note')">Delegate</button></div>
+  </div>
+
+  <!-- ========== BLOCKERS ========== -->
+  <h2 class="sec-head">Blockers <span class="count">4</span><span class="sec-q">Blocked ≠ late. Who can unblock whom?</span></h2>
+  <div class="grid">
     <div class="card">
-      <div class="card-head">You're blocking <span class="count">2</span><span class="badge">2 people waiting</span></div>
-      <div class="item"><span class="id">B-112</span>Vu needs your fixture measurements to order materials
-        <div class="meta">Waiting 3 days · WP-02 · from Chat</div>
-        <div class="acts"><button onclick="ackItem(this)">✓ Resolve</button><button onclick="toast('Opens source chat')">Source ↗</button></div>
-      </div>
+      <div class="card-head">You're blocking <span class="count">1</span></div>
       <div class="item"><span class="id">B-118</span>Entertainment group waiting on your budget review
-        <div class="meta">Waiting 1 day · WP-01 · from Meeting</div>
+        <div class="meta">Blocked: Duc's team · Unblock: You · Since Jul 1 · Impact: demo prep idles</div>
         <div class="acts"><button onclick="ackItem(this)">✓ Resolve</button><button onclick="toast('Opens source transcript')">Source ↗</button></div>
       </div>
-      <div class="card-foot"><a onclick="switchTab('find')">View all →</a></div>
     </div>
-
     <div class="card">
-      <div class="card-head">Issues affecting you <span class="count">3</span></div>
-      <div class="item"><span class="id">I-77</span>Lumex lead times slipped from 2 to 5 weeks
-        <div class="meta">Raised Jul 1 · from Outside link</div>
-        <div class="acts"><button onclick="ackItem(this)">✓ Ack</button><button onclick="toast('Opens source')">Source ↗</button></div>
+      <div class="card-head">Another leader is blocking <span class="count">1</span></div>
+      <div class="item"><span class="id">B-121</span>WP-02 hiring waits on finance headcount sign-off
+        <div class="meta">Blocked: Vu · Unblock: Finance lead · Since Jun 25 · Impact: Q3 hiring slips</div>
+        <div class="acts"><button onclick="toast('Nudge sent to finance lead')">Nudge</button><button onclick="toast('Escalation drafted')">Escalate</button></div>
       </div>
-      <div class="item"><span class="id">I-81</span>Whiteboard notes from Jun 30 session missing owner tags
-        <div class="meta">Flagged by system · from Whiteboard</div>
-        <div class="acts"><button onclick="toast('Opens tagging flow')">Fix tags</button></div>
-      </div>
-      <div class="item"><span class="id">I-84</span>Duplicate task detected: T-133 vs T-140
-        <div class="meta">Flagged by system</div>
-        <div class="acts"><button onclick="toast('Opens merge flow')">Merge</button></div>
-      </div>
-      <div class="card-foot"><a onclick="switchTab('find')">View all →</a></div>
     </div>
-
     <div class="card">
-      <div class="card-head">Hot tasks <span class="count">4</span><span class="badge">2 overdue</span></div>
-      <div class="item"><span class="id">T-235</span>Send Lumex PO for lighting order <span class="overdue-flag">OVERDUE 2D</span>
-        <div class="meta">Due Jun 30 · Committed in WP-01 sync</div>
-        <div class="acts"><button onclick="ackItem(this)">✓ Done</button><button onclick="toast('Snoozed')">Snooze</button><button onclick="toast('Opens source')">Source ↗</button></div>
+      <div class="card-head">Missing info / supplier / ownership <span class="count">2</span></div>
+      <div class="item"><span class="id">B-112</span>Vu needs fixture measurements <span class="overdue-flag">MISSING INFO</span>
+        <div class="meta">Unblock: Scout · Since Jun 29 · Impact: material order delayed</div>
+        <div class="acts"><button onclick="ackItem(this)">✓ Resolve</button><button onclick="toast('Opens source chat')">Source ↗</button></div>
       </div>
-      <div class="item"><span class="id">T-133</span>Review kitchen fixture spec v3 <span class="overdue-flag">OVERDUE 1D</span>
-        <div class="meta">Due Jul 1 · Committed via email</div>
-        <div class="acts"><button onclick="ackItem(this)">✓ Done</button><button onclick="toast('Snoozed')">Snooze</button><button onclick="toast('Opens source')">Source ↗</button></div>
+      <div class="item"><span class="id">B-125</span>Battery vendor test data not delivered <span class="overdue-flag">SUPPLIER</span>
+        <div class="meta">Unblock: vendor — contract owner unclear · Since Jun 20 · Impact: evidence gap</div>
+        <div class="acts"><button onclick="toast('Assign contract owner')">Assign owner</button><button onclick="toast('Opens vendor thread')">Source ↗</button></div>
       </div>
-      <div class="item"><span class="id">T-35</span>Prep entertainment demo checklist
-        <div class="meta">Due Jul 8 · Owner: You + Duc</div>
-        <div class="acts"><button onclick="ackItem(this)">✓ Done</button><button onclick="toast('Opens source')">Source ↗</button></div>
-      </div>
-      <div class="item"><span class="id">T-140</span>Confirm bathroom tile delivery window
-        <div class="meta">Due Jul 10 · Depends on Vu (WP-02)</div>
-        <div class="acts"><button onclick="ackItem(this)">✓ Done</button><button onclick="toast('Opens source')">Source ↗</button></div>
-      </div>
-      <div class="card-foot"><a onclick="switchTab('find')">View all →</a></div>
     </div>
+  </div>
 
-    <div class="card">
-      <div class="card-head">Open questions for you <span class="count">3</span></div>
-      <div class="item"><span class="id">Q-12</span>Mitch: "Which lighting temp did we settle on for the kitchen — 2700K or 3000K?"
-        <div class="meta">Asked yesterday · from Chat</div>
-        <div class="acts"><button onclick="ackItem(this)">Answer</button><button onclick="toast('Opens source chat')">Source ↗</button></div>
-      </div>
-      <div class="item"><span class="id">Q-14</span>Sally: "Is the demo on the 17th client-facing?"
-        <div class="meta">Asked today · from Meeting</div>
-        <div class="acts"><button onclick="ackItem(this)">Answer</button><button onclick="toast('Opens source')">Source ↗</button></div>
-      </div>
-      <div class="item"><span class="id">Q-15</span>System: "T-140 has no due-date owner — assign one?"
-        <div class="meta">Auto-detected gap</div>
-        <div class="acts"><button onclick="ackItem(this)">Assign</button></div>
-      </div>
-      <div class="card-foot"><a onclick="switchTab('find')">View all →</a></div>
-    </div>
+  <!-- ========== WHAT CHANGED ========== -->
+  <h2 class="sec-head">What changed since your last review <span class="sec-q">last reviewed: yesterday 17:40</span><button class="reviewed-btn" onclick="markReviewed(this)">Mark reviewed ✓</button></h2>
+  <div id="chgList" class="card">
+    <div class="item"><span class="chg-tag">New issue</span>Battery vendor data-rights surfaced by AI<div class="meta">today 10:05 · from 3 chats + 1 meeting</div></div>
+    <div class="item"><span class="chg-tag">Decision made</span>D-321 vendor switch approved — now company truth<div class="meta">yesterday · approved by Scout</div></div>
+    <div class="item"><span class="chg-tag">Risk increased</span>R-08 demo risk trend moved flat → worsening<div class="meta">today · lead-time data updated</div></div>
+    <div class="item"><span class="chg-tag">Conflict detected</span>Two documents disagree on passenger count (4 vs 6)<div class="meta">today · needs engineering review</div></div>
+    <div class="item"><span class="chg-tag">Went stale</span>WP-02 budget doc untouched for 30 days<div class="meta">flagged by AI · owner: Vu</div></div>
+  </div>
 
-    <div class="card">
-      <div class="card-head">Risks <span class="count">2</span><span class="badge outline">1 new</span></div>
-      <div class="item"><span class="id">R-08</span>Lumex lead-time slip may push the Jul 17 demo
-        <div class="meta">Surfaced today · linked: I-77, D-456</div>
-        <div class="acts"><button onclick="ackItem(this)">✓ Ack</button><button onclick="toast('Opens linked items')">Linked ↗</button></div>
-      </div>
-      <div class="item"><span class="id">R-06</span>WP-02 budget unconfirmed past quarter close
-        <div class="meta">Surfaced Jun 27 · Owner: Vu</div>
-        <div class="acts"><button onclick="ackItem(this)">✓ Ack</button><button onclick="toast('Opens source')">Source ↗</button></div>
-      </div>
-      <div class="card-foot"><a onclick="switchTab('find')">View all →</a></div>
-    </div>
-
+  <!-- ========== TODAY'S AGENDA ========== -->
+  <h2 class="sec-head">Today's leadership agenda <span class="sec-q">AI-recommended moves — accept, edit, reorder, or dismiss</span></h2>
+  <div id="agendaList">
+    <div class="agenda-item"><span class="agenda-num">1</span><span>Decide D-790 (supplier RFI criteria) — unblocks a Top Issue + supplier outreach</span>
+      <span class="agenda-acts"><button onclick="agendaAccept(this)">✓ Accept</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="moveUp(this)">↑</button><button onclick="hitlDismiss(this)">✕</button></span></div>
+    <div class="agenda-item"><span class="agenda-num">2</span><span>Clear B-118 (your budget review) — Duc's team is idle</span>
+      <span class="agenda-acts"><button onclick="agendaAccept(this)">✓ Accept</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="moveUp(this)">↑</button><button onclick="hitlDismiss(this)">✕</button></span></div>
+    <div class="agenda-item"><span class="agenda-num">3</span><span>Respond to R-08 (demo risk) — approve air-freight or re-scope</span>
+      <span class="agenda-acts"><button onclick="agendaAccept(this)">✓ Accept</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="moveUp(this)">↑</button><button onclick="hitlDismiss(this)">✕</button></span></div>
+    <div class="agenda-item"><span class="agenda-num">4</span><span>Review 2 AI-suggested Top Issues — promote or dismiss</span>
+      <span class="agenda-acts"><button onclick="agendaAccept(this)">✓ Accept</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="moveUp(this)">↑</button><button onclick="hitlDismiss(this)">✕</button></span></div>
   </div>
 
   <div class="savedviews">
@@ -374,7 +468,61 @@
     </div>
   </div>
 
-  <p class="wf-note">Wireframe notes: news collapsed to digest strips (expand on click) · all six object cards above the fold · per-item actions on hover · counts + overdue badges on every card · sign-off queue surfaces the human-in-the-loop step.</p>
+  <p class="wf-note">Wireframe notes (Leadership): every AI output carries a status — dashed = AI suggested (provisional, visible but not official), solid = human approved (company truth), faded = dismissed. Approval is required only for <i>promotion to official</i>, so awareness is never gated behind review clicks. Sections follow Duc's model: Top Issues → Urgent/Important → Decision Queue → Blockers (split by who unblocks) → What Changed → Today's Agenda.</p>
+
+  </div><!-- /dash-lead -->
+
+  <!-- ========== PROJECT / WORK PACKAGE (next phase stub) ========== -->
+  <div id="dash-proj" class="stub-section" style="display:none">
+    <h2 class="sec-head">Project / Work Package <span class="badge outline">next phase</span><span class="sec-q">Is the work moving, blocked, late, or drifting?</span></h2>
+    <p class="principle">AI detects project signals. Human confirms project status. Blocked work (something is missing) is managed differently from late work (a commitment was missed).</p>
+    <table class="wp-table">
+      <tr><th>Work package</th><th>Status (human-confirmed)</th><th>Owner</th><th>Milestone</th><th>Forecast</th><th>Confidence</th><th>Main blocker</th><th>Main dependency</th><th>Decision needed</th><th>Trend</th></tr>
+      <tr><td>WP-01 · Propulsion integration</td><td>On track ✓</td><td>Scout</td><td>PDR prep</td><td>Aug 12</td><td>Med</td><td>—</td><td>ICD-04</td><td>—</td><td>↗</td></tr>
+      <tr><td>WP-02 · Supplier RFI</td><td><span class="hchip suggested">AI: blocked?</span></td><td>Vu</td><td>RFI issue</td><td>Jul 22</td><td>Low</td><td>RFI criteria unapproved</td><td>Decision D-790</td><td>Yes</td><td>↘</td></tr>
+      <tr><td>WP-03 · Demo aircraft</td><td>At risk ✓</td><td>Duc</td><td>Demo</td><td>Jul 17</td><td>Low</td><td>Lumex lead time</td><td>Air-freight decision</td><td>Yes</td><td>↘</td></tr>
+    </table>
+    <p class="wf-note">Skeleton only — same data as Leadership, re-cut by work package. AI-suggested statuses require owner confirmation before becoming official, mirroring the Leadership HITL flow.</p>
+  </div>
+
+  <!-- ========== ENGINEERING / AIRCRAFT (next phase stub) ========== -->
+  <div id="dash-eng" class="stub-section" style="display:none">
+    <h2 class="sec-head">Engineering / Aircraft <span class="badge outline">next phase</span><span class="sec-q">Is the aircraft converging into a real, integrated, certifiable product?</span></h2>
+    <p class="principle">AI finds drift. Human controls the aircraft.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="card-head">Aircraft Baseline</div>
+        <div class="item">Passenger count: 4 <span class="hchip approved">Approved</span></div>
+        <div class="item">Range: 500 km <span class="hchip suggested">Working assumption</span></div>
+        <div class="item">Thermal architecture <span class="hchip suggested">Conflicting</span><div class="meta">2 docs disagree — needs leadership decision</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">Requirements Maturity</div>
+        <div class="item">Aircraft-level: draft · Propulsion: reviewed · Thermal: missing<div class="meta">scale: missing → draft → reviewed → approved → traced → verified</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">Interface Control (ICDs)</div>
+        <div class="item">Turbogenerator → HV bus: draft<div class="meta">owner: Scout · risk: med</div></div>
+        <div class="item">Battery/ESS → HV bus: open<div class="meta">supplier dependency · risk: high</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">Technical Performance</div>
+        <div class="item">Empty weight: target 3,200 kg · est 3,410 kg <span class="trend bad">↘</span><div class="meta">margin negative · confidence: med</div></div>
+        <div class="item">Thermal margin: target 15% · est 11%<div class="meta">trend: flat · owner: —</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">Evidence Readiness</div>
+        <div class="item">Iron Bird data: exists · uncontrolled<div class="meta">not yet certification-useful</div></div>
+        <div class="item">Battery data: missing<div class="meta">supplier · linked to B-125</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">Engineering Change Control</div>
+        <div class="item">2 AI-detected changes awaiting human approval<div class="meta">range assumption · battery strategy — impact analysis attached</div></div>
+      </div>
+    </div>
+    <p class="wf-note">Skeleton only — note how the same supplier-RFI issue appears here as missing evidence/ICD, as a blocker in Project view, and as a Top Issue in Leadership. Same data, three lenses.</p>
+  </div>
+
 </section>
 
 <!-- ==================== FILTER & FIND ==================== -->
@@ -703,6 +851,51 @@ function renderCal(){
     ).join('')+'</div>';
   });
   document.getElementById('cal').innerHTML=heads+cells;
+}
+
+/* ---------- dashboard toggle + HITL actions ---------- */
+function showDash(btn,which){
+  setSeg(btn);
+  ['lead','proj','eng'].forEach(k=>document.getElementById('dash-'+k).style.display = (k===which?'block':'none'));
+}
+function hitlApprove(btn){
+  const card=btn.closest('.issue');
+  card.classList.remove('suggested'); card.classList.add('official');
+  const chip=card.querySelector('.hchip');
+  if(chip){chip.classList.remove('suggested'); chip.classList.add('approved'); chip.textContent='Approved · you';}
+  btn.remove();
+  toast('Promoted to official — now part of approved company truth');
+}
+function hitlDismiss(btn){
+  const card=btn.closest('.issue')||btn.closest('.mitem')||btn.closest('.agenda-item');
+  if(!card) return;
+  card.style.opacity=.35;
+  const chip=card.querySelector('.hchip');
+  if(chip){chip.className='hchip dismissed'; chip.textContent='Dismissed';}
+  toast('Dismissed — AI will not resurface unless the signal changes');
+}
+function confirmPlace(btn){
+  const it=btn.closest('.mitem');
+  it.classList.remove('suggested');
+  const mv=it.querySelector('button:last-of-type');
+  btn.remove();
+  toast('Placement confirmed — human-controlled priority');
+}
+function agendaAccept(btn){
+  btn.closest('.agenda-item').classList.add('accepted');
+  btn.remove();
+  toast('Accepted onto today\'s agenda');
+}
+function moveUp(btn){
+  const it=btn.closest('.agenda-item');
+  const prev=it.previousElementSibling;
+  if(prev) it.parentNode.insertBefore(it,prev);
+}
+function markReviewed(btn){
+  document.getElementById('chgList').style.opacity=.4;
+  btn.textContent='Reviewed ✓ — baseline reset';
+  btn.disabled=true;
+  toast('Baseline set — next visit shows only changes since now');
 }
 
 /* ---------- capture panel (deep-link simulation) ---------- */
