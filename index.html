@@ -126,6 +126,9 @@
   .rcard .title .id{font-weight:800; font-size:12px; margin-right:6px;}
   .rcard .meta{font-size:11.5px; color:var(--ink3); margin-top:4px; display:flex; gap:12px; flex-wrap:wrap;}
   .rcard .src{font-size:12px; font-weight:600; text-decoration:underline; color:var(--ink2); white-space:nowrap; cursor:pointer;}
+  .tcol{flex:none; display:flex; flex-direction:column; gap:4px; align-items:center; width:96px;}
+  .tcol .tbadge{width:100%;}
+  .rserial{margin-left:0; font-size:9px; padding:1px 4px;}
   .empty{border:1px dashed var(--line); border-radius:var(--r); padding:30px; text-align:center; color:var(--ink3);}
 
   /* ============ TIMELINE ============ */
@@ -206,6 +209,24 @@
   .wp-table th,.wp-table td{border:1px solid var(--line); padding:6px 8px; text-align:left;}
   .wp-table th{background:var(--panel2); font-size:10px; text-transform:uppercase; letter-spacing:.4px;}
 
+  /* ============ EDITABLE COMPANY NEWS ============ */
+  .news-edit{padding:6px; border:1.5px solid transparent; border-radius:4px;}
+  .news-edit[contenteditable="true"]{border-color:var(--ink); background:#fff; outline:none;}
+  .news-edit.aidraft{border:1.5px dashed var(--ink2); background:#fff;}
+  .news-controls{display:flex; gap:6px; margin-top:8px; align-items:center; flex-wrap:wrap;}
+  .news-controls button{font-size:11px; padding:4px 10px; border:1px solid var(--ink); background:#fff; border-radius:4px; font-weight:600;}
+  .news-controls button:hover{background:var(--ink); color:#fff;}
+  .news-controls .nbtn-primary{background:var(--ink); color:#fff;}
+  .news-hint{font-size:10.5px; color:var(--ink3); font-style:italic; margin-left:auto;}
+
+  /* ============ SERIALS + PER-ITEM CLASSIFICATION ============ */
+  .serial{margin-left:auto; font-size:10px; font-weight:700; letter-spacing:.5px; border:1px solid var(--ink); border-radius:3px; padding:1px 6px; color:var(--ink2); background:var(--panel); white-space:nowrap; font-family:Consolas,Menlo,monospace;}
+  .dd-wrap{display:flex; gap:6px; margin-left:auto; align-items:center;}
+  .ui-dd{font:inherit; font-size:10.5px; font-weight:700; padding:2px 4px; border:1.5px dashed var(--ink2); border-radius:4px; background:#fff; color:var(--ink); cursor:pointer;}
+  .ui-dd.confirmed{border-style:solid; border-color:var(--ink);}
+  .dd-row{display:flex; gap:6px; margin-top:5px; align-items:center; justify-content:flex-end;}
+  .dd-row .dd-label{font-size:9.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--ink3); font-weight:700;}
+
   /* ============ CAPTURE OVERLAY ============ */
   .mtg-add{display:block; width:100%; margin-top:5px; font-size:10.5px; font-weight:700; padding:3px 4px; border:1px solid var(--ink); background:#fff; border-radius:4px;}
   .mtg-add:hover{background:var(--ink); color:#fff;}
@@ -240,6 +261,46 @@
   #capList .cap-empty{color:var(--ink3); font-style:italic; border-bottom:none;}
   .cap-foot{padding:10px 12px; border-top:1px solid var(--line);}
   .cap-foot a{font-size:13px; font-weight:700; text-decoration:underline; cursor:pointer;}
+
+  /* ============ ENGAGEMENT OVERLAY (calendar) ============ */
+  #engOvl{position:fixed; inset:0; background:#fff; z-index:60; display:none; flex-direction:column;}
+  #engOvl.show{display:flex;}
+  .eng-head{display:flex; align-items:center; gap:14px; padding:12px 20px; border-bottom:2px solid var(--ink); flex-wrap:wrap;}
+  .eng-head b{font-size:16px;}
+  .eng-head .serial{margin-left:0;}
+  .eng-x{margin-left:auto; font-size:14px; padding:6px 14px; border:1.5px solid var(--ink); background:#fff; border-radius:var(--r); font-weight:700;}
+  .eng-x:hover{background:var(--ink); color:#fff;}
+  .eng-add{font-size:12px; padding:6px 12px; border:1px solid var(--ink); background:#fff; border-radius:var(--r); font-weight:700;}
+  .eng-add:hover{background:var(--ink); color:#fff;}
+  .eng-tabs{display:flex; gap:4px; padding:0 20px; border-bottom:1px solid var(--line);}
+  .eng-tabs button{padding:10px 16px; border:none; background:none; color:var(--ink3); border-bottom:3px solid transparent; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.5px;}
+  .eng-tabs button.active{color:var(--ink); border-bottom-color:var(--ink);}
+  .eng-tabs button:hover{color:var(--ink);}
+  .eng-body{flex:1; overflow:auto; padding:24px 20px; width:100%; max-width:1000px; margin:0 auto;}
+  .stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px;}
+  @media(max-width:700px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+  .stat{border:1.5px solid var(--ink); border-radius:var(--r); padding:16px; text-align:center;}
+  .stat b{display:block; font-size:28px;}
+  .stat span{font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink3); font-weight:700;}
+  .takeaway{border:1.5px dashed var(--ink2); border-radius:var(--r); padding:14px 16px; font-size:15px; font-weight:600; margin-bottom:16px;}
+  .flowrow{display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:12px;}
+  .flowbox{border:1px solid var(--ink); border-radius:4px; padding:6px 10px; background:var(--panel); font-weight:600;}
+  .slide{border:2px solid var(--ink); border-radius:var(--r); aspect-ratio:16/9; max-height:420px; width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:30px; background:#fff;}
+  .slide h1{font-size:26px; margin-bottom:10px;}
+  .slide p{color:var(--ink2); max-width:560px;}
+  .slide-nav{display:flex; gap:10px; align-items:center; justify-content:center; margin-top:12px;}
+  .slide-nav button{font-size:14px; padding:5px 16px; border:1.5px solid var(--ink); background:#fff; border-radius:var(--r); font-weight:700;}
+  .slide-nav button:hover{background:var(--ink); color:#fff;}
+  .transcript{font-family:Consolas,Menlo,monospace; font-size:12px; background:var(--panel); border:1px solid var(--line); border-radius:var(--r); padding:16px; white-space:pre-wrap; line-height:1.7;}
+  .asset-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  @media(max-width:700px){.asset-grid{grid-template-columns:1fr;}}
+  .asset{border:1px solid var(--line); border-radius:var(--r); padding:14px; cursor:pointer;}
+  .asset:hover{border-color:var(--ink);}
+  .asset .atype{font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; border:1px solid var(--ink); border-radius:3px; padding:1px 6px; display:inline-block; margin-bottom:8px;}
+  .asset b{display:block; font-size:13px;}
+  .asset small{color:var(--ink3);}
+  .eng-empty{border:1.5px dashed var(--ink3); border-radius:var(--r); padding:50px 30px; text-align:center; color:var(--ink2);}
+  .eng-empty button{margin-top:14px; font-size:13px; padding:8px 16px; border:none; background:var(--ink); color:#fff; border-radius:var(--r); font-weight:700;}
 
   /* ============ TOAST / ANNOTATION ============ */
   #toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--ink); color:#fff; padding:10px 20px; border-radius:var(--r); font-weight:600; transition:transform .25s; z-index:99;}
@@ -296,7 +357,7 @@
     <span class="ctrl-label">Dashboard</span>
     <span class="seg" id="dashSeg">
       <button class="on" onclick="showDash(this,'lead')">Leadership</button>
-      <button onclick="showDash(this,'proj')">Project / Work Package</button>
+      <button onclick="showDash(this,'proj')">Work Package Review</button>
       <button onclick="showDash(this,'eng')">Engineering / Aircraft</button>
     </span>
     <span class="hitl-legend"><span class="hchip suggested">AI suggested</span> → review → <span class="hchip approved">Human approved</span><span class="hleg-note">AI surfaces the information. Human decides what matters.</span></span>
@@ -304,84 +365,65 @@
 
   <div id="dash-lead">
 
-  <div class="news-strip" onclick="this.classList.toggle('open')">
+  <div class="news-strip" id="coNewsStrip" onclick="this.classList.toggle('open')">
     <div class="news-head">
       <span class="news-tag">Company news</span>
       <span class="news-oneliner">Q3 planning kickoff moved to Jul 14 · New vendor policy in effect · 2 more updates</span>
+      <span class="hchip approved" id="coNewsStatus" style="font-size:9px;">Published</span>
       <span class="news-caret">▼ expand</span>
     </div>
-    <div class="news-body">Full digest: Q3 planning kickoff moved to Jul 14 (decision D-310). New vendor onboarding policy effective this week — all new vendor contracts route through legal review first. Office closed Jul 20 for maintenance. All-hands recording from Jun 30 processed and searchable.</div>
-  </div>
-
-  <div class="news-strip" onclick="this.classList.toggle('open')">
-    <div class="news-head">
-      <span class="news-tag">WP-01 news</span>
-      <span class="news-oneliner">Lighting vendor switch approved · Entertainment sub-group blocked on budget · 1 more</span>
-      <span class="news-caret">▼ expand</span>
+    <div class="news-body" onclick="event.stopPropagation()">
+      <div class="news-edit" id="coNewsText" contenteditable="false" oninput="newsEdited()">Full digest: Q3 planning kickoff moved to Jul 14 (WP01.DEC-310). New vendor onboarding policy effective this week — all new vendor contracts route through legal review first. Office closed Jul 20 for maintenance. All-hands recording from Jun 30 processed and searchable.</div>
+      <div class="news-controls">
+        <button onclick="aiRenderNews()">⟳ AI render summary</button>
+        <button onclick="editNews()">✎ Edit</button>
+        <button class="nbtn-primary" onclick="publishNews()">✓ Publish</button>
+        <span class="news-hint">Leadership-only: AI drafts, you edit, publish makes it company truth.</span>
+      </div>
     </div>
-    <div class="news-body">Full digest: Lighting vendor switch to Lumex approved in Monday sync (D-321). Entertainment sub-group blocked on budget sign-off from finance (B-118). Duc returns from PTO Thursday.</div>
   </div>
 
   <!-- ========== TOP ISSUES ========== -->
   <h2 class="sec-head">Top Issues <span class="count">1 official · 2 suggested</span><span class="sec-q">What deserves leadership attention right now?</span></h2>
 
   <div class="issue official">
-    <div class="issue-top"><span class="hchip approved">Approved · Scout</span><b>Lumex lead-time slip threatens the Jul 17 demo</b><span class="aging">open 5d</span><span class="trend bad">↘ worsening</span></div>
+    <div class="issue-top"><span class="hchip approved">Approved · Scout</span><b>Lumex lead-time slip threatens the Jul 17 demo</b><span class="aging">open 5d</span><span class="trend bad">↘ worsening</span><span class="serial">WP01.ISU-5167</span></div>
     <div class="issue-grid">
       <div><label>What is happening</label>Lead times slipped from 2 to 5 weeks; demo hardware may not arrive in time.</div>
       <div><label>Impact if we do nothing</label>Demo slips into August; client pre-brief loses credibility.</div>
       <div><label>Owner</label>Duc</div>
       <div><label>Needed leadership action</label>Approve air-freight budget or re-scope the demo.</div>
     </div>
-    <div class="issue-acts"><button class="primary" onclick="toast('Opens linked decision D-791')">Open linked decision</button><button onclick="toast('Reassign owner')">Assign</button><button onclick="hitlDismiss(this)">Mark resolved</button></div>
+    <div class="issue-acts"><button class="primary" onclick="toast('Opens linked decision WP01.DEC-791')">Open linked decision</button><button onclick="toast('Reassign owner')">Assign</button><button onclick="hitlDismiss(this)">Mark resolved</button><span class="dd-wrap"><select class="ui-dd confirmed" onchange="ddConfirm(this)"><option selected>Urgent</option><option>Not urgent</option></select><select class="ui-dd confirmed" onchange="ddConfirm(this)"><option selected>Important</option><option>Not important</option></select></span></div>
   </div>
 
   <div class="issue suggested">
-    <div class="issue-top"><span class="hchip suggested">AI suggested</span><b>Supplier RFI criteria may be incomplete</b><span class="aging">open 6d</span><span class="trend">→ flat</span></div>
+    <div class="issue-top"><span class="hchip suggested">AI suggested</span><b>Supplier RFI criteria may be incomplete</b><span class="aging">open 6d</span><span class="trend">→ flat</span><span class="serial">WP12.ISU-6789</span></div>
     <div class="issue-grid">
       <div><label>Why the AI surfaced it</label>Supplier discussion is moving forward, but commercial terms, certification evidence, and data-rights requirements are not clearly approved in any channel.</div>
       <div><label>Impact if we do nothing</label>Supplier conversations move forward with weak criteria.</div>
       <div><label>Owner</label>Vu (unconfirmed)</div>
-      <div><label>Needed leadership action</label>Approve the RFI criteria set (Decision D-790).</div>
+      <div><label>Needed leadership action</label>Approve the RFI criteria set (Decision WP08.DEC-790).</div>
     </div>
-    <div class="issue-acts"><button class="primary" onclick="hitlApprove(this)">▲ Promote to official</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="toast('Assign owner')">Assign</button><button onclick="hitlDismiss(this)">Dismiss</button><button onclick="toast('Snoozed 1 week — will resurface')">Snooze</button></div>
+    <div class="issue-acts"><button class="primary" onclick="hitlApprove(this)">▲ Promote to official</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="toast('Assign owner')">Assign</button><button onclick="hitlDismiss(this)">Dismiss</button><button onclick="toast('Snoozed 1 week — will resurface')">Snooze</button><span class="dd-wrap"><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change"><option selected>Urgent</option><option>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change"><option selected>Important</option><option>Not important</option></select></span></div>
   </div>
 
   <div class="issue suggested">
-    <div class="issue-top"><span class="hchip suggested">AI suggested</span><b>Battery vendor data-rights unresolved</b><span class="aging">open 12d</span><span class="trend">→ flat</span></div>
+    <div class="issue-top"><span class="hchip suggested">AI suggested</span><b>Battery vendor data-rights unresolved</b><span class="aging">open 12d</span><span class="trend">→ flat</span><span class="serial">WP08.ISU-4321</span></div>
     <div class="issue-grid">
       <div><label>Why the AI surfaced it</label>Three chats and one meeting reference vendor test data PLANA may not own; no agreement found in any ingested channel.</div>
       <div><label>Impact if we do nothing</label>Certification evidence may be unusable; rework at supplier-contract stage.</div>
       <div><label>Owner</label>— none detected</div>
       <div><label>Needed leadership action</label>Assign an owner; request data-rights clause review.</div>
     </div>
-    <div class="issue-acts"><button class="primary" onclick="hitlApprove(this)">▲ Promote to official</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="toast('Assign owner')">Assign</button><button onclick="hitlDismiss(this)">Dismiss</button><button onclick="toast('Snoozed 1 week — will resurface')">Snooze</button></div>
-  </div>
-
-  <!-- ========== URGENT VS IMPORTANT ========== -->
-  <h2 class="sec-head">Urgent vs Important <span class="sec-q">AI suggests placement — you confirm. A deadline ≠ importance.</span></h2>
-  <div class="matrix">
-    <div class="quad"><h5>Important + Urgent <small>· act now</small></h5>
-      <div class="mitem">Lumex lead-time slip (demo) <span class="hchip approved">✓</span></div>
-      <div class="mitem suggested">Supplier RFI criteria <button onclick="confirmPlace(this)">✓ confirm</button><button onclick="toast('Drag to another quadrant (simulated)')">move</button></div>
-    </div>
-    <div class="quad"><h5>Important + Not urgent <small>· protect time</small></h5>
-      <div class="mitem suggested">Certification path assumptions <button onclick="confirmPlace(this)">✓ confirm</button><button onclick="toast('Move (simulated)')">move</button></div>
-      <div class="mitem suggested">Q3 hiring plan <button onclick="confirmPlace(this)">✓ confirm</button><button onclick="toast('Move (simulated)')">move</button></div>
-    </div>
-    <div class="quad"><h5>Urgent + Not important <small>· delegate</small></h5>
-      <div class="mitem suggested">Office maintenance reschedule <button onclick="confirmPlace(this)">✓ confirm</button><button onclick="toast('Delegated to ops')">delegate</button></div>
-    </div>
-    <div class="quad"><h5>Not urgent + Not important <small>· drop</small></h5>
-      <div class="mitem suggested">Legacy meeting-notes cleanup <button onclick="hitlDismiss(this)">drop</button></div>
-    </div>
+    <div class="issue-acts"><button class="primary" onclick="hitlApprove(this)">▲ Promote to official</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="toast('Assign owner')">Assign</button><button onclick="hitlDismiss(this)">Dismiss</button><button onclick="toast('Snoozed 1 week — will resurface')">Snooze</button><span class="dd-wrap"><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change"><option>Urgent</option><option selected>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change"><option selected>Important</option><option>Not important</option></select></span></div>
   </div>
 
   <!-- ========== DECISION QUEUE ========== -->
   <h2 class="sec-head">Decision Queue <span class="count">2</span><span class="sec-q">A decision changes direction, budget, ownership, or company truth.</span></h2>
 
   <div class="issue suggested">
-    <div class="issue-top"><span class="hchip suggested">Awaiting you</span><b>D-790 · Approve supplier RFI criteria set</b><span class="aging">deadline Jul 10</span></div>
+    <div class="issue-top"><span class="hchip suggested">Awaiting you</span><b>Approve supplier RFI criteria set</b><span class="aging">deadline Jul 10</span><span class="serial">WP08.DEC-790</span></div>
     <div class="issue-grid">
       <div><label>Requested by</label>Vu (WP-02 supplier lead)</div>
       <div><label>Recommendation</label>Approve v2 with added data-rights clause</div>
@@ -390,11 +432,11 @@
       <div><label>Evidence / source</label><a style="text-decoration:underline;cursor:pointer" onclick="toast('Opens RFI draft v2 + Jun 30 meeting extract')">RFI draft v2 + meeting extract ↗</a></div>
       <div><label>If no decision</label>Supplier conversations slip ~2 weeks; criteria stay informal</div>
     </div>
-    <div class="issue-acts"><button class="primary" onclick="toast('Opens decision flow — outcome recorded as company truth')">Decide now</button><button onclick="toast('30 min held tomorrow 9:00')">Schedule 30 min</button><button onclick="toast('Delegate with note')">Delegate</button></div>
+    <div class="issue-acts"><button class="primary" onclick="toast('Opens decision flow — outcome recorded as company truth')">Decide now</button><button onclick="toast('30 min held tomorrow 9:00')">Schedule 30 min</button><button onclick="toast('Delegate with note')">Delegate</button><span class="dd-wrap"><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change"><option selected>Urgent</option><option>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change"><option selected>Important</option><option>Not important</option></select></span></div>
   </div>
 
   <div class="issue suggested">
-    <div class="issue-top"><span class="hchip suggested">Awaiting you</span><b>D-789 · Freeze cabin fixture spec at v3</b><span class="aging">deadline Jul 9</span></div>
+    <div class="issue-top"><span class="hchip suggested">Awaiting you</span><b>Freeze cabin fixture spec at v3</b><span class="aging">deadline Jul 9</span><span class="serial">WP08.DEC-951</span></div>
     <div class="issue-grid">
       <div><label>Requested by</label>Scout (WP-01)</div>
       <div><label>Recommendation</label>Freeze at v3; changes go through change control</div>
@@ -403,7 +445,7 @@
       <div><label>Evidence / source</label><a style="text-decoration:underline;cursor:pointer" onclick="toast('Opens spec doc v3')">Spec doc v3 ↗</a></div>
       <div><label>If no decision</label>Suppliers quote against a moving target</div>
     </div>
-    <div class="issue-acts"><button class="primary" onclick="toast('Opens decision flow — outcome recorded as company truth')">Decide now</button><button onclick="toast('30 min held tomorrow 9:30')">Schedule 30 min</button><button onclick="toast('Delegate with note')">Delegate</button></div>
+    <div class="issue-acts"><button class="primary" onclick="toast('Opens decision flow — outcome recorded as company truth')">Decide now</button><button onclick="toast('30 min held tomorrow 9:30')">Schedule 30 min</button><button onclick="toast('Delegate with note')">Delegate</button><span class="dd-wrap"><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change"><option>Urgent</option><option selected>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change"><option selected>Important</option><option>Not important</option></select></span></div>
   </div>
 
   <!-- ========== BLOCKERS ========== -->
@@ -411,26 +453,30 @@
   <div class="grid">
     <div class="card">
       <div class="card-head">You're blocking <span class="count">1</span></div>
-      <div class="item"><span class="id">B-118</span>Entertainment group waiting on your budget review
+      <div class="item"><span class="id">WP08.BLK-118</span>Entertainment group waiting on your budget review
         <div class="meta">Blocked: Duc's team · Unblock: You · Since Jul 1 · Impact: demo prep idles</div>
+        <div class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)"><option selected>Urgent</option><option>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)"><option selected>Important</option><option>Not important</option></select></div>
         <div class="acts"><button onclick="ackItem(this)">✓ Resolve</button><button onclick="toast('Opens source transcript')">Source ↗</button></div>
       </div>
     </div>
     <div class="card">
       <div class="card-head">Another leader is blocking <span class="count">1</span></div>
-      <div class="item"><span class="id">B-121</span>WP-02 hiring waits on finance headcount sign-off
+      <div class="item"><span class="id">WP01.BLK-121</span>WP-02 hiring waits on finance headcount sign-off
         <div class="meta">Blocked: Vu · Unblock: Finance lead · Since Jun 25 · Impact: Q3 hiring slips</div>
+        <div class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)"><option>Urgent</option><option selected>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)"><option selected>Important</option><option>Not important</option></select></div>
         <div class="acts"><button onclick="toast('Nudge sent to finance lead')">Nudge</button><button onclick="toast('Escalation drafted')">Escalate</button></div>
       </div>
     </div>
     <div class="card">
       <div class="card-head">Missing info / supplier / ownership <span class="count">2</span></div>
-      <div class="item"><span class="id">B-112</span>Vu needs fixture measurements <span class="overdue-flag">MISSING INFO</span>
+      <div class="item"><span class="id">WP05.BLK-112</span>Vu needs fixture measurements <span class="overdue-flag">MISSING INFO</span>
         <div class="meta">Unblock: Scout · Since Jun 29 · Impact: material order delayed</div>
+        <div class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)"><option selected>Urgent</option><option>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)"><option>Important</option><option selected>Not important</option></select></div>
         <div class="acts"><button onclick="ackItem(this)">✓ Resolve</button><button onclick="toast('Opens source chat')">Source ↗</button></div>
       </div>
-      <div class="item"><span class="id">B-125</span>Battery vendor test data not delivered <span class="overdue-flag">SUPPLIER</span>
+      <div class="item"><span class="id">WP01.BLK-125</span>Battery vendor test data not delivered <span class="overdue-flag">SUPPLIER</span>
         <div class="meta">Unblock: vendor — contract owner unclear · Since Jun 20 · Impact: evidence gap</div>
+        <div class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)"><option>Urgent</option><option selected>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)"><option selected>Important</option><option>Not important</option></select></div>
         <div class="acts"><button onclick="toast('Assign contract owner')">Assign owner</button><button onclick="toast('Opens vendor thread')">Source ↗</button></div>
       </div>
     </div>
@@ -439,50 +485,59 @@
   <!-- ========== WHAT CHANGED ========== -->
   <h2 class="sec-head">What changed since your last review <span class="sec-q">last reviewed: yesterday 17:40</span><button class="reviewed-btn" onclick="markReviewed(this)">Mark reviewed ✓</button></h2>
   <div id="chgList" class="card">
-    <div class="item"><span class="chg-tag">New issue</span>Battery vendor data-rights surfaced by AI<div class="meta">today 10:05 · from 3 chats + 1 meeting</div></div>
-    <div class="item"><span class="chg-tag">Decision made</span>D-321 vendor switch approved — now company truth<div class="meta">yesterday · approved by Scout</div></div>
-    <div class="item"><span class="chg-tag">Risk increased</span>R-08 demo risk trend moved flat → worsening<div class="meta">today · lead-time data updated</div></div>
-    <div class="item"><span class="chg-tag">Conflict detected</span>Two documents disagree on passenger count (4 vs 6)<div class="meta">today · needs engineering review</div></div>
-    <div class="item"><span class="chg-tag">Went stale</span>WP-02 budget doc untouched for 30 days<div class="meta">flagged by AI · owner: Vu</div></div>
+    <div class="item"><span class="chg-tag">New issue</span>WP08.ISU-4321 battery vendor data-rights surfaced by AI<div class="meta">today 10:05 · from 3 chats + 1 meeting</div>
+      <div class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)"><option>Urgent</option><option selected>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)"><option selected>Important</option><option>Not important</option></select></div></div>
+    <div class="item"><span class="chg-tag">Decision made</span>WP01.DEC-321 vendor switch approved — now company truth<div class="meta">yesterday · approved by Scout</div>
+      <div class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)"><option>Urgent</option><option selected>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)"><option selected>Important</option><option>Not important</option></select></div></div>
+    <div class="item"><span class="chg-tag">Risk increased</span>WP01.RSK-0008 demo risk trend moved flat → worsening<div class="meta">today · lead-time data updated</div>
+      <div class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)"><option selected>Urgent</option><option>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)"><option selected>Important</option><option>Not important</option></select></div></div>
+    <div class="item"><span class="chg-tag">Conflict detected</span>WP03.ISU-7712 two documents disagree on passenger count (4 vs 6)<div class="meta">today · needs engineering review</div>
+      <div class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)"><option>Urgent</option><option selected>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)"><option selected>Important</option><option>Not important</option></select></div></div>
+    <div class="item"><span class="chg-tag">Went stale</span>WP02.ISU-7713 budget doc untouched for 30 days<div class="meta">flagged by AI · owner: Vu</div>
+      <div class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)"><option>Urgent</option><option selected>Not urgent</option></select><select class="ui-dd" onchange="ddConfirm(this)"><option>Important</option><option selected>Not important</option></select></div></div>
   </div>
 
   <!-- ========== TODAY'S AGENDA ========== -->
   <h2 class="sec-head">Today's leadership agenda <span class="sec-q">AI-recommended moves — accept, edit, reorder, or dismiss</span></h2>
   <div id="agendaList">
-    <div class="agenda-item"><span class="agenda-num">1</span><span>Decide D-790 (supplier RFI criteria) — unblocks a Top Issue + supplier outreach</span>
+    <div class="agenda-item"><span class="agenda-num">1</span><span>Decide WP08.DEC-790 (supplier RFI criteria) — unblocks a Top Issue + supplier outreach</span>
       <span class="agenda-acts"><button onclick="agendaAccept(this)">✓ Accept</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="moveUp(this)">↑</button><button onclick="hitlDismiss(this)">✕</button></span></div>
-    <div class="agenda-item"><span class="agenda-num">2</span><span>Clear B-118 (your budget review) — Duc's team is idle</span>
+    <div class="agenda-item"><span class="agenda-num">2</span><span>Clear WP08.BLK-118 (your budget review) — Duc's team is idle</span>
       <span class="agenda-acts"><button onclick="agendaAccept(this)">✓ Accept</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="moveUp(this)">↑</button><button onclick="hitlDismiss(this)">✕</button></span></div>
-    <div class="agenda-item"><span class="agenda-num">3</span><span>Respond to R-08 (demo risk) — approve air-freight or re-scope</span>
+    <div class="agenda-item"><span class="agenda-num">3</span><span>Respond to WP01.RSK-0008 (demo risk) — approve air-freight or re-scope</span>
       <span class="agenda-acts"><button onclick="agendaAccept(this)">✓ Accept</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="moveUp(this)">↑</button><button onclick="hitlDismiss(this)">✕</button></span></div>
     <div class="agenda-item"><span class="agenda-num">4</span><span>Review 2 AI-suggested Top Issues — promote or dismiss</span>
       <span class="agenda-acts"><button onclick="agendaAccept(this)">✓ Accept</button><button onclick="toast('Opens inline editor')">Edit</button><button onclick="moveUp(this)">↑</button><button onclick="hitlDismiss(this)">✕</button></span></div>
   </div>
 
-  <div class="savedviews">
-    <h3>Your saved views</h3>
-    <div class="sv-row">
-      <div class="sv-chip" onclick="switchTab('find'); applySaved('risks')">Risks · WP-02 · Last 30 days<small>saved from Filter &amp; Find</small></div>
-      <div class="sv-chip" onclick="switchTab('find'); applySaved('decisions')">All decisions · Company · This quarter<small>saved from Filter &amp; Find</small></div>
-      <div class="sv-chip ghost" onclick="switchTab('find')">+ New view (build in Filter &amp; Find)</div>
-    </div>
-  </div>
-
-  <p class="wf-note">Wireframe notes (Leadership): every AI output carries a status — dashed = AI suggested (provisional, visible but not official), solid = human approved (company truth), faded = dismissed. Approval is required only for <i>promotion to official</i>, so awareness is never gated behind review clicks. Sections follow Duc's model: Top Issues → Urgent/Important → Decision Queue → Blockers (split by who unblocks) → What Changed → Today's Agenda.</p>
+  <p class="wf-note">Wireframe notes (Leadership, rev. 3): every extraction carries a work-package serial (WP##.TYP-#### — ISU/DEC/BLK/RSK/ACT/QST) and its own Urgent/Important dropdowns — AI pre-fills them (dashed), a human change or confirm makes them solid. The quadrant matrix and Saved Views sections are removed; classification lives on each item, and saved views now live in Filter &amp; Find. Dashed = AI suggested · solid = human approved · faded = dismissed.</p>
 
   </div><!-- /dash-lead -->
 
   <!-- ========== PROJECT / WORK PACKAGE (next phase stub) ========== -->
   <div id="dash-proj" class="stub-section" style="display:none">
-    <h2 class="sec-head">Project / Work Package <span class="badge outline">next phase</span><span class="sec-q">Is the work moving, blocked, late, or drifting?</span></h2>
+    <h2 class="sec-head">Work Package Review <span class="badge outline">next phase</span><span class="sec-q">Is the work moving, blocked, late, or drifting?</span></h2>
     <p class="principle">AI detects project signals. Human confirms project status. Blocked work (something is missing) is managed differently from late work (a commitment was missed).</p>
+
+    <div class="news-strip" id="wpNewsStrip" onclick="this.classList.toggle('open')" style="opacity:1;">
+      <div class="news-head">
+        <select class="ui-dd confirmed news-tag" style="text-transform:uppercase;" onclick="event.stopPropagation()" onchange="wpNews(this)" title="Leadership permission: toggle any of the 13 work packages">
+          <option selected>WP-01</option><option>WP-02</option><option>WP-03</option><option>WP-04</option><option>WP-05</option><option>WP-06</option><option>WP-07</option><option>WP-08</option><option>WP-09</option><option>WP-10</option><option>WP-11</option><option>WP-12</option><option>WP-13</option>
+        </select>
+        <span class="news-tag" style="border:none; padding:0;">news</span>
+        <span class="news-oneliner" id="wpNewsLine">Lighting vendor switch approved · Entertainment sub-group blocked on budget · 1 more</span>
+        <span class="news-caret">▼ expand</span>
+      </div>
+      <div class="news-body" id="wpNewsBody">Full digest: Lighting vendor switch to Lumex approved in Monday sync (WP01.DEC-321). Entertainment sub-group blocked on budget sign-off from finance (WP08.BLK-118). Duc returns from PTO Thursday.</div>
+    </div>
+
     <table class="wp-table">
       <tr><th>Work package</th><th>Status (human-confirmed)</th><th>Owner</th><th>Milestone</th><th>Forecast</th><th>Confidence</th><th>Main blocker</th><th>Main dependency</th><th>Decision needed</th><th>Trend</th></tr>
       <tr><td>WP-01 · Propulsion integration</td><td>On track ✓</td><td>Scout</td><td>PDR prep</td><td>Aug 12</td><td>Med</td><td>—</td><td>ICD-04</td><td>—</td><td>↗</td></tr>
       <tr><td>WP-02 · Supplier RFI</td><td><span class="hchip suggested">AI: blocked?</span></td><td>Vu</td><td>RFI issue</td><td>Jul 22</td><td>Low</td><td>RFI criteria unapproved</td><td>Decision D-790</td><td>Yes</td><td>↘</td></tr>
       <tr><td>WP-03 · Demo aircraft</td><td>At risk ✓</td><td>Duc</td><td>Demo</td><td>Jul 17</td><td>Low</td><td>Lumex lead time</td><td>Air-freight decision</td><td>Yes</td><td>↘</td></tr>
     </table>
-    <p class="wf-note">Skeleton only — same data as Leadership, re-cut by work package. AI-suggested statuses require owner confirmation before becoming official, mirroring the Leadership HITL flow.</p>
+    <p class="wf-note">Same data as Leadership, re-cut by work package. The news dropdown at top gives a per-package digest (WP-01 through WP-13, leadership permission); the matrix below gives status at a glance. AI-suggested statuses require owner confirmation before becoming official, mirroring the Leadership HITL flow.</p>
   </div>
 
   <!-- ========== ENGINEERING / AIRCRAFT (next phase stub) ========== -->
@@ -574,6 +629,15 @@
       </div>
 
       <button class="clear-all" onclick="clearAll()">Clear all filters</button>
+
+      <div class="facet" style="margin-top:16px;">
+        <h4>Your saved views</h4>
+        <div class="sv-row" style="flex-direction:column; align-items:stretch;">
+          <div class="sv-chip" onclick="applySaved('risks')">Risks · WP-02 · Last 30 days<small>applies these filters</small></div>
+          <div class="sv-chip" onclick="applySaved('decisions')">All decisions · Company · This quarter<small>applies these filters</small></div>
+          <div class="sv-chip ghost" onclick="toast('Set filters above, then use ＋ Add view to Dashboard / Save view')">+ Save current filters as a view</div>
+        </div>
+      </div>
     </aside>
 
     <div>
@@ -584,7 +648,7 @@
       </div>
       <div class="chips" id="chips"></div>
       <div id="results"></div>
-      <p class="wf-note">Wireframe notes: results update live (no Done/Apply step) · applied filters shown as removable chips · results are typed cards, not prose · every card links to its source · asking a question in the top bar auto-populates these filters.</p>
+      <p class="wf-note">Wireframe notes (rev. 3): every result carries its work-package serial (WP##.TYP-####) under the type badge — same ID as on the dashboards — and its own AI-prefilled Urgent/Important dropdowns (dashed until a human confirms). Results update live · applied filters are removable chips · every card links to its source · asking a question in the top bar auto-populates these filters · saved views now live in the left rail.</p>
     </div>
   </div>
 </section>
@@ -599,7 +663,7 @@
     <button class="qchip" onclick="tlFilter(this,'Blocker')">Blockers</button>
   </div>
   <div id="tl"></div>
-  <p class="wf-note">Wireframe notes: Timeline answers "what changed?" — a reverse-chronological feed of extracted objects, grouped by day, filtered by the same scope/horizon controls above.</p>
+  <p class="wf-note">Wireframe notes (rev. 3): Timeline answers "what changed?" — a reverse-chronological feed of extracted objects, grouped by day, filtered by the same scope/horizon controls above. Every entry carries its work-package serial (same ID as on the dashboards and Filter &amp; Find) and AI-prefilled Urgent/Important dropdowns (dashed until a human confirms).</p>
 </section>
 
 <!-- ==================== CALENDAR ==================== -->
@@ -610,10 +674,30 @@
     <span><span class="st proc">… Processing</span> ingestion running</span>
     <span><span class="st warn">! No capture</span> no transcript/notes found</span>
   </div>
-  <p class="wf-note">Wireframe notes: Calendar doubles as ingestion visibility — every meeting shows whether it was captured and processed. "＋ Add assets" deep-links into the native capture companion (planabrain:// protocol) pre-scoped to that meeting; "No capture" meetings style it as a recovery CTA, turning blind spots into contributions.</p>
+  <p class="wf-note">Wireframe notes (rev. 3): Calendar doubles as ingestion visibility — every meeting shows whether it was captured and processed. Clicking a card opens the full-screen engagement record with five fidelity levels: Infographic (10-second read) → Slideshow (rendered deck) → Summary (written digest) → Transcripts (raw merged data, full traceability) → Linked assets (every participant contribution). "＋ Add assets" deep-links into the native capture companion pre-scoped to that meeting; "No capture" engagements show a recovery CTA in place of content.</p>
 </section>
 
 </main>
+
+<!-- ==================== ENGAGEMENT OVERLAY (calendar full-screen record) ==================== -->
+<div id="engOvl">
+  <div class="eng-head">
+    <b id="engName">Meeting</b>
+    <span id="engMeta" style="color:var(--ink3); font-size:13px;">Mon 6 · 9:30</span>
+    <span class="serial" id="engSerial">WP01.MTG-0042</span>
+    <span class="hchip" id="engStatus">Processed</span>
+    <button class="eng-add" onclick="closeEng(); openCapture(engMtgName,false)">＋ Add assets</button>
+    <button class="eng-x" onclick="closeEng()">✕ Close</button>
+  </div>
+  <div class="eng-tabs">
+    <button class="active" onclick="engTab(this,'info')">Infographic</button>
+    <button onclick="engTab(this,'slides')">Slideshow</button>
+    <button onclick="engTab(this,'summary')">Summary</button>
+    <button onclick="engTab(this,'transcripts')">Transcripts</button>
+    <button onclick="engTab(this,'assets')">Linked assets</button>
+  </div>
+  <div class="eng-body" id="engContent"></div>
+</div>
 
 <!-- ==================== CAPTURE PANEL (simulated native companion app) ==================== -->
 <div id="ovl" onclick="if(event.target===this)closeCapture()">
@@ -676,23 +760,24 @@ function toast(msg){
 
 /* ---------- Filter & Find data ---------- */
 const DATA=[
- {id:'D-321',type:'Decision',text:'Switch WP-01 lighting vendor to Lumex',owner:'Scout',team:'WP-01',channel:'Meeting',date:'Jun 29',days:3,src:'GMeet: WP-01 sync'},
- {id:'D-456',type:'Decision',text:'Entertainment demo pushed to Jul 17',owner:'Duc',team:'WP-01',channel:'Email',date:'Jul 1',days:1,src:'Email thread'},
- {id:'D-789',type:'Decision',text:'Kitchen fixture spec frozen at v3 (awaiting sign-off)',owner:'Scout',team:'WP-01',channel:'Doc',date:'Jul 2',days:0,src:'Doc upload'},
- {id:'D-290',type:'Decision',text:'Bathroom tile supplier confirmed: TileCo',owner:'Vu',team:'WP-02',channel:'Meeting',date:'Jun 12',days:20,src:'GMeet: WP-02 sync'},
- {id:'T-235',type:'Action',text:'Send Lumex PO for lighting order (overdue)',owner:'Scout',team:'WP-01',channel:'Meeting',date:'Jun 30',days:2,src:'GMeet: WP-01 sync'},
- {id:'T-133',type:'Action',text:'Review kitchen fixture spec v3 (overdue)',owner:'Scout',team:'WP-01',channel:'Email',date:'Jul 1',days:1,src:'Email thread'},
- {id:'T-98',type:'Action',text:'Order bathroom vanity hardware',owner:'Mitch',team:'WP-02',channel:'Chat',date:'Jun 25',days:7,src:'Chat: #wp-02'},
- {id:'R-08',type:'Risk',text:'Lumex lead-time slip may push the Jul 17 demo',owner:'Scout',team:'WP-01',channel:'Link',date:'Jul 2',days:0,src:'Outside link'},
- {id:'R-06',type:'Risk',text:'WP-02 budget unconfirmed past quarter close',owner:'Vu',team:'WP-02',channel:'Meeting',date:'Jun 27',days:5,src:'GMeet: budget review'},
- {id:'R-04',type:'Risk',text:'Kitchen counter template measurements unverified',owner:'Sally',team:'WP-02',channel:'Note',date:'Jun 8',days:24,src:'Quick note'},
- {id:'B-112',type:'Blocker',text:'Vu blocked on fixture measurements from Scout',owner:'Vu',team:'WP-02',channel:'Chat',date:'Jun 29',days:3,src:'Chat: #wp-02'},
- {id:'B-118',type:'Blocker',text:'Entertainment group blocked on budget review',owner:'Duc',team:'WP-01',channel:'Meeting',date:'Jul 1',days:1,src:'GMeet: WP-01 sync'},
- {id:'Q-12',type:'Question',text:'Which lighting temp for the kitchen — 2700K or 3000K?',owner:'Mitch',team:'WP-02',channel:'Chat',date:'Jul 1',days:1,src:'Chat: #kitchen'},
- {id:'Q-14',type:'Question',text:'Is the Jul 17 demo client-facing?',owner:'Sally',team:'WP-02',channel:'Meeting',date:'Jul 2',days:0,src:'GMeet: standup'},
- {id:'N-51',type:'Info',text:'Lumex catalog + spec sheets attached to vendor record',owner:'Duc',team:'WP-01',channel:'Doc',date:'Jun 30',days:2,src:'Doc upload'},
- {id:'N-49',type:'Info',text:'Site photos from Jun 26 walkthrough geotagged and filed',owner:'Vu',team:'WP-02',channel:'Doc',date:'Jun 26',days:6,src:'Image upload'}
+ {serial:'WP01.DEC-0321',type:'Decision',text:'Switch WP-01 lighting vendor to Lumex',owner:'Scout',team:'WP-01',channel:'Meeting',date:'Jun 29',days:3,src:'GMeet: WP-01 sync',urg:'Not urgent',imp:'Important'},
+ {serial:'WP01.DEC-0456',type:'Decision',text:'Entertainment demo pushed to Jul 17',owner:'Duc',team:'WP-01',channel:'Email',date:'Jul 1',days:1,src:'Email thread',urg:'Urgent',imp:'Important'},
+ {serial:'WP08.DEC-951',type:'Decision',text:'Kitchen fixture spec frozen at v3 (awaiting sign-off)',owner:'Scout',team:'WP-01',channel:'Doc',date:'Jul 2',days:0,src:'Doc upload',urg:'Not urgent',imp:'Important'},
+ {serial:'WP02.DEC-0290',type:'Decision',text:'Bathroom tile supplier confirmed: TileCo',owner:'Vu',team:'WP-02',channel:'Meeting',date:'Jun 12',days:20,src:'GMeet: WP-02 sync',urg:'Not urgent',imp:'Not important'},
+ {serial:'WP01.ACT-0235',type:'Action',text:'Send Lumex PO for lighting order (overdue)',owner:'Scout',team:'WP-01',channel:'Meeting',date:'Jun 30',days:2,src:'GMeet: WP-01 sync',urg:'Urgent',imp:'Important'},
+ {serial:'WP01.ACT-0133',type:'Action',text:'Review kitchen fixture spec v3 (overdue)',owner:'Scout',team:'WP-01',channel:'Email',date:'Jul 1',days:1,src:'Email thread',urg:'Urgent',imp:'Important'},
+ {serial:'WP02.ACT-0098',type:'Action',text:'Order bathroom vanity hardware',owner:'Mitch',team:'WP-02',channel:'Chat',date:'Jun 25',days:7,src:'Chat: #wp-02',urg:'Not urgent',imp:'Not important'},
+ {serial:'WP01.RSK-0008',type:'Risk',text:'Lumex lead-time slip may push the Jul 17 demo',owner:'Scout',team:'WP-01',channel:'Link',date:'Jul 2',days:0,src:'Outside link',urg:'Urgent',imp:'Important'},
+ {serial:'WP02.RSK-0006',type:'Risk',text:'WP-02 budget unconfirmed past quarter close',owner:'Vu',team:'WP-02',channel:'Meeting',date:'Jun 27',days:5,src:'GMeet: budget review',urg:'Not urgent',imp:'Important'},
+ {serial:'WP02.RSK-0004',type:'Risk',text:'Kitchen counter template measurements unverified',owner:'Sally',team:'WP-02',channel:'Note',date:'Jun 8',days:24,src:'Quick note',urg:'Not urgent',imp:'Important'},
+ {serial:'WP05.BLK-112',type:'Blocker',text:'Vu blocked on fixture measurements from Scout',owner:'Vu',team:'WP-02',channel:'Chat',date:'Jun 29',days:3,src:'Chat: #wp-02',urg:'Urgent',imp:'Not important'},
+ {serial:'WP08.BLK-118',type:'Blocker',text:'Entertainment group blocked on budget review',owner:'Duc',team:'WP-01',channel:'Meeting',date:'Jul 1',days:1,src:'GMeet: WP-01 sync',urg:'Urgent',imp:'Important'},
+ {serial:'WP02.QST-0012',type:'Question',text:'Which lighting temp for the kitchen — 2700K or 3000K?',owner:'Mitch',team:'WP-02',channel:'Chat',date:'Jul 1',days:1,src:'Chat: #kitchen',urg:'Not urgent',imp:'Not important'},
+ {serial:'WP02.QST-0014',type:'Question',text:'Is the Jul 17 demo client-facing?',owner:'Sally',team:'WP-02',channel:'Meeting',date:'Jul 2',days:0,src:'GMeet: standup',urg:'Urgent',imp:'Not important'},
+ {serial:'WP01.INF-0051',type:'Info',text:'Lumex catalog + spec sheets attached to vendor record',owner:'Duc',team:'WP-01',channel:'Doc',date:'Jun 30',days:2,src:'Doc upload',urg:'Not urgent',imp:'Not important'},
+ {serial:'WP02.INF-0049',type:'Info',text:'Site photos from Jun 26 walkthrough geotagged and filed',owner:'Vu',team:'WP-02',channel:'Doc',date:'Jun 26',days:6,src:'Image upload',urg:'Not urgent',imp:'Not important'}
 ];
+function ddOpts(val,a,b){return '<option'+(val===a?' selected':'')+'>'+a+'</option><option'+(val===b?' selected':'')+'>'+b+'</option>';}
 let whenDays=7;
 
 function getChecked(cls){
@@ -754,9 +839,10 @@ function refresh(){
   const res=document.getElementById('results');
   if(rows.length===0){res.innerHTML='<div class="empty">No results for these filters.<br><br>Try widening the time window, or ask the company brain directly in the bar above.</div>';return;}
   res.innerHTML=rows.map(d=>
-    '<div class="rcard"><div class="tbadge'+(d.type==='Risk'||d.type==='Blocker'?' filled':'')+'">'+d.type+'</div>'+
-    '<div class="body"><div class="title"><span class="id">'+d.id+'</span>'+d.text+'</div>'+
-    '<div class="meta"><span>Owner: '+d.owner+' ('+d.team+')</span><span>'+d.date+'</span><span>via '+d.channel+'</span></div></div>'+
+    '<div class="rcard"><div class="tcol"><div class="tbadge'+(d.type==='Risk'||d.type==='Blocker'?' filled':'')+'">'+d.type+'</div><div class="serial rserial">'+d.serial+'</div></div>'+
+    '<div class="body"><div class="title">'+d.text+'</div>'+
+    '<div class="meta"><span>Owner: '+d.owner+' ('+d.team+')</span><span>'+d.date+'</span><span>via '+d.channel+'</span></div>'+
+    '<div class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change">'+ddOpts(d.urg,'Urgent','Not urgent')+'</select><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change">'+ddOpts(d.imp,'Important','Not important')+'</select></div></div>'+
     '<a class="src" onclick="toast(\'Opens original source: '+d.src.replace(/'/g,'')+'\')">'+d.src+' ↗</a></div>'
   ).join('');
 }
@@ -797,27 +883,27 @@ function applySaved(kind){
 /* ---------- timeline ---------- */
 const TL=[
  {day:'Today · Thu, Jul 2',entries:[
-   {t:'10:05',type:'Risk',txt:'R-08 surfaced: Lumex lead-time slip may push the Jul 17 demo',src:'auto-linked from I-77 + D-456'},
-   {t:'09:40',type:'Decision',txt:'D-789 proposed: kitchen fixture spec frozen at v3 — awaiting your sign-off',src:'from Doc upload'},
-   {t:'09:12',type:'Question',txt:'Q-14 asked by Sally: is the Jul 17 demo client-facing?',src:'from GMeet: standup'}]},
+   {t:'10:05',type:'Risk',serial:'WP01.RSK-0008',urg:'Urgent',imp:'Important',txt:'Surfaced: Lumex lead-time slip may push the Jul 17 demo',src:'auto-linked from WP01.ISU-0077 + WP01.DEC-0456'},
+   {t:'09:40',type:'Decision',serial:'WP08.DEC-951',urg:'Not urgent',imp:'Important',txt:'Proposed: kitchen fixture spec frozen at v3 — awaiting your sign-off',src:'from Doc upload'},
+   {t:'09:12',type:'Question',serial:'WP02.QST-0014',urg:'Urgent',imp:'Not important',txt:'Asked by Sally: is the Jul 17 demo client-facing?',src:'from GMeet: standup'}]},
  {day:'Yesterday · Wed, Jul 1',entries:[
-   {t:'16:20',type:'Decision',txt:'D-456: entertainment demo pushed to Jul 17',src:'from Email thread'},
-   {t:'14:02',type:'Blocker',txt:'B-118: entertainment group blocked on your budget review',src:'from GMeet: WP-01 sync'},
-   {t:'11:30',type:'Action',txt:'T-133 became overdue: review kitchen fixture spec v3',src:'committed via email Jun 24'},
-   {t:'09:15',type:'Question',txt:'Q-12 asked by Mitch: 2700K or 3000K for kitchen lighting?',src:'from Chat: #kitchen'}]},
+   {t:'16:20',type:'Decision',serial:'WP01.DEC-0456',urg:'Urgent',imp:'Important',txt:'Entertainment demo pushed to Jul 17',src:'from Email thread'},
+   {t:'14:02',type:'Blocker',serial:'WP08.BLK-118',urg:'Urgent',imp:'Important',txt:'Entertainment group blocked on your budget review',src:'from GMeet: WP-01 sync'},
+   {t:'11:30',type:'Action',serial:'WP01.ACT-0133',urg:'Urgent',imp:'Important',txt:'Became overdue: review kitchen fixture spec v3',src:'committed via email Jun 24'},
+   {t:'09:15',type:'Question',serial:'WP02.QST-0012',urg:'Not urgent',imp:'Not important',txt:'Asked by Mitch: 2700K or 3000K for kitchen lighting?',src:'from Chat: #kitchen'}]},
  {day:'Tue, Jun 30',entries:[
-   {t:'15:45',type:'Action',txt:'T-235 became overdue: send Lumex PO for lighting order',src:'committed in WP-01 sync'},
-   {t:'10:00',type:'Info',txt:'All-hands recording processed — 14 items extracted, 3 assigned to WP-01',src:'from GMeet + hardware transcript'}]},
+   {t:'15:45',type:'Action',serial:'WP01.ACT-0235',urg:'Urgent',imp:'Important',txt:'Became overdue: send Lumex PO for lighting order',src:'committed in WP-01 sync'},
+   {t:'10:00',type:'Info',serial:'WP01.INF-0060',urg:'Not urgent',imp:'Not important',txt:'All-hands recording processed — 14 items extracted, 3 assigned to WP-01',src:'from GMeet + hardware transcript'}]},
  {day:'Mon, Jun 29',entries:[
-   {t:'11:20',type:'Decision',txt:'D-321: WP-01 lighting vendor switched to Lumex',src:'from GMeet: WP-01 sync'},
-   {t:'11:25',type:'Blocker',txt:'B-112: Vu waiting on fixture measurements from Scout',src:'from Chat: #wp-02'}]}
+   {t:'11:20',type:'Decision',serial:'WP01.DEC-0321',urg:'Not urgent',imp:'Important',txt:'WP-01 lighting vendor switched to Lumex',src:'from GMeet: WP-01 sync'},
+   {t:'11:25',type:'Blocker',serial:'WP05.BLK-112',urg:'Urgent',imp:'Not important',txt:'Vu waiting on fixture measurements from Scout',src:'from Chat: #wp-02'}]}
 ];
 function renderTL(filter){
   document.getElementById('tl').innerHTML = TL.map(day=>{
     const rows=day.entries.filter(e=>filter==='all'||e.type===filter);
     if(rows.length===0) return '';
     return '<div class="tl-day"><h3>'+day.day+'</h3>'+rows.map(e=>
-      '<div class="tl-entry"><span class="tl-time">'+e.t+'</span><span class="tbadge'+(e.type==='Risk'||e.type==='Blocker'?' filled':'')+'">'+e.type+'</span><span class="txt">'+e.txt+'<small>'+e.src+'</small></span></div>'
+      '<div class="tl-entry"><span class="tl-time">'+e.t+'</span><span class="tcol" style="width:84px;"><span class="tbadge'+(e.type==='Risk'||e.type==='Blocker'?' filled':'')+'" style="width:100%;">'+e.type+'</span><span class="serial rserial">'+e.serial+'</span></span><span class="txt">'+e.txt+'<small>'+e.src+'</small><span class="dd-row"><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change">'+ddOpts(e.urg,'Urgent','Not urgent')+'</select><select class="ui-dd" onchange="ddConfirm(this)" title="AI-suggested — confirm or change">'+ddOpts(e.imp,'Important','Not important')+'</select></span></span></div>'
     ).join('')+'</div>';
   }).join('');
 }
@@ -825,6 +911,83 @@ function tlFilter(btn,type){
   document.querySelectorAll('.qchip').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   renderTL(type);
+}
+
+/* ---------- engagement overlay (calendar record) ---------- */
+let engMtgName='', engMtgStatus='ok', engSlideIdx=0;
+const ENG_SLIDES=[
+ {h:'{NAME}', p:'Auto-rendered deck · 4 slides · built from the merged meeting record. Every claim links back to its source.'},
+ {h:'Decisions (2)', p:'WP01.DEC-0321 — lighting vendor switched to Lumex. WP08.DEC-951 — fixture spec freeze proposed, awaiting sign-off.'},
+ {h:'Actions & blockers', p:'WP01.ACT-0235 — send Lumex PO (overdue). WP08.BLK-118 — entertainment group waiting on budget review.'},
+ {h:'Risks & open questions', p:'WP01.RSK-0008 — lead-time slip may push the Jul 17 demo. WP02.QST-0014 — is the demo client-facing?'}
+];
+function openEng(name,time,status){
+  engMtgName=name; engMtgStatus=status; engSlideIdx=0;
+  document.getElementById('engName').textContent=name;
+  document.getElementById('engMeta').textContent=time+' · this week';
+  document.getElementById('engSerial').textContent='WP01.MTG-0042';
+  const s=document.getElementById('engStatus');
+  if(status==='ok'){s.className='hchip approved'; s.textContent='Processed';}
+  else if(status==='proc'){s.className='hchip suggested'; s.textContent='Processing…';}
+  else {s.className='hchip dismissed'; s.textContent='No capture';}
+  const tabs=document.querySelectorAll('.eng-tabs button');
+  tabs.forEach(b=>b.classList.remove('active')); tabs[0].classList.add('active');
+  renderEng('info');
+  document.getElementById('engOvl').classList.add('show');
+}
+function closeEng(){document.getElementById('engOvl').classList.remove('show');}
+function engTab(btn,which){
+  document.querySelectorAll('.eng-tabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderEng(which);
+}
+function engEmpty(){
+  return '<div class="eng-empty"><b>Nothing was captured for this engagement.</b><br>No transcript, notes, or assets were ingested — so there is nothing to render on any tab.<br><button onclick="closeEng(); openCapture(engMtgName,true)">! Add what you have</button></div>';
+}
+function renderEng(which){
+  const c=document.getElementById('engContent');
+  if(engMtgStatus==='warn'){c.innerHTML=engEmpty(); return;}
+  const proc=engMtgStatus==='proc' ? '<p class="wf-note" style="margin:0 0 14px;">⏳ Ingestion still running — content below is partial and will update.</p>' : '';
+  if(which==='info'){
+    c.innerHTML=proc+
+    '<div class="stat-grid"><div class="stat"><b>2</b><span>Decisions</span></div><div class="stat"><b>3</b><span>Actions</span></div><div class="stat"><b>1</b><span>Risk</span></div><div class="stat"><b>4</b><span>Participants</span></div></div>'+
+    '<div class="takeaway">Key takeaway: vendor switch approved, but lead-time risk now threatens the Jul 17 demo — a decision on air-freight is the critical path.</div>'+
+    '<div class="flowrow"><span class="flowbox">Vendor switch approved</span>→<span class="flowbox">Lead times slipped 2→5 wks</span>→<span class="flowbox">Demo at risk</span>→<span class="flowbox">Air-freight decision needed</span></div>'+
+    '<p class="wf-note">Auto-rendered infographic — a 10-second visual read of the engagement. Click any element to jump to its source (simulated).</p>';
+  } else if(which==='slides'){
+    renderSlide(c,proc);
+  } else if(which==='summary'){
+    c.innerHTML=proc+
+    '<h2 class="sec-head" style="margin-top:0;">Summary</h2>'+
+    '<p style="margin-bottom:10px;">'+engMtgName+' covered the Lumex vendor relationship end to end. The group confirmed the switch to Lumex as the WP-01 lighting vendor (WP01.DEC-0321) and reviewed updated lead times, which have slipped from 2 to 5 weeks. This slip was flagged as a risk to the Jul 17 demo (WP01.RSK-0008) and linked to the pending air-freight decision.</p>'+
+    '<p style="margin-bottom:10px;">Scout committed to sending the Lumex PO (WP01.ACT-0235, now overdue). The entertainment sub-group remains blocked on budget review (WP08.BLK-118). Sally asked whether the Jul 17 demo is client-facing (WP02.QST-0014) — unanswered.</p>'+
+    '<p class="wf-note">Human-in-the-loop: this summary is AI-drafted. Leadership can edit and publish it, same as Company News.</p>';
+  } else if(which==='transcripts'){
+    c.innerHTML=proc+
+    '<div class="transcript">[MERGED SOURCES: GMeet transcript · Plaud hardware · Duc\'s Granola notes]\n\n09:31 SCOUT   ok — Lumex. are we go or no-go on the switch?\n09:31 DUC     go. pricing held, samples passed QA.\n09:32 VU      one flag: their lead time email yesterday said five weeks now, not two.\n09:33 SCOUT   five? that lands after the demo…\n09:34 DUC     then we either air-freight the demo units or re-scope.\n09:35 SALLY   is the demo client-facing? changes what we show.\n09:35 SCOUT   parking that — need an answer this week.\n09:36 SCOUT   I\'ll send the PO today either way.\n\n[47 more lines · full traceability — every extraction links to a line here]</div>';
+  } else if(which==='assets'){
+    c.innerHTML=proc+
+    '<div class="asset-grid">'+
+    '<div class="asset" onclick="toast(\'Opens PDF viewer\')"><span class="atype">PDF</span><b>Lumex-quote-v2.pdf</b><small>uploaded by Duc · during meeting</small></div>'+
+    '<div class="asset" onclick="toast(\'Opens image\')"><span class="atype">Photo</span><b>site-photo_026.jpg</b><small>uploaded by Vu · geotagged Site A</small></div>'+
+    '<div class="asset" onclick="toast(\'Opens video player\')"><span class="atype">Video</span><b>fixture-demo.mp4</b><small>uploaded by Mitch · 2:14</small></div>'+
+    '<div class="asset" onclick="toast(\'Opens external URL\')"><span class="atype">URL</span><b>lumex.example.com/spec-sheets</b><small>referenced by Scout at 09:32</small></div>'+
+    '<div class="asset" onclick="toast(\'Opens whiteboard export\')"><span class="atype">Whiteboard</span><b>demo-plan-board.png</b><small>digital whiteboard export</small></div>'+
+    '<div class="asset" onclick="toast(\'Opens note\')"><span class="atype">Note</span><b>Quick note — PO reminder</b><small>typed by Scout · capture app</small></div>'+
+    '</div>'+
+    '<p class="wf-note">Everything any participant contributed — files, photos, video, URLs, notes — linked to this engagement by the capture flow.</p>';
+  }
+}
+function renderSlide(c,proc){
+  const s=ENG_SLIDES[engSlideIdx];
+  c.innerHTML=(proc||'')+
+  '<div class="slide"><h1>'+s.h.replace('{NAME}',engMtgName)+'</h1><p>'+s.p+'</p></div>'+
+  '<div class="slide-nav"><button onclick="slideNav(-1)">‹ Prev</button><span style="font-size:12px;color:var(--ink3);">Slide '+(engSlideIdx+1)+' of '+ENG_SLIDES.length+'</span><button onclick="slideNav(1)">Next ›</button><button onclick="toast(\'Exports deck as PPTX (simulated)\')">⬇ Export</button></div>';
+}
+function slideNav(d){
+  engSlideIdx=Math.max(0,Math.min(ENG_SLIDES.length-1,engSlideIdx+d));
+  const proc=engMtgStatus==='proc' ? '<p class="wf-note" style="margin:0 0 14px;">⏳ Ingestion still running — content below is partial and will update.</p>' : '';
+  renderSlide(document.getElementById('engContent'),proc);
 }
 
 /* ---------- calendar ---------- */
@@ -843,7 +1006,7 @@ function renderCal(){
   Object.keys(CAL).forEach(d=>{
     heads+='<div class="dayhead">'+d+'</div>';
     cells+='<div class="daycell">'+CAL[d].map(m=>
-      '<div class="mtg" onclick="toast(\'Opens merged meeting record: transcript + notes + assets\')"><b>'+m.n+'</b>'+m.t+'<br><span class="st '+m.s+'">'+stLbl[m.s]+'</span>'+
+      '<div class="mtg" onclick="openEng(\''+m.n+'\',\''+m.t+'\',\''+m.s+'\')"><b>'+m.n+'</b>'+m.t+'<br><span class="st '+m.s+'">'+stLbl[m.s]+'</span>'+
       (m.s==='warn'
         ? '<button class="mtg-add recover" onclick="event.stopPropagation();openCapture(\''+m.n+'\',true)">! No capture — add what you have</button>'
         : '<button class="mtg-add" onclick="event.stopPropagation();openCapture(\''+m.n+'\',false)">＋ Add assets</button>')+
@@ -874,12 +1037,58 @@ function hitlDismiss(btn){
   if(chip){chip.className='hchip dismissed'; chip.textContent='Dismissed';}
   toast('Dismissed — AI will not resurface unless the signal changes');
 }
-function confirmPlace(btn){
-  const it=btn.closest('.mitem');
-  it.classList.remove('suggested');
-  const mv=it.querySelector('button:last-of-type');
-  btn.remove();
-  toast('Placement confirmed — human-controlled priority');
+/* ---------- editable company news (leadership only) ---------- */
+function aiRenderNews(){
+  const t=document.getElementById('coNewsText');
+  t.textContent='AI draft — week of Jul 5: Two decisions await leadership (WP08.DEC-790, WP08.DEC-951). Demo date Jul 17 at risk from Lumex lead times (WP01.ISU-5167). Battery vendor data-rights issue surfaced with no owner (WP08.ISU-4321). Q3 planning kickoff Jul 14. Four blockers open across three work packages.';
+  t.classList.add('aidraft');
+  t.contentEditable='true';
+  const s=document.getElementById('coNewsStatus');
+  s.className='hchip suggested'; s.style.fontSize='9px'; s.textContent='AI draft';
+  toast('AI rendered a fresh summary from this week\'s extractions — edit freely, then publish');
+}
+function editNews(){
+  const t=document.getElementById('coNewsText');
+  t.contentEditable='true'; t.focus();
+  toast('Editing company news — publish when done');
+}
+function newsEdited(){
+  const s=document.getElementById('coNewsStatus');
+  s.className='hchip suggested'; s.style.fontSize='9px'; s.textContent='Edited · unpublished';
+}
+function publishNews(){
+  const t=document.getElementById('coNewsText');
+  t.contentEditable='false'; t.classList.remove('aidraft');
+  const s=document.getElementById('coNewsStatus');
+  s.className='hchip approved'; s.style.fontSize='9px'; s.textContent='Published · you';
+  toast('Published — this digest is now company truth, visible per role permissions');
+}
+
+const WPNEWS={
+ 'WP-01':{line:'Lighting vendor switch approved · Entertainment sub-group blocked on budget · 1 more',body:'Full digest: Lighting vendor switch to Lumex approved in Monday sync (WP01.DEC-321). Entertainment sub-group blocked on budget sign-off from finance (WP08.BLK-118). Duc returns from PTO Thursday.'},
+ 'WP-02':{line:'Supplier RFI on hold pending criteria decision · 2 vendor replies logged',body:'Full digest: RFI issue blocked on WP08.DEC-790. Two vendor responses ingested and linked. Hiring waits on finance sign-off (WP01.BLK-121).'},
+ 'WP-03':{line:'Demo aircraft at risk — Lumex lead time · air-freight decision pending',body:'Full digest: Demo date Jul 17 at risk (WP01.ISU-5167). Air-freight vs re-scope decision expected this week. Checklist prep on track.'},
+ 'WP-04':{line:'Propulsion PDR prep on track · ICD-04 draft circulated',body:'Full digest: PDR prep tracking to Aug 12. Turbogenerator→HV bus ICD draft circulated for review; two open assumptions flagged.'},
+ 'WP-05':{line:'Structures: fixture measurements still missing',body:'Full digest: Fixture measurements blocker (WP05.BLK-112) open 9 days; material order delayed. No other changes this week.'},
+ 'WP-06':{line:'Thermal margin estimate slipped to 11% vs 15% target',body:'Full digest: Thermal margin trending below target; requirements for thermal domain still missing. Needs an owner.'},
+ 'WP-07':{line:'Avionics: no significant changes this week',body:'Full digest: No new extractions this week. Last activity: interface discussion with flight controls, Jun 22.'},
+ 'WP-08':{line:'2 decisions awaiting leadership · battery data-rights issue surfaced',body:'Full digest: WP08.DEC-790 and WP08.DEC-951 await you. Battery vendor data-rights issue (WP08.ISU-4321) surfaced today — no owner detected.'},
+ 'WP-09':{line:'Battery/ESS: vendor test data overdue 18 days',body:'Full digest: Vendor test data undelivered (WP01.BLK-125); certification evidence gap growing. ESS→HV bus ICD still open.'},
+ 'WP-10':{line:'Flight controls: prototype plan review scheduled Fri',body:'Full digest: Control logic evidence review scheduled Friday. One dependency on propulsion ICD.'},
+ 'WP-11':{line:'Manufacturing: no significant changes this week',body:'Full digest: No new extractions. Tooling survey planned for next month.'},
+ 'WP-12':{line:'Procurement: RFI criteria incomplete — issue suggested to leadership',body:'Full digest: WP12.ISU-6789 (supplier RFI criteria) suggested as a top issue. Vendor pipeline active; 17 mailers outstanding.'},
+ 'WP-13':{line:'Ops/infrastructure: office maintenance rescheduled',body:'Full digest: Maintenance vendor rescheduled to Jul 20. No impact on engineering work detected.'}
+};
+function wpNews(sel){
+  const d=WPNEWS[sel.value];
+  document.getElementById('wpNewsLine').textContent=d.line;
+  document.getElementById('wpNewsBody').textContent=d.body;
+  document.getElementById('wpNewsStrip').classList.remove('open');
+  toast(sel.value+' digest loaded — leadership can view all 13 work packages');
+}
+function ddConfirm(sel){
+  sel.classList.add('confirmed');
+  toast('Classification set by you — human-controlled priority');
 }
 function agendaAccept(btn){
   btn.closest('.agenda-item').classList.add('accepted');
