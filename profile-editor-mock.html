@@ -84,6 +84,24 @@
   .btn:hover{background:var(--ink); color:#fff;}
   .btn.primary{background:var(--ink); color:#fff;}
   .btn.primary:hover{opacity:.85;}
+  .cov-row{display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:8px;}
+  .cov-label{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--ink3);}
+  .cov-chip{font-size:10.5px; font-weight:700; border:1.5px dashed var(--line); color:var(--ink3); border-radius:12px; padding:2px 9px; background:#fff;}
+  .cov-chip.lit{border:1.5px solid var(--ink); color:var(--ink); background:#fff;}
+  .cov-chip.lit::before{content:'✓ ';}
+  .cov-guide{margin-left:auto; font-size:11px; font-weight:700; border:1px solid var(--ink); background:#fff; border-radius:4px; padding:3px 10px;}
+  .cov-guide:hover{background:var(--ink); color:#fff;}
+  #guideOvl{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; z-index:60; align-items:center; justify-content:center; padding:20px;}
+  #guideOvl.show{display:flex;}
+  .guide{background:#fff; border-radius:8px; max-width:560px; width:100%; max-height:88vh; overflow:auto; padding:22px 24px; box-shadow:0 12px 40px rgba(0,0,0,.25);}
+  .guide h3{font-size:17px; margin-bottom:4px;}
+  .guide .sub{font-size:12px; color:var(--ink3); margin-bottom:14px;}
+  .guide ol{margin-left:20px;}
+  .guide li{margin-bottom:10px; font-size:13px;}
+  .guide li b{display:block;}
+  .guide li i{color:var(--ink3); font-size:12px;}
+  .guide .close-row{display:flex; margin-top:14px;}
+  .guide .close-row button{margin-left:auto;}
   #toast{position:fixed; bottom:70px; left:50%; transform:translateX(-50%) translateY(120px); background:var(--ink); color:#fff; padding:10px 20px; border-radius:var(--r); font-weight:600; transition:transform .25s; z-index:99; font-size:13px; max-width:90vw;}
   #toast.show{transform:translateX(-50%) translateY(0);}
 </style>
@@ -111,12 +129,17 @@
           <div class="flabel">Work package</div>
           <select oninput="edited('g1')"><option selected>WP-13 — Platform &amp; AI Systems</option><option>WP-01</option><option>WP-02</option><option>…</option></select>
           <div class="flabel">Role / job description — unstructured; describe your mission, key relationships, resources, and authority in your own words</div>
-          <textarea style="min-height:150px;" oninput="edited('g1')">I run WP-13 (Platform &amp; AI Systems) — the team building PLANA's company brain. My mission is to make the platform the trusted source of company truth: first by getting the dashboard-v2 PoC to a standard Duc signs off on, then by rolling it out across all 13 work packages.
+          <textarea id="roleText" style="min-height:150px;" oninput="edited('g1');updateCoverage()">I run WP-13 (Platform &amp; AI Systems) — the team building PLANA's company brain. My mission is to make the platform the trusted source of company truth: first by getting the dashboard-v2 PoC to a standard Duc signs off on, then by rolling it out across all 13 work packages.
 
 Relationships: I report to Duc (COO) and answer to him on scope and budget. I work daily with Vu (technical lead) and the tester group; my delivery depends on their bug-fix velocity. I coordinate with WP-08 on supplier data-rights questions that affect our ingestion pipeline.
 
 Resources &amp; authority: two developers, the tester pool, and the Pioneerxity build partnership. I can approve platform spend up to about $25k and WP-13 hiring on my own; supplier contracts and anything that changes another WP's process go through Duc.</textarea>
-          <div style="font-size:11px;color:var(--ink3);margin-top:4px;font-style:italic;">AI-drafted from your meetings and threads — rewrite freely. The AI parses this to learn what "leadership action" means for you and when to escalate instead of recommend.</div>
+          <div class="cov-row">
+            <span class="cov-label">Coverage:</span>
+            <span id="covChips"></span>
+            <button class="cov-guide" onclick="openGuide()">📋 Writing guide</button>
+          </div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:6px;font-style:italic;">AI-drafted from your meetings and threads — rewrite freely. Chips light up as the AI detects each theme in your draft. Starters: "My mission is… · Success by [date] looks like… · It goes wrong if… · Not my job: …"</div>
         </div>
       </div>
 
@@ -194,7 +217,47 @@ Tool notifications with no decision attached.</textarea>
   <button class="btn primary" id="applyBtn" onclick="applyProfile()">Confirm &amp; apply profile</button>
 </div>
 
+<div id="guideOvl" onclick="if(event.target===this)closeGuide()">
+  <div class="guide">
+    <h3>Writing a role description the AI can use</h3>
+    <div class="sub">Free-form prose is fine — aim to touch all eight themes. The coverage chips light up as each is detected.</div>
+    <ol>
+      <li><b>Mission</b><i>Why your role exists, in one or two sentences.</i></li>
+      <li><b>What success looks like</b><i>Concrete and time-boxed: "Success this quarter = Duc signs off on the PoC and two more WPs onboard."</i></li>
+      <li><b>What failure looks like</b><i>The inverse — what must not happen. Risks threatening this get elevated automatically.</i></li>
+      <li><b>Relationships &amp; dependencies</b><i>Who you answer to, who depends on you, who you depend on. Dependency direction drives blocker routing.</i></li>
+      <li><b>Resources &amp; authority</b><i>Team, budget, partnerships — and what you can approve alone vs. what escalates.</i></li>
+      <li><b>Boundaries — not your job</b><i>What you explicitly don't own, so the AI routes it away instead of guessing.</i></li>
+      <li><b>Constraints &amp; pressures</b><i>Budget ceilings, deadlines, team size, regulatory context — calibrates what a "reasonable action" is.</i></li>
+      <li><b>Time horizons</b><i>What's a this-week concern vs. a this-year ambition, so urgency inference has a baseline.</i></li>
+    </ol>
+    <div class="close-row"><button class="btn primary" onclick="closeGuide()">Got it</button></div>
+  </div>
+</div>
+
 <div id="toast"></div>
+
+<script>
+const THEMES=[
+ {n:'Mission',re:/mission|why (this|my) role|exists to/i},
+ {n:'Success',re:/success|win(ning)? looks|done when|goal for (q[1-4]|this)/i},
+ {n:'Failure',re:/fail(ure)?|goes wrong|must not|worst case/i},
+ {n:'Relationships',re:/report to|answer to|depend|work (daily )?with|coordinate/i},
+ {n:'Resources & authority',re:/resource|authority|approve|budget|team of|my team|partnership/i},
+ {n:'Boundaries',re:/not my job|don'?t own|out of scope|explicitly not/i},
+ {n:'Constraints',re:/constraint|ceiling|deadline|only (have|two|one)|two developers|limited/i},
+ {n:'Horizons',re:/this week|this quarter|this year|long[- ]term|near[- ]term|by (aug|sep|oct|nov|dec|jan|q[1-4])/i}
+];
+function updateCoverage(){
+  const txt=document.getElementById('roleText').value;
+  document.getElementById('covChips').innerHTML=THEMES.map(t=>
+    '<span class="cov-chip'+(t.re.test(txt)?' lit':'')+'">'+t.n+'</span>'
+  ).join(' ');
+}
+function openGuide(){document.getElementById('guideOvl').classList.add('show');}
+function closeGuide(){document.getElementById('guideOvl').classList.remove('show');}
+updateCoverage();
+</script>
 
 <script>
 let toastT;
