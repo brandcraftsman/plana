@@ -71,6 +71,8 @@ button{cursor:pointer;background:none;border:none}
 .side-item:hover{background:var(--raised)}
 .side-item[aria-current="page"],.side-item.active{background:var(--raised);font-weight:600;box-shadow:inset 3px 0 0 var(--brand-orange)}
 .side-item .ico{width:16px;text-align:center;color:var(--muted)}
+.side-item.disabled,.side-item.disabled:hover{background:none;color:var(--faint);cursor:not-allowed;opacity:.55}
+.side-item.disabled .ico{color:var(--faint)}
 .side-foot{border-top:1px solid var(--line);padding:12px}
 .user{display:flex;gap:10px;align-items:center;margin-top:10px;width:100%;text-align:left;
   padding:6px;border-radius:8px;cursor:pointer}
@@ -167,6 +169,8 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .group.critical .group-head h3{background:linear-gradient(90deg,#ff6b69,var(--brand-orange));
   -webkit-background-clip:text;background-clip:text;color:transparent}
 .group.high .group-head h3{color:var(--brand-orange)}
+.group.low .group-head h3{color:var(--faint)}
+.group-head .gloss{font-size:11px;color:var(--faint);font-style:italic;letter-spacing:.02em}
 
 /* cards */
 .card{background:linear-gradient(180deg,#1e1e21 0%,var(--surface) 55%,#18181a 100%);
@@ -183,6 +187,9 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .card h4 button.details-toggle:hover{text-decoration:underline;text-underline-offset:3px}
 .quick{display:flex;gap:8px;align-items:center;flex-shrink:0}
 .summary{font-size:13.5px;color:var(--muted);margin-top:6px;max-width:88ch}
+.serial{position:absolute;right:12px;bottom:8px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:10.5px;letter-spacing:.08em;color:var(--faint);padding:2px 5px;border-radius:4px}
+.serial:hover{color:var(--text);background:var(--raised)}
 .more-link{font:inherit;color:var(--brand-orange);padding:0;white-space:nowrap}
 .more-link:hover{text-decoration:underline;text-underline-offset:3px}
 /* "more" expansion modal */
@@ -215,6 +222,14 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .attn{font-size:12px;font-weight:700;color:var(--brand-orange)}
 .members{font-size:12.5px;color:var(--muted);margin-top:10px}
 .members b{color:var(--faint);font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-right:6px}
+.mem{position:relative;cursor:default;border-radius:3px}
+.mem:hover,.mem:focus-visible{color:var(--text)}
+.mem::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 7px);left:50%;
+  transform:translateX(-50%) translateY(2px);background:var(--raised);border:1px solid var(--line-strong);
+  color:var(--text);font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:6px;white-space:nowrap;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;pointer-events:none;
+  transition:opacity .15s ease .1s, transform .15s ease .1s;z-index:25}
+.mem:hover::after,.mem:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0)}
 .card-actions{display:flex;gap:8px;align-items:center;margin-top:12px}
 .more-wrap{position:relative;margin-left:auto}
 .menu{position:absolute;right:0;top:calc(100% + 4px);background:var(--raised);border:1px solid var(--line-strong);
@@ -225,10 +240,24 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .menu .sep{height:1px;background:var(--line);margin:4px 0}
 .menu button.danger{color:#ff6b69}
 .menu button[aria-checked="true"]::before{content:"✓ ";font-weight:700}
+/* Quad B severity panel */
+.menu.quad{min-width:330px;padding:14px;cursor:default}
+.quad-title{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
+.quad-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quad-cols h6{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.qbtn{display:block;width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:11px;
+  background:var(--surface);color:var(--muted);font-weight:600;font-size:12.5px;margin-bottom:6px;text-align:center}
+.qbtn:hover{border-color:var(--brand-orange);color:var(--text)}
+.qbtn[aria-pressed="true"]{border:none;background:linear-gradient(120deg,var(--brand-red) 25%,var(--brand-orange) 140%);
+  color:#fff;font-weight:800}
+.qbtn[aria-pressed="true"]::before{content:"✓ "}
+.quad-result{border-top:1px solid var(--line);margin-top:8px;padding-top:10px;font-size:12.5px;color:var(--muted);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .details{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:12px;
   font-size:13px;color:var(--muted)}
 .card.open .details{display:block}
 .details a{color:var(--brand-orange)}
+.details .conf{font-weight:700;color:var(--text);cursor:help}
 
 .load-note{text-align:center;color:var(--muted);font-size:13px;padding:10px}
 .load-note .btn{margin-left:10px}
@@ -402,6 +431,14 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .guide .close-row{display:flex;margin-top:14px}
 .guide .close-row .btn{margin-left:auto}
 
+/* jump to top */
+#jumpTop{position:fixed;right:22px;bottom:22px;z-index:50;width:42px;height:42px;border-radius:50%;
+  background:var(--raised);border:1px solid var(--line-strong);color:var(--text);font-size:17px;
+  display:grid;place-items:center;box-shadow:0 8px 26px rgba(0,0,0,.5);cursor:pointer;
+  opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .2s,transform .2s}
+#jumpTop.show{opacity:1;pointer-events:auto;transform:none}
+#jumpTop:hover{border-color:var(--brand-orange);color:var(--brand-orange)}
+
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);
   background:var(--raised);border:1px solid var(--line-strong);border-radius:9px;padding:10px 18px;
   font-size:13px;z-index:90;transition:transform .25s;box-shadow:0 10px 30px rgba(0,0,0,.5)}
@@ -417,19 +454,17 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
     <div class="ws">
       <button class="btn side-collapse" id="sideCollapse" aria-label="Collapse sidebar" title="Collapse sidebar">«</button>
       <img src="data:image/png;base64,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" alt="PLANA">
-      <div class="ws-sub">Company brain</div>
+      <div class="ws-sub">Company Brain Project 1 (Beta)</div>
     </div>
     <div class="side-scroll">
-      <div class="side-label">Discovery</div>
-      <button class="side-item" aria-current="page"><span class="ico">▦</span>Dashboard</button>
-      <button class="side-item"><span class="ico">◫</span>Knowledge Base</button>
-      <button class="side-item"><span class="ico">▤</span>Collections</button>
-      <button class="side-item"><span class="ico">≋</span>Engagement Nav</button>
-
       <div class="side-label">Dashboard views</div>
-      <button class="side-item active"><span class="ico">⚡</span>Action Feed</button>
-      <button class="side-item"><span class="ico">⇄</span>WP Relations</button>
-      <button class="side-item"><span class="ico">⚙</span>Engineering</button>
+      <button class="side-item active"><span class="ico">⚡</span>Me</button>
+      <button class="side-item"><span class="ico">⇄</span>Group Blockers</button>
+      <button class="side-item disabled" disabled aria-disabled="true"
+        title="Not available yet"><span class="ico">⇄</span>Company Blockers</button>
+
+      <div class="side-label">Discovery</div>
+      <button class="side-item"><span class="ico">▤</span>Group Knowledge</button>
     </div>
     <div class="side-foot">
       <button class="btn" style="width:100%;justify-content:center">⇌ Integrations</button>
@@ -478,20 +513,19 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 
     <!-- Row 3: category tabs with counts -->
     <div class="cats" role="tablist" aria-label="Action categories">
-      <button class="cat" role="tab" aria-selected="true">Top issues <span class="n hot">45</span></button>
+      <button class="cat" role="tab" aria-selected="true">Issues <span class="n hot">45</span></button>
       <button class="cat" role="tab" aria-selected="false">Risks <span class="n">12</span></button>
-      <button class="cat" role="tab" aria-selected="false">Blockers <span class="n">4</span></button>
       <button class="cat" role="tab" aria-selected="false">Tasks <span class="n">18</span></button>
       <button class="cat" role="tab" aria-selected="false">Follow-ups <span class="n">9</span></button>
       <button class="cat" role="tab" aria-selected="false">Decisions <span class="n">3</span></button>
-      <button class="cat" role="tab" aria-selected="false">What changed <span class="n">7</span></button>
-      <button class="cat" role="tab" aria-selected="false">Agenda <span class="n">2</span></button>
+      <button class="cat" role="tab" aria-selected="false">Blockers <span class="n">4</span></button>
+      <button class="cat" role="tab" aria-selected="false">Changes <span class="n">7</span></button>
     </div>
 
     <!-- ================= Feed ================= -->
-    <section class="feed" id="feed" aria-label="Top issues feed">
+    <section class="feed" id="feed" aria-label="Issues feed">
       <div class="feed-head">
-        <h2>Top Issues</h2>
+        <h2>Issues</h2>
         <span class="counts"><b>1 official</b> · 44 suggested</span>
         <button class="btn gear-btn" id="gearBtn" aria-haspopup="dialog" aria-controls="tuneDrawer"
           aria-expanded="false" aria-label="Tune extraction" title="Tune extraction">⚙</button>
@@ -499,7 +533,8 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 
       <div class="controls">
         <span class="qf"><select class="quiet" aria-label="Severity" data-default="All severities">
-          <option>All severities</option><option>Critical</option><option>High</option><option>Medium</option></select></span>
+          <option>All severities</option><option>Urgent · High impact</option><option>High impact</option>
+          <option>Urgent · Low impact</option><option>Low impact</option></select></span>
         <span class="qsep">·</span>
         <span class="qf"><select class="quiet" aria-label="Priority" data-default="All priorities">
           <option>All priorities</option><option>Urgent</option><option>Normal</option></select></span>
@@ -520,7 +555,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 <aside id="tuneDrawer" role="dialog" aria-modal="true" aria-labelledby="drTitle">
   <div class="dr-head">
     <div class="dr-head-top">
-      <b id="drTitle">⚙ Extraction tuning — Top Issues</b>
+      <b id="drTitle">⚙ Extraction tuning — Issues</b>
       <span class="wp-chip">WP-13</span>
       <button class="btn" id="drClose">✕ Close</button>
     </div>
@@ -803,6 +838,7 @@ Tool notifications with no decision attached.</textarea>
   </div>
 </div>
 
+<button id="jumpTop" aria-label="Jump to top" title="Jump to top">↑</button>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -847,7 +883,7 @@ const CARDS = [
    "Jeremy was active in the originating Google Meet discussion and is the natural candidate; if he can't take it, the reassignment conversation itself usually surfaces who can."]},
  {t:"Camera expected on the weekly PLANA USA call",
   s:"Enable camera during the weekly PLANA USA call. Meeting norms expect cameras on, and recent sessions show yours off. Low-stakes — surfaced only because it was raised explicitly in the thread.",
-  sev:"medium", when:"seen Jul 22", src:"Google Meet", m:"External guest · Scout Underwood · Duc Huy Tran · Jeremy Thomas · Mitch Amos",
+  sev:"low", when:"seen Jul 22", src:"Google Meet", m:"External guest · Scout Underwood · Duc Huy Tran · Jeremy Thomas · Mitch Amos",
   d:["Cameras-on is an explicit norm for the weekly PLANA USA call, and it was raised directly in the meeting thread on Jul 22 — which is the only reason this low-stakes item is surfaced at all. Recent sessions show your camera off while the rest of the group is on.",
    "This is a social-signal item, not a performance one: the system surfaces it because a stated group norm and observed behavior diverge, and quiet divergences are the kind of thing colleagues notice but rarely mention twice.",
    "If there's a practical reason (bandwidth, location), a one-line note in the thread resets the expectation; otherwise enabling the camera next session closes the item automatically."]},
@@ -871,21 +907,58 @@ const CARDS = [
    "Move the response to the Google Chat thread; confirming there whether filming is acceptable, and under what constraints, is the only path where the answer actually reaches the requester."]}
 ];
 
-const SEV_LABEL = {critical:"Critical", high:"High", medium:"Medium"};
+/* serial numbers — category initial + unique 5-digit id */
+const SERIALS = ["I-00214","I-00389","I-00415","I-00521","I-00548","I-00602","I-00755","I-00633","I-00671","I-00712"];
+CARDS.forEach((c, i) => c.sn = SERIALS[i]);
+/* AI extraction confidence — shown in the title accordion */
+const CONF = [96, 58, 82, 74, 71, 66, 52, 77, 69, 63];
+CARDS.forEach((c, i) => c.conf = CONF[i]);
+/* Quad B model — severity is urgency × impact */
+CARDS.forEach(c => {
+  c.urg = c.sev === "critical" || c.sev === "medium";   // urgent?
+  c.imp = c.sev === "critical" || c.sev === "high";     // high impact?
+});
+const TIER = c => c.urg && c.imp ? "critical" : (!c.urg && c.imp ? "high" : (c.urg ? "medium" : "low"));
+const AXLABEL = c => c.urg && c.imp ? "Urgent · High impact"
+  : (!c.urg && c.imp ? "High impact" : (c.urg ? "Urgent · Low impact" : "Low impact"));
 const srcIcon = s => s === "Gmail" ? "✉" : "▣";
+/* member directory — full name + work package for tooltips */
+const PEOPLE = {
+  "Vu Pham":"WP-07", "Vu Pham (PLANA)":"WP-07",
+  "Scout Underwood":"WP-13",
+  "Duc Huy Tran":"WP-01", "Duc (UX)":"WP-02",
+  "Mitch Amos":"WP-04",
+  "Sally Nanyoung Oh":"WP-09",
+  "Jeremy Thomas":"WP-11",
+  "External guest":"no WP"
+};
+const firstNames = m => m.split("·").map(p => p.trim()).map(p => {
+  const first = p === "External guest" ? p : p.split(" ")[0];
+  const wp = PEOPLE[p] || "WP-?";
+  return `<span class="mem" tabindex="0" data-tip="${p} — ${wp}">${first}</span>`;
+}).join(" · ");
 
 function cardHTML(c, i){
-  const sevChip = `<button class="chip sev sev-${c.sev}" data-menu="sev-${i}"
-      aria-haspopup="menu" aria-expanded="false" title="Change severity">${SEV_LABEL[c.sev]}</button>
-    <div class="menu" id="sev-${i}" role="menu">
-      ${Object.entries(SEV_LABEL).map(([k,v]) =>
-        `<button role="menuitemradio" aria-checked="${k===c.sev}">${v}</button>`).join("")}
+  const ci = CARDS.indexOf(c);
+  const sevChip = `<button class="chip sev sev-${TIER(c)}" data-menu="sev-${i}"
+      aria-haspopup="menu" aria-expanded="false" title="Change urgency / impact">${AXLABEL(c)}</button>
+    <div class="menu quad" id="sev-${i}" role="menu" data-card="${ci}">
+      <div class="quad-title">Severity — set both axes</div>
+      <div class="quad-cols">
+        <div><h6>Urgency</h6>
+          <button class="qbtn" data-ax="urg" data-val="1" aria-pressed="${c.urg}">Urgent</button>
+          <button class="qbtn" data-ax="urg" data-val="0" aria-pressed="${!c.urg}">Not urgent</button></div>
+        <div><h6>Impact</h6>
+          <button class="qbtn" data-ax="imp" data-val="1" aria-pressed="${c.imp}">High impact</button>
+          <button class="qbtn" data-ax="imp" data-val="0" aria-pressed="${!c.imp}">Low impact</button></div>
+      </div>
+      <div class="quad-result">→ <span class="chip sev-${TIER(c)}" style="cursor:default">${AXLABEL(c)}</span></div>
     </div>`;
   const prov = c.official
     ? `<span class="chip approved">Human approved</span>`
     : `<span class="chip dashed">AI suggested</span>`;
   return `
-  <article class="card ${c.official ? "official-card" : ""} sev-${c.sev}">
+  <article class="card ${c.official ? "official-card" : ""} sev-${TIER(c)}">
     <div class="card-top">
       <h4><button class="details-toggle" aria-expanded="false">${c.t}</button></h4>
       <div class="quick">
@@ -916,33 +989,46 @@ function cardHTML(c, i){
       <span class="src">${srcIcon(c.src)} ${c.src}</span>
       <span class="when">${c.when}</span>
     </div>
-    <div class="members"><b>Members</b>${c.m}</div>
+    <div class="members"><b>Members</b>${firstNames(c.m)}</div>
     <div class="details">
+      <span class="conf" title="AI extraction confidence">(${c.conf}%)</span>
       Source thread, timeline, and human adjustment history load here.
       <a href="#">Open source ↗</a>
     </div>
+    <button class="serial" title="Copy issue ID">${c.sn}</button>
   </article>`;
 }
 
-/* group: pinned official first, then suggested by severity */
+/* group: pinned official first, then suggested by quadrant tier */
 const groups = [
-  {key:"official", label:"Official — pinned", items: CARDS.filter(c=>c.official)},
-  {key:"critical", label:"Critical", items: CARDS.filter(c=>!c.official && c.sev==="critical")},
-  {key:"high", label:"High", items: CARDS.filter(c=>!c.official && c.sev==="high")},
-  {key:"medium", label:"Medium", items: CARDS.filter(c=>!c.official && c.sev==="medium")},
+  {key:"official", label:"Official — pinned", gloss:"", items: CARDS.filter(c=>c.official)},
+  {key:"critical", label:"Urgent · High impact", gloss:"", items: CARDS.filter(c=>!c.official && TIER(c)==="critical")},
+  {key:"high", label:"High impact", gloss:"", items: CARDS.filter(c=>!c.official && TIER(c)==="high")},
+  {key:"medium", label:"Urgent · Low impact", gloss:"", items: CARDS.filter(c=>!c.official && TIER(c)==="medium")},
+  {key:"low", label:"Low impact", gloss:"", items: CARDS.filter(c=>!c.official && TIER(c)==="low")},
 ];
 let idx = 0;
-document.getElementById("groups").innerHTML = groups.filter(g=>g.items.length).map(g => `
+document.getElementById("groups").innerHTML = groups.map(g => `
   <div class="group ${g.key}">
-    <div class="group-head"><h3>${g.label}</h3><span class="n">${g.items.length}</span><span class="rule"></span></div>
+    <div class="group-head"><h3>${g.label}</h3>${g.gloss ? `<span class="gloss">${g.gloss}</span>` : ""}<span class="n">${g.items.length}</span><span class="rule"></span></div>
     ${g.items.map(c => cardHTML(c, idx++)).join("")}
   </div>`).join("");
+function refreshGroups(){
+  document.querySelectorAll("#groups .group").forEach(g => {
+    const n = g.querySelectorAll(".card").length;
+    g.querySelector(".group-head .n").textContent = n;
+    g.style.display = n ? "" : "none";
+  });
+}
+refreshGroups();
 
 /* ---------- interactions ---------- */
 // menus (severity chips + overflow)
 document.addEventListener("click", e => {
   const trigger = e.target.closest("[data-menu]");
+  const insideMenu = e.target.closest(".menu");
   document.querySelectorAll(".menu.open").forEach(m => {
+    if (insideMenu === m && m.classList.contains("quad")) return;   // quad panel stays open while setting axes
     if (!trigger || m.id !== trigger.dataset.menu) { m.classList.remove("open");
       const t = document.querySelector(`[data-menu="${m.id}"]`); if (t) t.setAttribute("aria-expanded","false"); }
   });
@@ -951,17 +1037,43 @@ document.addEventListener("click", e => {
     const open = m.classList.toggle("open");
     trigger.setAttribute("aria-expanded", open);
   }
-  // severity selection updates the chip (single source of truth)
-  const radio = e.target.closest('[role="menuitemradio"]');
-  if (radio){
-    const menu = radio.closest(".menu");
+  // Quad B — axis selection updates chip, card tier, and group
+  const qb = e.target.closest(".qbtn");
+  if (qb){
+    const menu = qb.closest(".menu.quad");
+    const c = CARDS[+menu.dataset.card];
+    c[qb.dataset.ax] = qb.dataset.val === "1";
+    menu.querySelectorAll(`.qbtn[data-ax="${qb.dataset.ax}"]`).forEach(b =>
+      b.setAttribute("aria-pressed", b === qb));
     const chip = document.querySelector(`[data-menu="${menu.id}"]`);
-    menu.querySelectorAll("[role=menuitemradio]").forEach(b => b.setAttribute("aria-checked","false"));
-    radio.setAttribute("aria-checked","true");
-    chip.className = `chip sev sev-${radio.textContent.toLowerCase()}`;
-    chip.textContent = radio.textContent;
-    chip.setAttribute("data-menu", menu.id);
-    menu.classList.remove("open");
+    chip.className = `chip sev sev-${TIER(c)}`;
+    chip.textContent = AXLABEL(c);
+    const res = menu.querySelector(".quad-result .chip");
+    res.className = `chip sev-${TIER(c)}`;
+    res.textContent = AXLABEL(c);
+    const card = menu.closest(".card");
+    card.classList.remove("sev-critical","sev-high","sev-medium","sev-low");
+    card.classList.add(`sev-${TIER(c)}`);
+    if (!card.classList.contains("official-card")){
+      const target = document.querySelector(`#groups .group.${TIER(c)}`);
+      if (target && card.parentElement !== target){ target.appendChild(card); refreshGroups(); }
+    }
+  }
+  // serial — click to copy
+  const sn = e.target.closest(".serial");
+  if (sn){
+    const id = sn.textContent.trim();
+    const done = () => toast(`${id} copied to clipboard`);
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(id).then(done, () => fallbackCopy(id, done));
+    } else fallbackCopy(id, done);
+  }
+  function fallbackCopy(text, cb){
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch(_){}
+    ta.remove(); cb();
   }
   // pin / unpin from the ⋯ menu
   const pin = e.target.closest(".pin-btn");
@@ -1076,8 +1188,9 @@ function openMore(idx, trigger){
   document.getElementById("moTitle").textContent = c.t;
   document.getElementById("moMeta").innerHTML =
     (c.official ? '<span class="chip approved">Human approved</span>' : '<span class="chip dashed">AI suggested</span>') +
-    `<span class="chip sev-${c.sev}" style="cursor:default">${SEV_LABEL[c.sev]}</span>` +
-    `<span class="src">${srcIcon(c.src)} ${c.src}</span><span class="when">${c.when}</span>`;
+    `<span class="chip sev-${TIER(c)}" style="cursor:default">${AXLABEL(c)}</span>` +
+    `<span class="src">${srcIcon(c.src)} ${c.src}</span><span class="when">${c.when}</span>` +
+    `<span class="when" style="font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em">${c.sn}</span>`;
   document.getElementById("moBody").innerHTML = c.d.map(p => `<p>${p}</p>`).join("");
   moreOvl.classList.add("show"); moreScrim.classList.add("show");
   document.getElementById("moClose").focus();
@@ -1180,6 +1293,12 @@ const appEl = document.querySelector(".app"),
       sExpand = document.getElementById("sideExpand");
 sCollapse.addEventListener("click", () => { appEl.classList.add("side-collapsed"); sExpand.focus(); });
 sExpand.addEventListener("click", () => { appEl.classList.remove("side-collapsed"); sCollapse.focus(); });
+// jump to top — appears after one viewport of scroll
+const jumpTop = document.getElementById("jumpTop");
+window.addEventListener("scroll", () => {
+  jumpTop.classList.toggle("show", window.scrollY > window.innerHeight * 0.75);
+}, { passive: true });
+jumpTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 // quiet filters — highlight when non-default + shrink-to-fit current value
 const qMeasure = document.createElement("span");
 qMeasure.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;font-size:12.5px";
