@@ -170,6 +170,25 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
   -webkit-background-clip:text;background-clip:text;color:transparent}
 .group.high .group-head h3{color:var(--brand-orange)}
 .group.low .group-head h3{color:var(--faint)}
+.group.blk-in .group-head h3{color:var(--brand-orange)}
+.group.blk-out .group-head h3{background:linear-gradient(90deg,#ff6b69,var(--brand-orange));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.blk-line{font-size:13px;color:var(--muted);margin-top:8px;padding:7px 11px;border-radius:7px;
+  background:var(--bg);border:1px solid var(--line);display:inline-block}
+.blk-line b{color:var(--text)}
+.blk-line.out{border-color:rgba(229,6,2,.45);background:rgba(229,6,2,.06)}
+.blk-line.out b{color:#ff6b69}
+.blk-line.in b{color:var(--brand-orange)}
+.blk-line.delta .d-old{text-decoration:line-through;color:var(--faint)}
+.blk-line.delta .d-arrow{color:var(--brand-orange);margin:0 7px}
+.blk-line.delta b{color:var(--text)}
+.card.reviewed{opacity:.55}
+.card.reviewed:hover{opacity:.85}
+.chip.rev{border:1px solid var(--line-strong);color:var(--muted)}
+.group.today .group-head h3{background:linear-gradient(90deg,#ff6b69,var(--brand-orange));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.group.week .group-head h3{color:var(--muted)}
+.group.lastweek .group-head h3{color:var(--faint)}
 .group-head .gloss{font-size:11px;color:var(--faint);font-style:italic;letter-spacing:.02em}
 
 /* cards */
@@ -222,14 +241,16 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .attn{font-size:12px;font-weight:700;color:var(--brand-orange)}
 .members{font-size:12.5px;color:var(--muted);margin-top:10px}
 .members b{color:var(--faint);font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-right:6px}
-.mem{position:relative;cursor:default;border-radius:3px}
-.mem:hover,.mem:focus-visible{color:var(--text)}
-.mem::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 7px);left:50%;
+.members .src{margin-left:12px}
+.mem,.has-tip{position:relative;cursor:default;border-radius:3px}
+.mem:hover,.mem:focus-visible,.has-tip:hover,.has-tip:focus-visible{color:var(--text)}
+.mem::after,.has-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 7px);left:50%;
   transform:translateX(-50%) translateY(2px);background:var(--raised);border:1px solid var(--line-strong);
   color:var(--text);font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:6px;white-space:nowrap;
   box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;pointer-events:none;
   transition:opacity .15s ease .1s, transform .15s ease .1s;z-index:25}
-.mem:hover::after,.mem:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0)}
+.mem:hover::after,.mem:focus-visible::after,
+.has-tip:hover::after,.has-tip:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0)}
 .card-actions{display:flex;gap:8px;align-items:center;margin-top:12px}
 .more-wrap{position:relative;margin-left:auto}
 .menu{position:absolute;right:0;top:calc(100% + 4px);background:var(--raised);border:1px solid var(--line-strong);
@@ -253,11 +274,15 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .qbtn[aria-pressed="true"]::before{content:"✓ "}
 .quad-result{border-top:1px solid var(--line);margin-top:8px;padding-top:10px;font-size:12.5px;color:var(--muted);
   display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.quad-result .set-by{margin-left:auto;text-align:right;font-size:10.5px;color:var(--faint);line-height:1.45}
+.quad-result .set-by b{color:var(--muted);font-weight:600}
 .details{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:12px;
   font-size:13px;color:var(--muted)}
 .card.open .details{display:block}
 .details a{color:var(--brand-orange)}
 .details .conf{font-weight:700;color:var(--text);cursor:help}
+.details .det-row{display:flex;align-items:center;gap:12px}
+.details .det-raci{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
 
 .load-note{text-align:center;color:var(--muted);font-size:13px;padding:10px}
 .load-note .btn{margin-left:10px}
@@ -459,9 +484,9 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
     <div class="side-scroll">
       <div class="side-label">Dashboard views</div>
       <button class="side-item active"><span class="ico">⚡</span>Me</button>
-      <button class="side-item"><span class="ico">⇄</span>Group Blockers</button>
+      <button class="side-item"><span class="ico">⇄</span>WP-13 Blockers</button>
       <button class="side-item disabled" disabled aria-disabled="true"
-        title="Not available yet"><span class="ico">⇄</span>Company Blockers</button>
+        title="Not available yet"><span class="ico">⇄</span>PLANA Blockers</button>
 
       <div class="side-label">Discovery</div>
       <button class="side-item"><span class="ico">▤</span>Group Knowledge</button>
@@ -513,21 +538,21 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 
     <!-- Row 3: category tabs with counts -->
     <div class="cats" role="tablist" aria-label="Action categories">
-      <button class="cat" role="tab" aria-selected="true">Issues <span class="n hot">45</span></button>
-      <button class="cat" role="tab" aria-selected="false">Risks <span class="n">12</span></button>
-      <button class="cat" role="tab" aria-selected="false">Tasks <span class="n">18</span></button>
-      <button class="cat" role="tab" aria-selected="false">Follow-ups <span class="n">9</span></button>
-      <button class="cat" role="tab" aria-selected="false">Decisions <span class="n">3</span></button>
-      <button class="cat" role="tab" aria-selected="false">Blockers <span class="n">4</span></button>
-      <button class="cat" role="tab" aria-selected="false">Changes <span class="n">7</span></button>
+      <button class="cat" role="tab" aria-selected="true" data-view="issues">Issues <span class="n hot">45</span></button>
+      <button class="cat" role="tab" aria-selected="false" data-view="risks">Risks <span class="n">12</span></button>
+      <button class="cat" role="tab" aria-selected="false" data-view="tasks">Tasks <span class="n">18</span></button>
+      <button class="cat" role="tab" aria-selected="false" data-view="followups">Follow-ups <span class="n">9</span></button>
+      <button class="cat" role="tab" aria-selected="false" data-view="decisions">Decisions <span class="n">3</span></button>
+      <button class="cat" role="tab" aria-selected="false" data-view="blockers">Blockers <span class="n">4</span></button>
+      <button class="cat" role="tab" aria-selected="false" data-view="changes">Changes <span class="n">7</span></button>
     </div>
 
     <!-- ================= Feed ================= -->
-    <section class="feed" id="feed" aria-label="Issues feed">
+    <section class="feed" id="feed" data-view="issues" aria-label="Issues feed">
       <div class="feed-head">
         <h2>Issues</h2>
         <span class="counts"><b>1 official</b> · 44 suggested</span>
-        <button class="btn gear-btn" id="gearBtn" aria-haspopup="dialog" aria-controls="tuneDrawer"
+        <button class="btn gear-btn" id="gearBtn" data-cat="Issues" aria-haspopup="dialog" aria-controls="tuneDrawer"
           aria-expanded="false" aria-label="Tune extraction" title="Tune extraction">⚙</button>
       </div>
 
@@ -543,9 +568,147 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
           <option>Active</option><option>Snoozed</option><option>Dismissed</option></select></span>
       </div>
 
-      <div id="groups"></div>
+      <div id="groups" class="groups-box"></div>
 
       <p class="load-note">Showing 10 of 45 items <button class="btn" type="button">Load 35 more</button></p>
+    </section>
+
+    <!-- ================= Risks ================= -->
+    <section class="feed" id="feed-risks" data-view="risks" aria-label="Risks feed" hidden>
+      <div class="feed-head">
+        <h2>Risks</h2>
+        <span class="counts"><b>1 official</b> · 11 suggested</span>
+        <button class="btn gear-btn" data-cat="Risks" aria-haspopup="dialog" aria-controls="tuneDrawer"
+          aria-label="Tune extraction" title="Tune extraction">⚙</button>
+      </div>
+      <div class="controls">
+        <span class="qf"><select class="quiet" aria-label="Severity" data-default="All severities">
+          <option>All severities</option><option>Likely · High impact</option><option>High impact</option>
+          <option>Likely · Low impact</option><option>Low impact</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Priority" data-default="All priorities">
+          <option>All priorities</option><option>Urgent</option><option>Normal</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Status" data-default="Active">
+          <option>Active</option><option>Snoozed</option><option>Dismissed</option></select></span>
+      </div>
+      <div id="groups-risks" class="groups-box"></div>
+      <p class="load-note">Showing 7 of 12 risks <button class="btn" type="button">Load 5 more</button></p>
+    </section>
+
+    <!-- ================= Tasks ================= -->
+    <section class="feed" id="feed-tasks" data-view="tasks" aria-label="Tasks feed" hidden>
+      <div class="feed-head">
+        <h2>Tasks</h2>
+        <span class="counts"><b>1 official</b> · 17 suggested</span>
+        <button class="btn gear-btn" data-cat="Tasks" aria-haspopup="dialog" aria-controls="tuneDrawer"
+          aria-label="Tune extraction" title="Tune extraction">⚙</button>
+      </div>
+      <div class="controls">
+        <span class="qf"><select class="quiet" aria-label="Severity" data-default="All severities">
+          <option>All severities</option><option>Urgent · High impact</option><option>High impact</option>
+          <option>Urgent · Low impact</option><option>Low impact</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Priority" data-default="All priorities">
+          <option>All priorities</option><option>Urgent</option><option>Normal</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Status" data-default="Active">
+          <option>Active</option><option>Snoozed</option><option>Dismissed</option></select></span>
+      </div>
+      <div id="groups-tasks" class="groups-box"></div>
+      <p class="load-note">Showing 8 of 18 tasks <button class="btn" type="button">Load 10 more</button></p>
+    </section>
+
+    <!-- ================= Follow-ups ================= -->
+    <section class="feed" id="feed-followups" data-view="followups" aria-label="Follow-ups feed" hidden>
+      <div class="feed-head">
+        <h2>Follow-ups</h2>
+        <span class="counts"><b>1 official</b> · 8 suggested</span>
+        <button class="btn gear-btn" data-cat="Follow-ups" aria-haspopup="dialog" aria-controls="tuneDrawer"
+          aria-label="Tune extraction" title="Tune extraction">⚙</button>
+      </div>
+      <div class="controls">
+        <span class="qf"><select class="quiet" aria-label="Severity" data-default="All severities">
+          <option>All severities</option><option>Overdue · High impact</option><option>High impact</option>
+          <option>Overdue · Low impact</option><option>Low impact</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Priority" data-default="All priorities">
+          <option>All priorities</option><option>Urgent</option><option>Normal</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Status" data-default="Active">
+          <option>Active</option><option>Snoozed</option><option>Dismissed</option></select></span>
+      </div>
+      <div id="groups-followups" class="groups-box"></div>
+      <p class="load-note">Showing 6 of 9 follow-ups <button class="btn" type="button">Load 3 more</button></p>
+    </section>
+
+    <!-- ================= Decisions ================= -->
+    <section class="feed" id="feed-decisions" data-view="decisions" aria-label="Decisions feed" hidden>
+      <div class="feed-head">
+        <h2>Decisions</h2>
+        <span class="counts"><b>1 official</b> · 2 suggested</span>
+        <button class="btn gear-btn" data-cat="Decisions" aria-haspopup="dialog" aria-controls="tuneDrawer"
+          aria-label="Tune extraction" title="Tune extraction">⚙</button>
+      </div>
+      <div class="controls">
+        <span class="qf"><select class="quiet" aria-label="Severity" data-default="All severities">
+          <option>All severities</option><option>Pending · High impact</option><option>High impact</option>
+          <option>Pending · Low impact</option><option>Low impact</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Priority" data-default="All priorities">
+          <option>All priorities</option><option>Urgent</option><option>Normal</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Status" data-default="Active">
+          <option>Active</option><option>Snoozed</option><option>Dismissed</option></select></span>
+      </div>
+      <div id="groups-decisions" class="groups-box"></div>
+      <p class="load-note">Showing 3 of 3 decisions</p>
+    </section>
+
+    <!-- ================= Blockers ================= -->
+    <section class="feed" id="feed-blockers" data-view="blockers" aria-label="Blockers feed" hidden>
+      <div class="feed-head">
+        <h2>Blockers</h2>
+        <span class="counts"><b>2 blocking me</b> · 2 I'm blocking</span>
+        <button class="btn gear-btn" data-cat="Blockers" aria-haspopup="dialog" aria-controls="tuneDrawer"
+          aria-label="Tune extraction" title="Tune extraction">⚙</button>
+      </div>
+      <div class="controls">
+        <span class="qf"><select class="quiet" aria-label="Direction" data-default="Both directions">
+          <option>Both directions</option><option>Blocking me</option><option>I'm blocking</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Severity" data-default="All severities">
+          <option>All severities</option><option>Urgent · High impact</option><option>High impact</option>
+          <option>Urgent · Low impact</option><option>Low impact</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Status" data-default="Active">
+          <option>Active</option><option>Resolved</option><option>Dismissed</option></select></span>
+      </div>
+      <div id="groups-blockers" class="groups-box"></div>
+      <p class="load-note">Showing 4 of 4 blockers</p>
+    </section>
+
+    <!-- ================= Changes ================= -->
+    <section class="feed" id="feed-changes" data-view="changes" aria-label="Changes feed" hidden>
+      <div class="feed-head">
+        <h2>Changes</h2>
+        <span class="counts"><b>2 today</b> · 5 this week</span>
+        <button class="btn gear-btn" data-cat="Changes" aria-haspopup="dialog" aria-controls="tuneDrawer"
+          aria-label="Tune extraction" title="Tune extraction">⚙</button>
+      </div>
+      <div class="controls">
+        <span class="qf"><select class="quiet" aria-label="Type" data-default="All types">
+          <option>All types</option><option>Schedule</option><option>People</option>
+          <option>Scope</option><option>Status</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Relevance" data-default="All relevance">
+          <option>All relevance</option><option>Affects me</option><option>FYI</option></select></span>
+        <span class="qsep">·</span>
+        <span class="qf"><select class="quiet" aria-label="Review state" data-default="Unreviewed">
+          <option>Unreviewed</option><option>All</option><option>Reviewed</option></select></span>
+      </div>
+      <div id="groups-changes" class="groups-box"></div>
+      <p class="load-note">Showing 7 of 7 changes</p>
     </section>
   </main>
 </div>
@@ -907,20 +1070,327 @@ const CARDS = [
    "Move the response to the Google Chat thread; confirming there whether filming is acceptable, and under what constraints, is the only path where the answer actually reaches the requester."]}
 ];
 
+/* ---------- Risks data ---------- */
+const RISKS = [
+ {t:"Supplier data-rights gap could invalidate certification evidence",
+  s:"Treat the unresolved battery-vendor data-rights question as a certification risk, not just a procurement one. If ingestion of supplier data continues without a signed rights agreement, any certification evidence derived from it could be challenged and re-work forced late in the program.",
+  sev:"critical", official:true, attn:true, when:"seen Jul 25", src:"Gmail",
+  m:"Scout Underwood · Duc Huy Tran",
+  d:["The WP-08 coordination thread has gone three weeks without a signed data-rights agreement from the battery vendor, while the ingestion pipeline continues to consume their feeds. Evidence packages assembled from that data inherit the ambiguity: if the vendor later asserts restrictions, any certification artifact built on it becomes contestable.",
+   "This was promoted to official because the mitigation window is closing — re-papering evidence after submission costs an order of magnitude more than pausing derived-evidence generation now. Recommended action: Duc raises the agreement directly with the vendor's counsel while WP-13 tags all evidence derived from their feeds so exposure is quantified."]},
+ {t:"Duc's PoC sign-off could slip past the Aug 31 review",
+  s:"The dashboard-v2 PoC must meet Duc's quality bar by the Aug 31 review, and the two open sync defects put that date at risk. If sign-off slips, the WP rollout sequence behind it compresses or slides into Q4.",
+  sev:"critical", attn:true, when:"seen Jul 27", src:"Gmail",
+  m:"Scout Underwood · Duc Huy Tran · Vu Pham",
+  d:["Sign-off depends on a demo built partly on tester-generated evidence, and the tester loop is stalled behind the sync defects. Working backwards from Aug 31, fixes need to land by mid-August to leave two usable feedback cycles.",
+   "The risk compounds rather than sits still: every week of tester delay removes a feedback cycle from the demo narrative. Mitigation is the same lever as the onboarding blocker — a committed fix estimate from Vu — which is why these two items reference each other."]},
+ {t:"Tester cohort may drift away while onboarding stays paused",
+  s:"Three of five confirmed testers are external volunteers whose availability was negotiated for July. The longer onboarding stays paused behind the sync fixes, the higher the odds the cohort has to be re-recruited from scratch.",
+  sev:"critical", when:"seen Jul 26", src:"Google Meet",
+  m:"Sally Nanyoung Oh · Scout Underwood",
+  d:["Sally's onboarding checklist is parked and the cohort's calendar holds expire at the end of July. Volunteer testers who lapse rarely return — re-recruiting historically takes four to six weeks and lands a less motivated group.",
+   "A cheap mitigation exists: a fortnightly 'you're still wanted' touchpoint with a firm restart estimate, which keeps the cohort warm without pretending the platform is ready. That message can go out before any code is fixed."]},
+ {t:"Sync architecture knowledge is concentrated in one person",
+  s:"Vu is the only person who fully understands the ingestion-to-dashboard sync architecture — the exact subsystem where both open defects live. Any absence or departure would stall the critical path with no warm backup.",
+  sev:"high", when:"seen Jul 24", src:"Google Meet",
+  m:"Vu Pham · Scout Underwood",
+  d:["Both open defects, the fix estimates leadership is waiting on, and the eventual multi-WP rollout all route through a single engineer's head. Nothing is written down beyond commit messages.",
+   "Low likelihood, high exposure — the classic bus-factor shape. A half-day architecture walkthrough recorded for the second developer converts most of the exposure into documentation, and scheduling it costs nothing while fixes are in progress."]},
+ {t:"Ingestion pipeline is untested beyond WP-13 data volumes",
+  s:"The rollout plan takes the platform from one work package to thirteen, but the ingestion pipeline has only ever run at WP-13 scale. Throughput and dedup behavior at 10× volume are unknowns sitting directly under the expansion story.",
+  sev:"high", when:"seen Jul 23", src:"Google Meet",
+  m:"Vu Pham · Scout Underwood",
+  d:["No load test has run against a multi-WP corpus, and several pipeline stages are single-threaded by design decisions made during the PoC. If scale problems surface during rollout, they surface in front of the newly onboarded WPs.",
+   "A synthetic 3-WP load test before the rollout commitment would either retire the risk or price the re-engineering while it's still cheap."]},
+ {t:"Platform spend is approaching the $25k self-approval ceiling",
+  s:"Cumulative platform spend is nearing the level Scout can approve alone. Anything beyond it routes through Duc, adding lead time to purchases that currently happen same-week — worth planning around rather than discovering mid-sprint.",
+  sev:"medium", when:"seen Jul 22", src:"Gmail",
+  m:"Scout Underwood",
+  d:["Roughly $4k of headroom remains at current burn. The next infrastructure renewal alone consumes most of it, meaning the first Duc-approval cycle likely lands mid-August — the same window as the sign-off push.",
+   "Submitting the renewal for approval now, ahead of need, keeps procurement off the critical path."]},
+ {t:"Pioneerxity partnership renewal overlaps the demo window",
+  s:"The build partnership renews in early September, immediately after the Aug 31 review. If renewal negotiation drags, contractor continuity through the rollout phase is exposed — low odds, but the timing is inconveniently stacked.",
+  sev:"low", when:"seen Jul 21", src:"Gmail",
+  m:"Scout Underwood · Mitch Amos",
+  d:["The renewal has historically been routine, but it has never coincided with a phase gate before. A September gap in contractor availability would hit exactly when rollout work is supposed to accelerate.",
+   "Starting the renewal conversation in mid-August, before the review crunch, de-stacks the two timelines at no cost."]}
+];
+/* ---------- Tasks data ---------- */
+const TASKS = [
+ {t:"Get a committed fix estimate for the two sync defects from Vu",
+  s:"Secure a dated estimate for the state-desync and connect/disconnect fixes. This single number unblocks three other items: the tester restart message, the dry-run narrative, and the Aug 31 sign-off plan all depend on it.",
+  sev:"critical", official:true, attn:true, when:"due Aug 5", src:"Google Meet",
+  m:"Scout Underwood · Vu Pham",
+  d:["Every stalled thread in the feed routes back to the same unknown: when do the sync fixes land? Vu has triaged both defects but no date is committed, which forces everyone downstream to plan against fog.",
+   "Promoted to official because it is the cheapest high-leverage action available — one working session with Vu produces the estimate, and every dependent plan can be re-anchored the same day. If the estimate is bad news, knowing that this week is worth more than hoping until mid-August."]},
+ {t:"Tag all certification evidence derived from battery-vendor feeds",
+  s:"Mark every evidence artifact built on battery-vendor data so exposure from the unsigned data-rights agreement is quantified. Until tagged, nobody can say how much re-work a rights dispute would force.",
+  sev:"critical", when:"due Aug 8", src:"Gmail",
+  m:"Scout Underwood · Duc Huy Tran",
+  d:["This is the WP-13 half of the data-rights mitigation: while Duc pursues the agreement with the vendor, tagging turns an unbounded risk into a counted list of artifacts.",
+   "The ingestion pipeline already records source provenance per document, so the tagging is a query and a label pass rather than a manual audit — an afternoon of work that converts 'unknown exposure' into a number leadership can act on."]},
+ {t:"Send the tester cohort a restart-estimate touchpoint",
+  s:"Message the five confirmed testers with an honest status and a restart estimate before their July calendar holds expire. Keeping the cohort warm costs one email; re-recruiting costs four to six weeks.",
+  sev:"critical", when:"due Aug 1", src:"Gmail",
+  m:"Sally Nanyoung Oh · Scout Underwood",
+  d:["The cohort's goodwill is a depreciating asset — three of five are external volunteers with no obligation to wait quietly. A dated, honest touchpoint ('fixes are in progress, restart estimated for <date>') preserves the relationship even if the date later moves.",
+   "Sally owns the checklist and the relationships; the only input she needs is the fix estimate from Vu — or, failing that, permission to send a holding message without one."]},
+ {t:"Record Vu's sync-architecture walkthrough for the second developer",
+  s:"Schedule a half-day walkthrough of the ingestion-to-dashboard sync architecture and record it. Converts the single-person knowledge concentration into documentation while fixes are still in progress.",
+  sev:"high", when:"due Aug 15", src:"Google Meet",
+  m:"Vu Pham · Scout Underwood",
+  d:["The bus-factor risk stays open for as long as the architecture lives only in Vu's head. A recorded walkthrough with the second developer asking questions is the fastest credible mitigation — cheaper than written docs and more durable than a hallway explanation.",
+   "Scheduling it during fix development is deliberate: the material is freshest exactly now, and the recording doubles as onboarding for whoever joins during rollout."]},
+ {t:"Draft the 3-WP synthetic load test plan",
+  s:"Specify the synthetic multi-work-package load test for the ingestion pipeline: corpus size, throughput targets, and the single-threaded stages most likely to fold. Retires the scale unknown before the rollout commitment is made.",
+  sev:"high", when:"due Aug 22", src:"Google Meet",
+  m:"Vu Pham · Scout Underwood",
+  d:["The rollout story multiplies today's data volume by roughly ten with no evidence the pipeline survives it. A written test plan is the first checkpoint — it forces the throughput targets to be named and the fragile stages to be listed.",
+   "Drafting the plan does not compete with defect work; it is a design exercise that the second developer can lead, with Vu reviewing rather than authoring."]},
+ {t:"Submit the infrastructure renewal for Duc's approval now",
+  s:"Route the upcoming infrastructure renewal through Duc's approval ahead of need. Cumulative spend is ~$4k from the self-approval ceiling, and waiting until the renewal is due puts procurement on the critical path in the sign-off window.",
+  sev:"medium", when:"due Aug 6", src:"Gmail",
+  m:"Scout Underwood",
+  d:["The first over-ceiling approval will happen regardless; the only choice is whether it happens calmly in early August or urgently in the same week as the Aug 31 review prep.",
+   "Submitting early also gives Duc visibility into the spend trajectory before the rollout phase raises it further — a small trust dividend on top of the scheduling one."]},
+ {t:"Rebook the Chapman weekly and notify participants",
+  s:"Close out the half-confirmed Chapman series: accept or rebook the Thu 2–5pm PDT slot and tell participants explicitly which slot is live, so no one keeps holding the old time.",
+  sev:"medium", when:"due Aug 4", src:"Gmail",
+  m:"Duc Huy Tran · Scout Underwood",
+  d:["Two feed items (the limbo cancellation and the moved invite) collapse into this one action: pick the slot, confirm it, and say so in the thread.",
+   "Once done, both related issue cards resolve themselves — a two-for-one that clears calendar ambiguity for four people."]},
+ {t:"Refresh the supplier RFI criteria doc with the new data-rights terms",
+  s:"Fold the data-rights language coming out of the vendor negotiation into the standing RFI criteria, so future supplier evaluations screen for it by default rather than re-discovering it per deal.",
+  sev:"low", when:"due Aug 29", src:"Gmail",
+  m:"Scout Underwood · Mitch Amos",
+  d:["A hygiene task with a long tail of value: every future supplier conversation inherits the lesson from the battery-vendor episode at zero marginal cost.",
+   "It deliberately waits until the current negotiation settles — the clause that survives vendor counsel is the one worth templating."]}
+];
+/* ---------- Follow-ups data ---------- */
+const FUPS = [
+ {t:"Vendor counsel still owes the data-rights agreement draft",
+  s:"Chase the battery vendor's counsel for the promised data-rights agreement draft. Three weeks without a document is what keeps the certification-evidence risk open — every other mitigation is downstream of this reply.",
+  sev:"critical", official:true, attn:true, when:"waiting 21d", src:"Gmail",
+  m:"Scout Underwood · Duc Huy Tran",
+  d:["The draft was promised in the Jul 9 call and has been 'with counsel' ever since. Two polite nudges have produced acknowledgments but no document, which is usually the signal to escalate the channel rather than repeat it.",
+   "Promoted to official because the chase now needs Duc's weight: a direct note from COO to the vendor's commercial lead, referencing the certification timeline, historically moves these in days. The evidence-tagging task quantifies our exposure in parallel either way."]},
+ {t:"WP-08 hasn't answered the ingestion data-rights checklist",
+  s:"Follow up with WP-08 on the supplier data-handling checklist sent twelve days ago. Their answers determine which of their feeds the pipeline can keep ingesting under the eventual agreement.",
+  sev:"critical", when:"waiting 12d", src:"Gmail",
+  m:"Scout Underwood · Duc Huy Tran",
+  d:["The checklist maps each WP-08 supplier feed to its rights status. Without it, the tagging task can only cover WP-13's own sources, leaving the cross-WP exposure unquantified.",
+   "The thread has had no reply since Jul 18 — likely buried rather than resisted. A direct ping to the WP-08 coordinator with a one-week deadline, copying Duc, fits the escalation ladder."]},
+ {t:"Tester #3 hasn't confirmed continued availability",
+  s:"Nudge the third external tester, who has not replied to the availability check since Jul 22. If they've lapsed, the cohort drops below the minimum viable size for the restart plan and re-recruiting needs to start now, not at restart time.",
+  sev:"critical", when:"waiting 8d", src:"Gmail",
+  m:"Sally Nanyoung Oh · Scout Underwood",
+  d:["Four of five testers answered Sally's check-in; the silent fifth is one of the three external volunteers whose July window is expiring. One unanswered email is noise; one unanswered email during a paused program is attrition in progress.",
+   "A personal note from Sally (not another broadcast) is the right instrument — and if there's no answer by Aug 4, the restart plan should assume a cohort of four and open a replacement search in parallel."]},
+ {t:"Pioneerxity renewal quote — promised by Aug 8",
+  s:"The partnership renewal quote was requested Jul 27 and promised within two weeks. On track for now; becomes a chase only if Aug 8 passes quietly. Parked here so the date doesn't rely on anyone's memory.",
+  sev:"high", when:"waiting 3d", src:"Gmail",
+  m:"Scout Underwood · Mitch Amos",
+  d:["Requesting the quote early was the de-stacking move for the renewal-vs-review timing risk; this follow-up is its tripwire. Nothing to do before Aug 8 — the value of the card is that the deadline is watched by the system rather than a person.",
+   "If the quote arrives on time, this resolves silently. If not, it escalates into the exact September crunch the early request was designed to avoid, and the chase should be same-day."]},
+ {t:"Room booking for the new Chapman slot unconfirmed",
+  s:"Facilities has not confirmed the Thursday 2–5pm room for the rebooked Chapman weekly. The series can't be announced as final until the room is locked — a small dependency blocking the calendar cleanup.",
+  sev:"medium", when:"waiting 4d", src:"Gmail",
+  m:"Duc Huy Tran · Scout Underwood",
+  d:["The rebooking task is otherwise ready to execute: participants identified, slot chosen, invite drafted. The room confirmation is the last physical dependency, and facilities' normal turnaround is two days — this one is at four.",
+   "A phone call beats a third email at this point; the booking system marks the request 'pending' with no error, which usually means it fell into manual review."]},
+ {t:"Jeremy's handoff notes from the blocked item",
+  s:"Jeremy agreed to send context notes for the item being reassigned to him. Not yet due, low stakes — tracked so the reassignment lands with the context attached rather than requiring a second conversation.",
+  sev:"low", when:"waiting 3d", src:"Google Meet",
+  m:"Jeremy Thomas · Scout Underwood",
+  d:["The reassignment fixes the ownership gap; the notes make it stick. Without them the item restarts from zero context and burns Jeremy's first week on archaeology.",
+   "No chase needed before Friday — surfaced only so the handoff isn't marked complete while the notes are still owed."]}
+];
+/* ---------- Decisions data ---------- */
+const DECS = [
+ {t:"Pull Vu onto the sync fixes, or restart onboarding with a known-issues caveat?",
+  s:"An open either/or that gates the tester restart: dedicate Vu to the two sync defects this sprint, or restart onboarding now with documented known issues. Each option trades demo risk against cohort risk — and not choosing is quietly choosing the second risk.",
+  sev:"critical", attn:true, when:"open 6d", src:"Google Meet",
+  m:"Scout Underwood · Vu Pham · Duc Huy Tran",
+  d:["Option (a) concentrates Vu on the fixes and keeps the cohort waiting behind a firm date; option (b) restarts testing on a wobbly platform and risks first impressions with the very group whose evidence the demo needs. The fix estimate task (T-00034) prices option (a); Sally's touchpoint (T-00117) buys time for either.",
+   "The decision is surfaced because the deadline is structural, not stated: every week without a choice consumes the calendar that makes option (a) viable, defaulting the program into (b). Recommended framing for Duc: decide by Aug 8 with the estimate in hand."]},
+ {t:"Manage tester onboarding as blocked work, not late work",
+  s:"Ratified: the onboarding delay is classified as blocked-by-defects rather than behind-schedule. This reframes accountability — pressure goes to the fix pipeline, not the waiting testers — and sets how the delay reports upward.",
+  sev:"high", official:true, when:"decided Jul 24", src:"Google Meet",
+  m:"Scout Underwood · Duc Huy Tran · Sally Nanyoung Oh",
+  d:["Made in the Jul 24 sync after Sally's status review, and promoted to official so the classification is citable: status reports, the Aug 31 narrative, and the tester communications all inherit it.",
+   "The distinction matters practically — 'late' invites schedule pressure on people who cannot act, while 'blocked' routes attention to the two defects that can. Every related card in the feed now carries this framing."]},
+ {t:"Allow filming of the UX-testing sessions?",
+  s:"Mitch's request to film the user-experience sessions is still undecided. Low stakes but time-boxed: the answer needs to reach the Google Chat thread before the sessions are scheduled, or it decides itself as a no.",
+  sev:"medium", when:"open 9d", src:"Gmail",
+  m:"Mitch Amos · Scout Underwood",
+  d:["Filming helps the demo narrative (real testers, real reactions) but adds a consent step for external participants. The pending piece is small: yes/no, plus consent language if yes.",
+   "Sitting in the notification-email thread where replies go nowhere — which is why it has aged nine days. The related issue card (I-00712) already routes the conversation to Chat; answering there closes both."]}
+];
+/* ---------- Blockers data — directional ---------- */
+const BLKS = [
+ {t:"Tester restart is blocked by the two sync defects",
+  s:"The onboarding restart cannot move until the state-desync and connect/disconnect fixes land. Everything on my side is staged — cohort, checklist, comms — and waits on the fix pipeline.",
+  sev:"critical", attn:true, when:"blocked 7d", src:"Google Meet", dir:"in",
+  blk:"Vu Pham (WP-07) — sync fix pipeline",
+  m:"Vu Pham · Scout Underwood · Sally Nanyoung Oh",
+  d:["This is the inbound face of the fix-estimate task: the restart plan is fully prepared and parked. The block clears the moment a fix date exists — even a bad date converts this from 'blocked' to 'scheduled'.",
+   "Escalation is already in flight via T-00034; this card exists so the dependency is visible as a blocker with an owner, not just a task on my list."]},
+ {t:"Evidence packaging blocked by the unsigned data-rights agreement",
+  s:"Certification evidence derived from battery-vendor feeds cannot be packaged for submission while the rights agreement is unsigned. External block — vendor counsel holds the pen.",
+  sev:"high", when:"blocked 21d", src:"Gmail", dir:"in",
+  blk:"Battery-vendor counsel (external)",
+  m:"Scout Underwood · Duc Huy Tran",
+  d:["The tagging task quantifies what's exposed; this blocker tracks the release condition. Until counsel returns the draft, every tagged artifact sits in a holding state that compounds toward the certification timeline.",
+   "The chase lives at F-00019 with Duc's escalation; this card is the dependency's status of record."]},
+ {t:"WP-08's supplier evaluation is waiting on my RFI criteria update",
+  s:"WP-08 can't score two candidate suppliers until the refreshed RFI criteria ship from my side. I am the bottleneck — their evaluation window closes Aug 12.",
+  sev:"critical", attn:true, when:"blocking 4d", src:"Gmail", dir:"out",
+  blk:"WP-08 — supplier evaluation",
+  m:"Scout Underwood · Mitch Amos",
+  d:["Surfaced under the standing attention rule 'items where my team is blocking someone else' — these always rise regardless of severity, because they spend WP-13's credibility, not just time.",
+   "The criteria refresh (T-00230) was sequenced to wait for the vendor negotiation, but WP-08's Aug 12 window flips the order: ship them the current draft criteria now, annotated where the data-rights clause may change, and unblock their scoring."]},
+ {t:"Jeremy's takeover waits on my handoff sign-off",
+  s:"The reassigned blocked item can't formally transfer until I counter-sign the handoff. Small, mine, and two days old — the kind of outbound block that quietly makes reassignment look slower than it is.",
+  sev:"medium", when:"blocking 2d", src:"Google Meet", dir:"out",
+  blk:"Jeremy Thomas — item takeover",
+  m:"Jeremy Thomas · Scout Underwood",
+  d:["The reassignment fixed the ownership gap; the sign-off is the last formality, waiting only on me. Jeremy's notes (F-00113) and my signature are converging on the same handoff packet.",
+   "Two minutes of work — surfaced because outbound blocks age reputationally faster than inbound ones."]}
+];
+/* ---------- Changes data — time-grouped deltas ---------- */
+const CHGS = [
+ {t:"Sally paused the tester onboarding checklist", tg:"today",
+  delta:{o:"Onboarding: Active — 5 testers scheduled", n:"Paused, blocked on sync fixes"},
+  s:"The pause makes the blocked-work decision operational — the checklist stops advancing until the defects clear. Restart readiness is preserved; nothing was cancelled.",
+  sev:"critical", type:"Status", when:"today 9:41 AM", src:"Google Meet",
+  m:"Sally Nanyoung Oh · Scout Underwood",
+  d:["Pausing formally, rather than letting the checklist drift, keeps the record honest: every downstream report now shows a deliberate state with a named unblock condition instead of quiet slippage.",
+   "The checklist state is reversible in one click when the fixes land — Sally kept all five tester assignments attached to their steps, so restart is a resume, not a rebuild."]},
+ {t:"Chapman weekly moved to Thursday afternoons", tg:"today",
+  delta:{o:"Wed 11:30 AM – 12:30 PM", n:"Thu 2 – 5 PM PDT"},
+  s:"The rebooked slot replaces the cancelled recurring series. Your Thursday deep-work block now collides with it every other week.",
+  sev:"medium", type:"Schedule", when:"today 8:15 AM", src:"Gmail",
+  m:"Duc Huy Tran · Scout Underwood",
+  d:["This closes the limbo the old series sat in — the calendar now shows one live slot instead of a ghost and a maybe. Room confirmation is the last loose end (F-00102).",
+   "The collision with your deep-work block is surfaced because you protect that time in your profile's attention rules; accepting the invite as-is or shifting the block are both one-step fixes."]},
+ {t:"Profile v1 applied — dashboard re-ranking active", tg:"week",
+  delta:{o:"Ranking: company default", n:"Personalized (profile v1)"},
+  s:"Your confirmed AI-context profile is now shaping the feed: accountability matches rank higher, attention rules force low-severity items up, and every re-ranked card carries a 'why you're seeing this' note.",
+  sev:"critical", type:"Status", when:"Mon 9:00 AM", src:"Gmail",
+  m:"Scout Underwood",
+  d:["The battery-vendor data-rights item rising despite low stated severity is this profile at work — your 'certification evidence or data rights' rule outranks the extractor's own scoring.",
+   "Provenance notes cite profile v1 on every affected card, so a colleague looking over your shoulder can distinguish your personalized ranking from company truth. The 90-day review is scheduled for Oct 27."]},
+ {t:"WP-08 supplier feed #3 added to the ingestion pipeline", tg:"week",
+  delta:{o:"Ingestion sources: 12", n:"13 (+WP-08 supplier feed)"},
+  s:"New source expands cross-WP coverage — and inherits the unresolved data-rights posture, so its documents are auto-tagged from day one.",
+  sev:"high", type:"Scope", when:"Tue 4:02 PM", src:"Google Meet",
+  m:"Vu Pham · Scout Underwood",
+  d:["First source onboarded from outside WP-13 — a quiet milestone for the rollout story, and a live test of the provenance tagging shipped for the data-rights exposure work.",
+   "Auto-tagging from ingestion means this feed never enters the untagged backlog; if the vendor agreement lands with restrictions, its documents are already quarantinable by query."]},
+ {t:"External guest added to the weekly PLANA USA call", tg:"week", reviewed:true,
+  delta:{o:"Attendees: 5 internal", n:"6 (+1 external guest)"},
+  s:"Roster change only — no agenda impact. Surfaced because external participation changes what can be discussed on the call.",
+  sev:"low", type:"People", when:"Mon 10:20 AM", src:"Google Meet",
+  m:"Mitch Amos · Scout Underwood",
+  d:["The guest joins under Mitch's UX-testing coordination; standing norm is that pre-release metrics and personnel topics move to the internal thread while externals attend.",
+   "Marked reviewed — kept in the log so the roster history stays reconstructible."]},
+ {t:"Extraction prompt v4 published for WP-13", tg:"lastweek",
+  delta:{o:"Prompt v3", n:"v4 — budget framing added to Impact"},
+  s:"Impact sections now express consequences against demo dates, certification evidence, or budget. Every extraction since Jul 22 uses the new framing.",
+  sev:"high", type:"Scope", when:"Jul 22 3:05 PM", src:"Gmail",
+  m:"Scout Underwood",
+  d:["The v4 change is why recent cards read 'threatens the Aug 31 sign-off' rather than generic urgency language — impact statements anchor to the three things WP-13 leadership actually trades against.",
+   "Version history and per-field diffs live in the tuning drawer; v5 (exclusion rules) is drafted and unpublished."]},
+ {t:"Dry-run offsite time finalized: 9 – 10 AM PT", tg:"lastweek", reviewed:true,
+  delta:{o:"Proposed: 11:30 AM – 12:30 PM", n:"Final: Fri 9 – 10 AM PT"},
+  s:"The organizer locked the earlier slot after the availability round. Attendee list closed at seven.",
+  sev:"medium", type:"Schedule", when:"Jul 23 11:15 AM", src:"Gmail",
+  m:"Duc Huy Tran · Scout Underwood · Mitch Amos",
+  d:["Finalization resolved the unconfirmed-availability issue (I-00548) — all seven attendees re-confirmed against the new time within two days.",
+   "Reviewed and retained as the record of when the slot locked, in case post-hoc scheduling questions surface."]}
+];
+CHGS.forEach(c => { c.kind = "change"; });
 /* serial numbers — category initial + unique 5-digit id */
 const SERIALS = ["I-00214","I-00389","I-00415","I-00521","I-00548","I-00602","I-00755","I-00633","I-00671","I-00712"];
 CARDS.forEach((c, i) => c.sn = SERIALS[i]);
+const RSERIALS = ["R-00108","R-00190","R-00227","R-00243","R-00301","R-00342","R-00377"];
+RISKS.forEach((c, i) => c.sn = RSERIALS[i]);
+const TSERIALS = ["T-00034","T-00092","T-00117","T-00126","T-00158","T-00183","T-00209","T-00230"];
+TASKS.forEach((c, i) => c.sn = TSERIALS[i]);
+const FSERIALS = ["F-00019","F-00047","F-00071","F-00088","F-00102","F-00113"];
+FUPS.forEach((c, i) => c.sn = FSERIALS[i]);
+const DSERIALS = ["D-00007","D-00012","D-00021"];
+DECS.forEach((c, i) => c.sn = DSERIALS[i]);
+const BSERIALS = ["B-00003","B-00011","B-00018","B-00026"];
+BLKS.forEach((c, i) => c.sn = BSERIALS[i]);
+const CHSERIALS = ["C-00044","C-00047","C-00035","C-00039","C-00031","C-00022","C-00024"];
+CHGS.forEach((c, i) => c.sn = CHSERIALS[i]);
 /* AI extraction confidence — shown in the title accordion */
 const CONF = [96, 58, 82, 74, 71, 66, 52, 77, 69, 63];
 CARDS.forEach((c, i) => c.conf = CONF[i]);
-/* Quad B model — severity is urgency × impact */
-CARDS.forEach(c => {
-  c.urg = c.sev === "critical" || c.sev === "medium";   // urgent?
+const RCONF = [88, 76, 81, 64, 57, 91, 60];
+RISKS.forEach((c, i) => c.conf = RCONF[i]);
+const TCONF = [93, 84, 79, 71, 68, 88, 74, 55];
+TASKS.forEach((c, i) => c.conf = TCONF[i]);
+const FCONF = [90, 72, 66, 83, 78, 61];
+FUPS.forEach((c, i) => c.conf = FCONF[i]);
+const DCONF = [86, 94, 70];
+DECS.forEach((c, i) => c.conf = DCONF[i]);
+const BCONF = [91, 87, 80, 73];
+BLKS.forEach((c, i) => c.conf = BCONF[i]);
+const CHCONF = [95, 89, 99, 92, 84, 97, 90];
+CHGS.forEach((c, i) => c.conf = CHCONF[i]);
+/* event timestamps — shown on source-channel hover */
+const CTS = ["Jul 28, 2026 · 2:47 PM","Jul 28, 2026 · 9:14 AM","Jul 28, 2026 · 11:05 AM","Jul 29, 2026 · 8:52 AM",
+  "Jul 28, 2026 · 4:41 PM","Jul 22, 2026 · 10:32 AM","Jul 22, 2026 · 3:58 PM","Jul 28, 2026 · 1:47 PM",
+  "Jul 21, 2026 · 9:26 AM","Jul 21, 2026 · 2:12 PM"];
+CARDS.forEach((c, i) => c.ts = CTS[i]);
+const RTS = ["Jul 25, 2026 · 10:18 AM","Jul 27, 2026 · 3:34 PM","Jul 26, 2026 · 11:47 AM","Jul 24, 2026 · 2:05 PM",
+  "Jul 23, 2026 · 9:41 AM","Jul 22, 2026 · 4:19 PM","Jul 21, 2026 · 10:55 AM"];
+RISKS.forEach((c, i) => c.ts = RTS[i]);
+const TTS = ["Jul 29, 2026 · 9:08 AM","Jul 28, 2026 · 2:31 PM","Jul 27, 2026 · 10:44 AM","Jul 24, 2026 · 3:17 PM",
+  "Jul 23, 2026 · 11:29 AM","Jul 26, 2026 · 9:53 AM","Jul 29, 2026 · 1:36 PM","Jul 25, 2026 · 4:02 PM"];
+TASKS.forEach((c, i) => c.ts = TTS[i]);
+const FTS = ["Jul 9, 2026 · 11:22 AM","Jul 18, 2026 · 2:58 PM","Jul 22, 2026 · 9:37 AM",
+  "Jul 27, 2026 · 10:11 AM","Jul 26, 2026 · 3:45 PM","Jul 27, 2026 · 1:19 PM"];
+FUPS.forEach((c, i) => c.ts = FTS[i]);
+const DTS = ["Jul 24, 2026 · 2:40 PM","Jul 24, 2026 · 3:15 PM","Jul 21, 2026 · 9:26 AM"];
+DECS.forEach((c, i) => c.ts = DTS[i]);
+const BTS = ["Jul 23, 2026 · 2:05 PM","Jul 9, 2026 · 11:22 AM","Jul 26, 2026 · 10:40 AM","Jul 28, 2026 · 3:22 PM"];
+BLKS.forEach((c, i) => c.ts = BTS[i]);
+const CHTS = ["Jul 30, 2026 · 9:41 AM","Jul 30, 2026 · 8:15 AM","Jul 27, 2026 · 9:00 AM","Jul 28, 2026 · 4:02 PM",
+  "Jul 27, 2026 · 10:20 AM","Jul 22, 2026 · 3:05 PM","Jul 23, 2026 · 11:15 AM"];
+CHGS.forEach((c, i) => c.ts = CHTS[i]);
+/* Quad B model — urgency × impact (issues, tasks) / likelihood × impact (risks) / timing × impact (follow-ups) */
+CARDS.forEach(c => { c.axU = "Urgent"; c.axUneg = "Not urgent"; c.axName = "Urgency"; });
+RISKS.forEach(c => { c.axU = "Likely"; c.axUneg = "Unlikely"; c.axName = "Likelihood"; });
+TASKS.forEach(c => { c.axU = "Urgent"; c.axUneg = "Not urgent"; c.axName = "Urgency"; });
+FUPS.forEach(c => { c.axU = "Overdue"; c.axUneg = "On track"; c.axName = "Timing"; });
+DECS.forEach(c => { c.axU = "Pending"; c.axUneg = "Decided"; c.axName = "Status"; });
+BLKS.forEach(c => { c.axU = "Urgent"; c.axUneg = "Not urgent"; c.axName = "Urgency"; });
+CHGS.forEach(c => { c.axU = "Affects me"; c.axUneg = "FYI"; c.axName = "Relevance"; c.axLow = "FYI"; });
+const ALL = CARDS.concat(RISKS, TASKS, FUPS, DECS, BLKS, CHGS);
+ALL.forEach(c => {
+  c.urg = c.sev === "critical" || c.sev === "medium";   // urgent / likely?
   c.imp = c.sev === "critical" || c.sev === "high";     // high impact?
 });
+/* severity provenance — who set the level last */
+ALL.forEach(c => {
+  if (c.official){ c.setBy = "Scout Underwood"; c.setTs = "Jul 29, 2026 · 8:40 AM"; }
+  else { c.setBy = "AI extractor (v4)"; c.setTs = c.ts; }
+});
+// a few human adjustments for realism
+CARDS[2].setBy = "Duc Huy Tran";      CARDS[2].setTs = "Jul 29, 2026 · 10:05 AM";
+RISKS[1].setBy = "Scout Underwood";   RISKS[1].setTs = "Jul 28, 2026 · 9:12 AM";
+CHGS[2].setBy  = "Scout Underwood";   CHGS[2].setTs  = "Jul 27, 2026 · 9:30 AM";
+const nowStamp = () => {
+  const d = new Date(), h = d.getHours(), m = String(d.getMinutes()).padStart(2,"0");
+  const mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.getMonth()];
+  return `${mo} ${d.getDate()}, ${d.getFullYear()} · ${((h+11)%12)+1}:${m} ${h < 12 ? "AM" : "PM"}`;
+};
 const TIER = c => c.urg && c.imp ? "critical" : (!c.urg && c.imp ? "high" : (c.urg ? "medium" : "low"));
-const AXLABEL = c => c.urg && c.imp ? "Urgent · High impact"
-  : (!c.urg && c.imp ? "High impact" : (c.urg ? "Urgent · Low impact" : "Low impact"));
+const AXLABEL = c => c.urg && c.imp ? `${c.axU} · High impact`
+  : (!c.urg && c.imp ? "High impact" : (c.urg ? `${c.axU} · Low impact` : (c.axLow || "Low impact")));
 const srcIcon = s => s === "Gmail" ? "✉" : "▣";
 /* member directory — full name + work package for tooltips */
 const PEOPLE = {
@@ -939,32 +1409,37 @@ const firstNames = m => m.split("·").map(p => p.trim()).map(p => {
 }).join(" · ");
 
 function cardHTML(c, i){
-  const ci = CARDS.indexOf(c);
+  const ci = ALL.indexOf(c);
   const sevChip = `<button class="chip sev sev-${TIER(c)}" data-menu="sev-${i}"
-      aria-haspopup="menu" aria-expanded="false" title="Change urgency / impact">${AXLABEL(c)}</button>
+      aria-haspopup="menu" aria-expanded="false" title="Change ${c.axName.toLowerCase()} / impact">${AXLABEL(c)}</button>
     <div class="menu quad" id="sev-${i}" role="menu" data-card="${ci}">
       <div class="quad-title">Severity — set both axes</div>
       <div class="quad-cols">
-        <div><h6>Urgency</h6>
-          <button class="qbtn" data-ax="urg" data-val="1" aria-pressed="${c.urg}">Urgent</button>
-          <button class="qbtn" data-ax="urg" data-val="0" aria-pressed="${!c.urg}">Not urgent</button></div>
+        <div><h6>${c.axName}</h6>
+          <button class="qbtn" data-ax="urg" data-val="1" aria-pressed="${c.urg}">${c.axU}</button>
+          <button class="qbtn" data-ax="urg" data-val="0" aria-pressed="${!c.urg}">${c.axUneg}</button></div>
         <div><h6>Impact</h6>
           <button class="qbtn" data-ax="imp" data-val="1" aria-pressed="${c.imp}">High impact</button>
           <button class="qbtn" data-ax="imp" data-val="0" aria-pressed="${!c.imp}">Low impact</button></div>
       </div>
-      <div class="quad-result">→ <span class="chip sev-${TIER(c)}" style="cursor:default">${AXLABEL(c)}</span></div>
+      <div class="quad-result">→ <span class="chip sev-${TIER(c)}" style="cursor:default">${AXLABEL(c)}</span>
+        <span class="set-by">Last set by <b>${c.setBy}</b><br>${c.setTs}</span></div>
     </div>`;
   const prov = c.official
     ? `<span class="chip approved">Human approved</span>`
     : `<span class="chip dashed">AI suggested</span>`;
   return `
-  <article class="card ${c.official ? "official-card" : ""} sev-${TIER(c)}">
+  <article class="card ${c.official ? "official-card" : ""} ${c.reviewed ? "reviewed" : ""} sev-${TIER(c)}">
     <div class="card-top">
       <h4><button class="details-toggle" aria-expanded="false">${c.t}</button></h4>
       <div class="quick">
         ${c.official
           ? `<span class="chip approved">Official</span>`
-          : `<button class="btn" type="button">Promote</button>`}
+          : c.kind === "change"
+            ? (c.reviewed
+                ? `<span class="chip rev">✓ Reviewed</span>`
+                : `<button class="btn mark-rev" type="button">Mark reviewed</button>`)
+            : `<button class="btn" type="button">Promote</button>`}
         <button class="btn btn-danger-ghost" type="button">Dismiss</button>
         <div class="more-wrap">
           <button class="btn" data-menu="more-${i}" aria-haspopup="menu" aria-expanded="false" aria-label="More actions">⋯</button>
@@ -980,47 +1455,96 @@ function cardHTML(c, i){
         </div>
       </div>
     </div>
-    <p class="summary">${c.s} <button class="more-link" data-more="${CARDS.indexOf(c)}"
+    ${c.dir ? `<div class="blk-line ${c.dir}">${c.dir === "in"
+      ? `⇠ Blocked by <b>${c.blk}</b>` : `⇢ Blocking <b>${c.blk}</b>`}</div>` : ""}
+    ${c.delta ? `<div class="blk-line delta"><span class="d-old">${c.delta.o}</span>
+      <span class="d-arrow">→</span><b>${c.delta.n}</b></div>` : ""}
+    <p class="summary">${c.s} <button class="more-link" data-more="${ALL.indexOf(c)}"
       aria-haspopup="dialog" aria-controls="moreOvl">(more)</button></p>
     <div class="meta">
       ${prov}
       <span style="position:relative;display:inline-flex">${sevChip}</span>
       ${c.attn ? `<span class="attn">Needs attention</span>` : ""}
-      <span class="src">${srcIcon(c.src)} ${c.src}</span>
+      ${c.type ? `<span class="chip outline">${c.type}</span>` : ""}
       <span class="when">${c.when}</span>
     </div>
-    <div class="members"><b>Members</b>${firstNames(c.m)}</div>
+    <div class="members"><b>Members</b>${firstNames(c.m)}
+      <span class="src has-tip" tabindex="0" data-tip="${c.ts}">${srcIcon(c.src)} ${c.src}</span></div>
     <div class="details">
-      <span class="conf" title="AI extraction confidence">(${c.conf}%)</span>
-      Source thread, timeline, and human adjustment history load here.
-      <a href="#">Open source ↗</a>
+      <div class="det-row">
+        <span class="conf" title="AI extraction confidence">(${c.conf}%)</span>
+        <a href="#">Open source ↗</a>
+      </div>
+      <div class="det-raci">RACI placeholder</div>
     </div>
     <button class="serial" title="Copy issue ID">${c.sn}</button>
   </article>`;
 }
 
 /* group: pinned official first, then suggested by quadrant tier */
-const groups = [
-  {key:"official", label:"Official — pinned", gloss:"", items: CARDS.filter(c=>c.official)},
-  {key:"critical", label:"Urgent · High impact", gloss:"", items: CARDS.filter(c=>!c.official && TIER(c)==="critical")},
-  {key:"high", label:"High impact", gloss:"", items: CARDS.filter(c=>!c.official && TIER(c)==="high")},
-  {key:"medium", label:"Urgent · Low impact", gloss:"", items: CARDS.filter(c=>!c.official && TIER(c)==="medium")},
-  {key:"low", label:"Low impact", gloss:"", items: CARDS.filter(c=>!c.official && TIER(c)==="low")},
-];
 let idx = 0;
-document.getElementById("groups").innerHTML = groups.map(g => `
-  <div class="group ${g.key}">
-    <div class="group-head"><h3>${g.label}</h3>${g.gloss ? `<span class="gloss">${g.gloss}</span>` : ""}<span class="n">${g.items.length}</span><span class="rule"></span></div>
-    ${g.items.map(c => cardHTML(c, idx++)).join("")}
-  </div>`).join("");
+function renderFeed(containerId, cards){
+  const axU = cards[0].axU;
+  const groups = [
+    {key:"official", label:"Official — pinned", items: cards.filter(c=>c.official)},
+    {key:"critical", label:`${axU} · High impact`, items: cards.filter(c=>!c.official && TIER(c)==="critical")},
+    {key:"high", label:"High impact", items: cards.filter(c=>!c.official && TIER(c)==="high")},
+    {key:"medium", label:`${axU} · Low impact`, items: cards.filter(c=>!c.official && TIER(c)==="medium")},
+    {key:"low", label:"Low impact", items: cards.filter(c=>!c.official && TIER(c)==="low")},
+  ];
+  document.getElementById(containerId).innerHTML = groups.map(g => `
+    <div class="group ${g.key}">
+      <div class="group-head"><h3>${g.label}</h3><span class="n">${g.items.length}</span><span class="rule"></span></div>
+      ${g.items.map(c => cardHTML(c, idx++)).join("")}
+    </div>`).join("");
+}
+renderFeed("groups", CARDS);
+renderFeed("groups-risks", RISKS);
+renderFeed("groups-tasks", TASKS);
+renderFeed("groups-followups", FUPS);
+renderFeed("groups-decisions", DECS);
+/* changes group by recency, not severity tier */
+(function(){
+  const groups = [
+    {key:"today", label:"Today", items: CHGS.filter(c=>c.tg==="today")},
+    {key:"week", label:"Earlier this week", items: CHGS.filter(c=>c.tg==="week")},
+    {key:"lastweek", label:"Last week", items: CHGS.filter(c=>c.tg==="lastweek")},
+  ];
+  document.getElementById("groups-changes").innerHTML = groups.map(g => `
+    <div class="group ${g.key}">
+      <div class="group-head"><h3>${g.label}</h3><span class="n">${g.items.length}</span><span class="rule"></span></div>
+      ${g.items.map(c => cardHTML(c, idx++)).join("")}
+    </div>`).join("");
+})();
+/* blockers group by direction, not severity tier */
+(function(){
+  const groups = [
+    {key:"blk-out", label:"I'm blocking — others are waiting on me", items: BLKS.filter(c=>c.dir==="out")},
+    {key:"blk-in", label:"Blocking me — I'm waiting on others", items: BLKS.filter(c=>c.dir==="in")},
+  ];
+  document.getElementById("groups-blockers").innerHTML = groups.map(g => `
+    <div class="group ${g.key}">
+      <div class="group-head"><h3>${g.label}</h3><span class="n">${g.items.length}</span><span class="rule"></span></div>
+      ${g.items.map(c => cardHTML(c, idx++)).join("")}
+    </div>`).join("");
+})();
 function refreshGroups(){
-  document.querySelectorAll("#groups .group").forEach(g => {
+  document.querySelectorAll(".groups-box .group").forEach(g => {
     const n = g.querySelectorAll(".card").length;
     g.querySelector(".group-head .n").textContent = n;
     g.style.display = n ? "" : "none";
   });
 }
 refreshGroups();
+
+/* category tab switching */
+document.querySelectorAll(".cats .cat").forEach(tab => {
+  tab.addEventListener("click", () => {
+    const v = tab.dataset.view;
+    document.querySelectorAll("section.feed[data-view]").forEach(s => s.hidden = s.dataset.view !== v);
+    window.scrollTo({ top: 0 });
+  });
+});
 
 /* ---------- interactions ---------- */
 // menus (severity chips + overflow)
@@ -1041,7 +1565,7 @@ document.addEventListener("click", e => {
   const qb = e.target.closest(".qbtn");
   if (qb){
     const menu = qb.closest(".menu.quad");
-    const c = CARDS[+menu.dataset.card];
+    const c = ALL[+menu.dataset.card];
     c[qb.dataset.ax] = qb.dataset.val === "1";
     menu.querySelectorAll(`.qbtn[data-ax="${qb.dataset.ax}"]`).forEach(b =>
       b.setAttribute("aria-pressed", b === qb));
@@ -1051,11 +1575,13 @@ document.addEventListener("click", e => {
     const res = menu.querySelector(".quad-result .chip");
     res.className = `chip sev-${TIER(c)}`;
     res.textContent = AXLABEL(c);
+    c.setBy = "Scout Underwood"; c.setTs = nowStamp();
+    menu.querySelector(".set-by").innerHTML = `Last set by <b>${c.setBy}</b><br>${c.setTs}`;
     const card = menu.closest(".card");
     card.classList.remove("sev-critical","sev-high","sev-medium","sev-low");
     card.classList.add(`sev-${TIER(c)}`);
     if (!card.classList.contains("official-card")){
-      const target = document.querySelector(`#groups .group.${TIER(c)}`);
+      const target = card.closest(".groups-box").querySelector(`.group.${TIER(c)}`);
       if (target && card.parentElement !== target){ target.appendChild(card); refreshGroups(); }
     }
   }
@@ -1074,6 +1600,14 @@ document.addEventListener("click", e => {
     document.body.appendChild(ta); ta.select();
     try { document.execCommand("copy"); } catch(_){}
     ta.remove(); cb();
+  }
+  // mark reviewed (changes)
+  const mr = e.target.closest(".mark-rev");
+  if (mr){
+    const card = mr.closest(".card");
+    card.classList.add("reviewed");
+    mr.outerHTML = `<span class="chip rev">✓ Reviewed</span>`;
+    toast("Marked reviewed");
   }
   // pin / unpin from the ⋯ menu
   const pin = e.target.closest(".pin-btn");
@@ -1119,22 +1653,27 @@ const drawer = document.getElementById("tuneDrawer"),
       scrim = document.getElementById("tuneScrim"),
       gear = document.getElementById("gearBtn"),
       toastEl = document.getElementById("toast");
+let lastGear = null;
 let toastTimer;
 function toast(msg){
   toastEl.textContent = msg; toastEl.classList.add("show");
   clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove("show"), 3200);
 }
-function openDrawer(){
+function openDrawer(fromGear){
+  lastGear = fromGear || gear;
+  document.getElementById("drTitle").textContent =
+    `⚙ Extraction tuning — ${lastGear.dataset.cat || "Issues"}`;
   drawer.classList.add("show"); scrim.classList.add("show");
-  gear.setAttribute("aria-expanded","true");
+  lastGear.setAttribute("aria-expanded","true");
   drawer.querySelector(".tfield-head").focus();
 }
 function closeDrawer(){
   if (!drawer.classList.contains("show")) return;
   drawer.classList.remove("show"); scrim.classList.remove("show");
-  gear.setAttribute("aria-expanded","false"); gear.focus();
+  if (lastGear){ lastGear.setAttribute("aria-expanded","false"); lastGear.focus(); }
 }
-gear.addEventListener("click", openDrawer);
+document.querySelectorAll(".gear-btn").forEach(g =>
+  g.addEventListener("click", () => openDrawer(g)));
 scrim.addEventListener("click", closeDrawer);
 document.getElementById("drClose").addEventListener("click", closeDrawer);
 document.getElementById("drCancel").addEventListener("click", closeDrawer);
@@ -1183,12 +1722,13 @@ const moreOvl = document.getElementById("moreOvl"),
       moreScrim = document.getElementById("moreScrim");
 let moreReturnFocus = null;
 function openMore(idx, trigger){
-  const c = CARDS[idx]; if (!c || !c.d) return;
+  const c = ALL[idx]; if (!c || !c.d) return;
   moreReturnFocus = trigger || null;
   document.getElementById("moTitle").textContent = c.t;
   document.getElementById("moMeta").innerHTML =
     (c.official ? '<span class="chip approved">Human approved</span>' : '<span class="chip dashed">AI suggested</span>') +
-    `<span class="chip sev-${TIER(c)}" style="cursor:default">${AXLABEL(c)}</span>` +
+    `<span class="chip sev-${TIER(c)} has-tip" tabindex="0" style="cursor:default"
+       data-tip="Last set by ${c.setBy} · ${c.setTs}">${AXLABEL(c)}</span>` +
     `<span class="src">${srcIcon(c.src)} ${c.src}</span><span class="when">${c.when}</span>` +
     `<span class="when" style="font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em">${c.sn}</span>`;
   document.getElementById("moBody").innerHTML = c.d.map(p => `<p>${p}</p>`).join("");
