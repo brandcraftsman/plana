@@ -705,6 +705,9 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .slide-dot.on{background:var(--brand-orange)}
 .tx-src{margin-bottom:18px}
 .tx-src .tx-head{display:flex;align-items:center;gap:9px;margin-bottom:8px;flex-wrap:wrap}
+.tx-orig{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--brand-orange);text-decoration:none;
+  display:inline-flex;gap:5px;align-items:center;white-space:nowrap}
+.tx-orig:hover{text-decoration:underline;text-underline-offset:3px}
 .tx-line{display:grid;grid-template-columns:74px 90px minmax(0,1fr);gap:10px;padding:7px 10px;border-radius:7px;font-size:13px}
 .tx-line:nth-child(odd){background:rgba(255,255,255,.02)}
 .tx-line .tc{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--brand-orange)}
@@ -718,6 +721,128 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .as-add{border:1px dashed var(--line-strong);border-radius:9px;padding:12px 14px;display:flex;gap:10px;
   align-items:center;color:var(--muted);font-size:13px;margin-bottom:18px}
 
+/* ============ Chat ============ */
+.chat-empty{min-height:calc(100vh - 200px);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:0;padding-bottom:60px}
+.chat-mark{font-size:30px;background:linear-gradient(120deg,var(--brand-red),var(--brand-orange));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.chat-empty h2{font-size:30px;font-weight:700;letter-spacing:-.02em;text-align:center;margin-top:14px}
+.chat-tag{font-size:14px;color:var(--muted);margin-top:8px}
+.chat-hero{width:min(760px,92vw);background:linear-gradient(180deg,var(--raised),#1c1c1f);
+  border:1px solid var(--line-strong);border-radius:18px;padding:18px 18px 12px;
+  box-shadow:0 18px 50px rgba(0,0,0,.4);margin-top:26px}
+.chat-hero input{width:100%;min-height:52px;background:none;border:none;color:var(--text);
+  font:inherit;font-size:15px;padding:2px 4px}
+.chat-hero input:focus{outline:none}
+.chat-hero input::placeholder{color:var(--faint)}
+.chat-hero-row{display:flex;align-items:center;gap:10px;margin-top:6px}
+.chat-sq{width:32px;height:32px;min-height:32px;padding:0;justify-content:center;border-radius:8px}
+.chat-send{width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(120deg,var(--brand-red) 25%,var(--brand-orange) 140%);
+  color:#fff;font-size:16px;font-weight:700}
+.chat-send:hover{filter:brightness(1.1)}
+.chat-sugs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+.chat-sug{border-radius:99px;font-size:12.5px;color:var(--muted)}
+.chat-sug:hover{color:var(--text);border-color:var(--brand-orange)}
+.chat-foot{font-size:11px;color:var(--faint);margin-top:26px}
+.chat-convo{width:min(800px,94vw);margin:0 auto;display:flex;flex-direction:column;gap:18px;
+  padding:10px 0 150px}
+.chat-head{display:flex;align-items:center;gap:12px}
+.chat-head h2{font-size:15px;font-weight:800}
+.chat-scope-lb{font-size:12px;font-weight:700;color:var(--brand-orange)}
+#chatMsgs{display:flex;flex-direction:column;gap:18px}
+.chat-u{align-self:flex-end;max-width:66.666%;background:#fff;color:#000;border-radius:14px 14px 4px 14px;
+  padding:11px 15px;font-size:14px;margin-top:8px}
+.chat-a{align-self:flex-start;max-width:66.666%;font-size:14px;color:#e8e8ea;line-height:1.65;margin-top:8px}
+.chat-a p{margin:0 0 28px}                          /* generous inter-paragraph breathing */
+.chat-a p:last-of-type{margin-bottom:0}
+.ser{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:11px;letter-spacing:.06em;
+  color:var(--muted);margin:0 6px;white-space:nowrap}
+.chat-src{border:1px solid rgba(229,98,3,.35);background:rgba(229,98,3,.05);border-radius:10px;
+  padding:10px 13px;margin-top:26px}
+.chat-src.none{border-color:rgba(229,6,2,.5);background:rgba(229,6,2,.07)}
+.chat-src .lb{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--brand-orange);margin-bottom:6px}
+.chat-src .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.chat-src .tx-orig{margin-left:0}
+.chat-acts{display:flex;gap:10px;margin-top:10px}
+.chat-acts button{background:none;border:none;color:var(--faint);cursor:pointer;font-size:12px;padding:0}
+.chat-acts button:hover{color:var(--text)}
+.chat-pill{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;width:min(800px,94vw);
+  background:linear-gradient(180deg,var(--raised),#1c1c1f);border:1px solid var(--line-strong);
+  border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;
+  box-shadow:0 18px 50px rgba(0,0,0,.55);z-index:45}
+.chat-pill input{flex:1;background:none;border:none;color:var(--text);font:inherit;font-size:14px}
+.chat-pill input:focus{outline:none}
+.chat-pill input::placeholder{color:var(--faint)}
+/* chat citations are drill-downs: gray serials, dotted underline */
+#chatPage .ser{cursor:pointer;border-bottom:1px dotted var(--faint);padding-bottom:1px}
+#chatPage .ser:hover{color:var(--text);border-bottom-color:var(--muted)}
+/* citation peek (Option A) */
+#serPeek{position:fixed;width:380px;z-index:96;display:none;
+  background:linear-gradient(180deg,#232326,#1a1a1c);border:1px solid var(--line-strong);
+  border-radius:12px;box-shadow:0 18px 60px rgba(0,0,0,.65);padding:14px 16px;font-size:12.5px}
+#serPeek.show{display:block}
+.sp-head{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.sp-head .ser{margin:0;color:var(--brand-orange)}
+.sp-kind{font-size:10.5px;font-weight:800;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.sp-head > span:last-child{margin-left:auto}
+.sp-title{font-weight:700;font-size:13.5px;color:#fff;margin-bottom:5px;line-height:1.4}
+.sp-sum{color:var(--muted);line-height:1.55;margin-bottom:10px;display:-webkit-box;
+  -webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.sp-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;color:var(--faint);font-size:11px;margin-bottom:12px}
+.sp-acts{display:flex;gap:8px}
+.sp-acts button{flex:1;border-radius:8px;padding:7px 0;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.sp-rec{background:#2a2a2e;border:1px solid var(--line-strong);color:#fff}
+.sp-rec:hover{border-color:var(--muted)}
+.sp-src{background:none;border:1px solid rgba(229,98,3,.5);color:var(--brand-orange)}
+.sp-src:hover{background:rgba(229,98,3,.08)}
+#serPeek .menu.quad{right:0;left:auto}
+
+/* ============ Scope builder ============ */
+.scb-open{gap:7px;font-size:12px;color:var(--muted);max-width:340px}
+.scb-open:hover{color:var(--brand-orange);border-color:var(--brand-orange)}
+.scb-open .scb-sum{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scb-open.on{color:var(--brand-orange);border-color:var(--brand-orange)}
+#scbScrim{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:84;opacity:0;pointer-events:none;transition:opacity .2s}
+#scbScrim.show{opacity:1;pointer-events:auto}
+#scbOvl{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-height:90vh;width:min(1180px,96vw);z-index:85;display:none;flex-direction:column;
+  background:linear-gradient(180deg,#1e1e21 0%,var(--surface) 25%,#161618 100%);
+  border:1px solid var(--line-strong);border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.7);overflow:hidden}
+#scbOvl.show{display:flex}
+.scb-head{display:flex;align-items:center;gap:12px;padding:15px 22px;border-bottom:1px solid var(--line)}
+.scb-role{display:flex;align-items:center;gap:10px;padding:10px 22px;border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.02)}
+.scb-role .lb,.scb-print .lb{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.scb-cols{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:16px 22px}
+.scb-col h6{font-size:12px;font-weight:800;margin-bottom:10px;display:flex;gap:7px;align-items:center}
+.scb-col h6 .ic{color:var(--brand-orange)}
+.scb-row{display:flex;align-items:center;gap:8px;min-height:30px;font-size:12.5px;color:var(--muted);
+  cursor:pointer;padding:0 6px;border-radius:6px}
+.scb-row:hover{background:var(--raised);color:var(--text)}
+.scb-row input{accent-color:var(--brand-orange);width:14px;height:14px;flex-shrink:0}
+.scb-row .l{flex:1}
+.scb-row.sub{padding-left:24px;font-size:12px}
+.scb-row .beta{font-size:8.5px;font-weight:800;letter-spacing:.05em;border:1px solid var(--line-strong);
+  color:var(--faint);border-radius:4px;padding:0 4px}
+.scb-row:has(input:checked){color:var(--text)}
+.scb-grp{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);
+  margin:10px 0 4px;padding-left:6px}
+.scb-pills{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.scb-pill{border:1px solid var(--line-strong);background:none;color:var(--muted);border-radius:8px;
+  min-height:30px;font-size:12px;cursor:pointer;font-family:inherit;padding:0 8px}
+.scb-pill:hover{color:var(--text);border-color:var(--brand-orange)}
+.scb-pill.on{background:linear-gradient(120deg,rgba(229,6,2,.18),rgba(229,98,3,.14));
+  border-color:var(--brand-orange);color:var(--text);font-weight:600}
+.scb-dates{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.scb-dates label{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted)}
+.scb-dates input[type=date]{flex:1;min-height:29px;background:var(--bg);border:1px solid var(--line-strong);
+  border-radius:6px;color:var(--text);padding:0 8px;font:inherit;font-size:12px;color-scheme:dark}
+.scb-print{padding:12px 22px;border-top:1px solid var(--line);background:rgba(255,255,255,.015)}
+.scb-print b{color:var(--text)}
+.scb-print .n-match{color:var(--brand-orange);font-weight:800}
+.scb-foot{display:flex;justify-content:flex-end;gap:10px;padding:12px 22px;border-top:1px solid var(--line)}
+
 /* jump to top */
 #jumpTop{position:fixed;right:22px;bottom:22px;z-index:50;width:42px;height:42px;border-radius:50%;
   background:var(--raised);border:1px solid var(--line-strong);color:var(--text);font-size:17px;
@@ -726,9 +851,51 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 #jumpTop.show{opacity:1;pointer-events:auto;transform:none}
 #jumpTop:hover{border-color:var(--brand-orange);color:var(--brand-orange)}
 
+/* ============ Open source overlay ============ */
+#srcScrim{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:91;opacity:0;pointer-events:none;transition:opacity .2s}
+#srcScrim.show{opacity:1;pointer-events:auto}
+#srcOvl{position:fixed;inset:4vh 0;margin:0 auto;width:min(940px,94vw);z-index:92;display:none;flex-direction:column;
+  background:linear-gradient(180deg,#1e1e21 0%,var(--surface) 25%,#161618 100%);
+  border:1px solid var(--line-strong);border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.7);overflow:hidden}
+#srcOvl.show{display:flex}
+.src-head{display:flex;align-items:flex-start;gap:12px;padding:16px 22px 12px}
+.src-head h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.src-tabs{display:flex;gap:2px;align-items:center;padding:0 22px;border-bottom:1px solid var(--line)}
+.src-orig{margin-left:auto;font-size:13px;font-weight:700;color:var(--brand-orange);text-decoration:none;
+  padding:9px 4px;display:inline-flex;gap:5px;align-items:center}
+.src-orig:hover{text-decoration:underline;text-underline-offset:3px}
+.src-body{flex:1;overflow-y:auto;padding:16px 22px}
+.src-chunk{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:14px 16px;margin-bottom:12px}
+.src-chunk .ck{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;border:1px solid var(--line-strong);
+  border-radius:6px;padding:2px 8px;color:var(--muted);margin-bottom:10px}
+.src-chunk pre{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:12px;line-height:1.7;
+  color:var(--muted);white-space:pre-wrap;word-break:break-word;margin:0}
+.src-chunk pre b{color:var(--text)}
+.att-row{display:flex;align-items:center;gap:12px;padding:9px 12px;border:1px solid var(--line);border-radius:9px;
+  margin-bottom:8px;background:rgba(255,255,255,.015)}
+.att-row .av{width:30px;height:30px;border-radius:50%;background:var(--brand-gray);color:#fff;
+  display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0}
+.att-row b{font-size:13.5px}
+.att-row .wp{font-size:11.5px;color:var(--faint);margin-left:auto}
+.kv{display:grid;grid-template-columns:180px 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.kv > div{padding:9px 14px;font-size:12.5px;border-bottom:1px solid var(--line)}
+.kv > div:nth-last-child(-n+2){border-bottom:none}
+.kv .k{color:var(--faint);font-weight:600;background:rgba(255,255,255,.02);
+  text-transform:uppercase;letter-spacing:.05em;font-size:10.5px;display:flex;align-items:center}
+.kv .v{font-family:ui-monospace,Menlo,monospace;color:var(--muted)}
+.sig-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:9px;
+  margin-bottom:8px;background:rgba(255,255,255,.015);cursor:pointer}
+.sig-row:hover{border-color:var(--line-strong)}
+.sig-row.sig-tall{display:block;padding:12px 14px}
+.sig-row .sig-top{display:flex;align-items:center;gap:10px}
+.sig-row .sig-why{font-size:12.5px;color:var(--muted);font-style:italic;line-height:1.55;margin-top:7px;
+  padding-left:2px;max-width:92ch}
+.sig-row .sig-why b{color:var(--faint);font-style:normal;font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;margin-right:4px}
+
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);
   background:var(--raised);border:1px solid var(--line-strong);border-radius:9px;padding:10px 18px;
-  font-size:13px;z-index:90;transition:transform .25s;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+  font-size:13px;z-index:99;transition:transform .25s;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 #toast.show{transform:translateX(-50%) translateY(0)}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
@@ -770,10 +937,10 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
     <header class="topbar">
       <button class="btn" id="sideExpand" aria-label="Expand sidebar" title="Expand sidebar">»</button>
       <h1 class="sr-only">PLANA Co. Brain — Advanced Dashboard</h1>
-      <div class="ask" role="search">
-        <label class="sr-only" for="ask">Ask your company brain</label>
-        <input id="ask" type="text" placeholder='Ask your company brain anything… (try: "risks from this month")'>
-        <button type="button">Ask</button>
+      <div class="ask" role="search" id="askBar">
+        <label class="sr-only" for="ask">Chat with your company brain</label>
+        <input id="ask" type="text" placeholder='Chat with your company brain… (try: "risks from this month")'>
+        <button type="button" id="askBtn">Chat</button>
       </div>
       <div class="sync" role="status">
         <span class="dot" aria-hidden="true"></span> Never synced
@@ -784,11 +951,11 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
     <!-- Row 2: product tabs + scope + horizon (collapsed into one utility bar) -->
     <div class="utility">
       <div class="tabs" role="tablist" aria-label="Product areas">
-        <button class="tab" role="tab" aria-selected="true" data-pview="dash">Dashboards</button>
+        <button class="tab" role="tab" aria-selected="true" data-pview="chat">Chat</button>
+        <button class="tab" role="tab" aria-selected="false" data-pview="dash">Insights</button>
         <button class="tab" role="tab" aria-selected="false" data-pview="ff">Filter &amp; Find</button>
         <button class="tab" role="tab" aria-selected="false" data-pview="timeline">Timeline</button>
         <button class="tab" role="tab" aria-selected="false" data-pview="calendar">Calendar</button>
-        <button class="tab" role="tab" aria-selected="false" data-pview="chat">Chat</button>
       </div>
       <div class="range"><b>Jun 30 – Jul 29, 2026</b> · <span class="updated">Updated 2m ago</span></div>
       <div class="seg-group horizon">
@@ -1039,7 +1206,50 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
         The calendar doubles as ingestion visibility — every meeting and thread shows whether the brain captured it.
         Anyone invited can attach files, links, and quick notes afterward.</p>
     </section>
-    <section class="feed" data-pview="chat" hidden><div class="empty">Chat — layout coming next.</div></section>
+    <!-- ================= Chat ================= -->
+    <section class="feed" id="chatPage" data-pview="chat" aria-label="Chat" hidden style="max-width:100%">
+      <div id="chatEmpty" class="chat-empty">
+        <span class="chat-mark">✦</span>
+        <h2 id="chatGreet">Good afternoon, Scout.</h2>
+        <p class="chat-tag">Ask your company brain — answers are traced, grounded, and cited.</p>
+        <div class="chat-hero">
+          <input id="chatHeroIn" placeholder="Ask about the workspace…" aria-label="Ask the workspace">
+          <div class="chat-hero-row">
+            <button class="btn chat-sq" title="Attach">＋</button>
+            <button class="btn scb-open" id="scbOpen1" aria-haspopup="dialog" title="Build the retrieval scope">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 5h18l-7 8v5l-4 2v-7L3 5z"/></svg>
+              <span class="scb-sum" id="chatScopeSum">PLANA · all channels · all callouts · all time</span></button>
+            <span style="flex:1"></span>
+            <button class="chat-send" id="chatHeroSend" aria-label="Send">↑</button>
+          </div>
+        </div>
+        <div class="chat-sugs">
+          <button class="btn chat-sug">What's blocking the Aug 31 sign-off?</button>
+          <button class="btn chat-sug">Who owes me responses right now?</button>
+          <button class="btn chat-sug">Summarize this week's decisions</button>
+        </div>
+        <p class="chat-foot">Answers cite serials and transcripts · verify citations for consequential decisions</p>
+      </div>
+      <div id="chatConvo" class="chat-convo" hidden>
+        <div class="chat-head">
+          <h2>Chat</h2>
+          <span class="chat-scope-lb" id="chatScopeLb">PLANA</span>
+          <span style="margin-left:auto;display:flex;gap:8px">
+            <button class="btn" id="chatToDoc" style="min-height:28px;font-size:11.5px">📄 Save to Doc</button>
+            <button class="btn" id="chatClear" style="min-height:28px;font-size:11.5px">Clear</button></span>
+        </div>
+        <div id="chatMsgs"></div>
+        <div class="chat-pill">
+          <button class="btn chat-sq" title="Attach">＋</button>
+          <input id="chatReplyIn" placeholder="Reply…" aria-label="Reply">
+          <button class="btn scb-open" id="scbOpen2" aria-haspopup="dialog" title="Build the retrieval scope"
+            style="min-height:30px;font-size:11.5px">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 5h18l-7 8v5l-4 2v-7L3 5z"/></svg>
+            <span class="scb-sum" id="chatScopeSum2">PLANA · all</span></button>
+          <button class="chat-send" id="chatReplySend" aria-label="Send">↑</button>
+        </div>
+      </div>
+    </section>
   </main>
 </div>
 
@@ -1087,6 +1297,48 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
       </div>
     </div>
   </div>
+</section>
+
+<!-- ============ Scope builder (chat super-filter) ============ -->
+<div id="scbScrim"></div>
+<section id="scbOvl" role="dialog" aria-modal="true" aria-labelledby="scbTitle">
+  <div class="scb-head">
+    <b id="scbTitle" style="font-size:16px">Scope builder</b>
+    <span style="font-size:12px;color:var(--muted)">Build the retrieval boundary first — the chat answers only inside it.</span>
+    <button class="btn" id="scbClose" style="margin-left:auto">✕</button>
+  </div>
+  <div class="scb-role">
+    <span class="lb">Workspace role</span>
+    <span class="chip approved" style="font-size:10.5px">Member</span>
+    <span style="font-size:12px;color:var(--muted)">Scout Underwood · WP-13 manager admin — scope can never exceed your access</span>
+  </div>
+  <div class="scb-cols" id="scbCols"></div>
+  <div class="scb-print">
+    <span class="lb">Filtered result printout</span>
+    <div id="scbPrint" style="font-size:12.5px;color:var(--muted);line-height:1.55"></div>
+  </div>
+  <div class="scb-foot">
+    <button class="btn" id="scbCancel">Cancel</button>
+    <button class="btn btn-publish" id="scbApply">Apply scope</button>
+  </div>
+</section>
+
+<!-- ============ Open source overlay (raw provenance) ============ -->
+<div id="srcScrim"></div>
+<section id="srcOvl" role="dialog" aria-modal="true" aria-labelledby="srcTitle">
+  <div class="src-head">
+    <div><h3 id="srcTitle"></h3><div id="srcSub" style="font-size:12px;color:var(--muted);margin-top:2px"></div></div>
+    <button class="btn" id="srcClose" style="margin-left:auto">✕ Close</button>
+  </div>
+  <div class="src-tabs" role="tablist" aria-label="Source views">
+    <button class="syn-tab" role="tab" aria-selected="true" data-st="raw">Raw content</button>
+    <button class="syn-tab" role="tab" aria-selected="false" data-st="sum">Summary</button>
+    <button class="syn-tab" role="tab" aria-selected="false" data-st="sig">Signals</button>
+    <button class="syn-tab" role="tab" aria-selected="false" data-st="att">Attendees</button>
+    <button class="syn-tab" role="tab" aria-selected="false" data-st="meta">Metadata</button>
+    <a href="#" id="srcOrig" class="src-orig">Original transcripts <span style="font-size:11px">↗</span></a>
+  </div>
+  <div class="src-body" id="srcBody"></div>
 </section>
 
 <!-- ============ Insight overlay (full record) ============ -->
@@ -1390,6 +1642,7 @@ Tool notifications with no decision attached.</textarea>
 </div>
 
 <button id="jumpTop" aria-label="Jump to top" title="Jump to top">↑</button>
+<div id="serPeek" role="dialog" aria-label="Citation preview"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -1837,7 +2090,7 @@ function moreMenu(c, id){
       <button role="menuitem">Assign…</button>
       <button role="menuitem">Snooze</button>
       <div class="sep"></div>
-      <button role="menuitem">Open source ↗</button>
+      <button role="menuitem" class="open-src" data-ins="${ci}">Open source ↗</button>
     </div>
   </div>`;
 }
@@ -1866,7 +2119,7 @@ function cardHTML(c, i){
             <button role="menuitem">Assign…</button>
             <button role="menuitem">Snooze</button>
             <div class="sep"></div>
-            <button role="menuitem">Open source ↗</button>
+            <button role="menuitem" class="open-src" data-ins="${ci}">Open source ↗</button>
             ${c.official ? `<div class="sep"></div><button role="menuitem" class="danger">Revert to suggested</button>` : ""}
           </div>
         </div>
@@ -1890,7 +2143,7 @@ function cardHTML(c, i){
     <div class="details">
       <div class="det-row">
         <span class="conf" title="AI extraction confidence">(${c.conf}%)</span>
-        <a href="#">Open source ↗</a>
+        <a href="#" class="open-src" data-ins="${ci}">Open source ↗</a>
       </div>
       <div class="det-raci">RACI placeholder</div>
     </div>
@@ -2073,14 +2326,20 @@ document.addEventListener("click", e => {
 document.addEventListener("keydown", e => {
   if (e.key === "Escape"){
     document.querySelectorAll(".menu.open").forEach(m => m.classList.remove("open"));
+    const pk = document.getElementById("serPeek");
+    if (pk && pk.classList.contains("show")){ if (typeof window.closeSerPeek === "function") window.closeSerPeek(); return; }
     const guide = document.getElementById("guideOvl");
     if (guide && guide.classList.contains("show")){ guide.classList.remove("show"); return; }
+    const so = document.getElementById("srcOvl");
+    if (so && so.classList.contains("show")){ if (typeof closeSource === "function") closeSource(); return; }
     const mo = document.getElementById("moreOvl");
     if (mo && mo.classList.contains("show")){ if (typeof closeMore === "function") closeMore(); return; }
     const io = document.getElementById("insOvl");
     if (io && io.classList.contains("show")){ if (typeof closeInsight === "function") closeInsight(); return; }
     const sy = document.getElementById("synOvl");
     if (sy && sy.classList.contains("show")){ if (typeof closeSyn === "function") closeSyn(); return; }
+    const sb = document.getElementById("scbOvl");
+    if (sb && sb.classList.contains("show")){ if (typeof window.closeScopeBuilder === "function") window.closeScopeBuilder(); return; }
     closeDrawer();
     if (typeof closeProfile === "function") closeProfile();
   }
@@ -2097,6 +2356,8 @@ document.querySelectorAll(".tabs [data-pview]").forEach(tab => {
     });
     document.querySelectorAll("section.feed[data-pview]").forEach(s => s.hidden = s.dataset.pview !== v);
     if (typeof cartBarRender === "function") cartBarRender();   // cart bar only shows on Calendar
+    // visibility (not display) so the topbar layout holds and "Never synced" stays right-justified
+    document.getElementById("askBar").style.visibility = v === "chat" ? "hidden" : "visible";
     window.scrollTo({ top: 0 });
   });
 });
@@ -2375,7 +2636,7 @@ function insRender(c, editing){
       <span class="ver-info" id="insProv">${c.dsn} · extracted from ${c.src} · event ${c.ts} ·
         severity last set by ${c.setBy} (${c.setTs})${c.edited ? ` · text edited by ${c.editedBy} (${c.editedTs})` : ""}</span>
       <button class="btn" id="insEditBtn">✎ Edit</button>
-      <a href="#" class="btn" style="text-decoration:none">Open source ↗</a>`;
+      <a href="#" class="btn open-src" data-ins="${ALL.indexOf(c)}" style="text-decoration:none">Open source ↗</a>`;
   }
 }
 function openInsight(i, trigger, editing = false){
@@ -2757,47 +3018,44 @@ function synRenderTab(){
       </div>`).join("");
   }
   if (synTab === "info"){
-    const tiers = ["critical","high","medium","low"].map(t => recs.filter(c => TIER(c) === t).length);
-    const byType = GRP_ORDER.map(g => [g, recs.filter(c => c.dsn === g).length]).filter(x => x[1]);
-    const maxT = Math.max(1, ...byType.map(x => x[1]));
-    const ppl = {};
-    srcs.forEach(s => s.p.split("·").forEach(n => { n = n.trim(); if (n) ppl[n] = (ppl[n] || 0) + 1; }));
-    const top = Object.entries(ppl).sort((a, b) => b[1] - a[1]).slice(0, 4);
     el.innerHTML = `
-      <div class="ig-tiles">
-        <div class="ig-tile"><div class="big">${srcs.length}</div><div class="lb">Sources</div></div>
-        <div class="ig-tile"><div class="big">${recs.length}</div><div class="lb">Extractions</div></div>
-        <div class="ig-tile"><div class="big" style="background:linear-gradient(90deg,#ff6b69,var(--brand-orange));-webkit-background-clip:text;background-clip:text;color:transparent">${tiers[0]}</div><div class="lb">Top severity</div></div>
-        <div class="ig-tile"><div class="big">${Math.round(srcs.filter(s => s.st === "ok").length / srcs.length * 100)}%</div><div class="lb">Processed</div></div>
-      </div>
-      <div class="ig-tile" style="margin-bottom:12px">
-        <div class="lb" style="margin-bottom:4px">Severity mix</div>
-        <div class="ig-bar">${["critical","high","medium","low"].map((t, i) => tiers[i]
-          ? `<span class="ig-seg-${t}" style="flex:${tiers[i]}"></span>` : "").join("")}</div>
-        <div style="display:flex;gap:14px;font-size:11px;color:var(--faint)">
-          ${["critical","high","medium","low"].map((t, i) => tiers[i] ? `<span>${t} ${tiers[i]}</span>` : "").join("")}</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="ig-tile"><div class="lb" style="margin-bottom:10px">By extraction type</div>
-          ${byType.map(x => `<div class="ig-row"><span style="width:86px">${x[0]}</span>
-            <span class="track"><span class="fill" style="width:${x[1] / maxT * 100}%"></span></span><b style="color:var(--text)">${x[1]}</b></div>`).join("")}</div>
-        <div class="ig-tile"><div class="lb" style="margin-bottom:10px">Most present</div>
-          ${top.map(x => `<div class="ig-row"><span style="width:86px">${x[0].split(" ")[0]}</span>
-            <span class="track"><span class="fill" style="width:${x[1] / top[0][1] * 100}%"></span></span><b style="color:var(--text)">${x[1]}</b></div>`).join("")}</div>
+      <div style="border:2px dashed var(--line-strong);border-radius:14px;min-height:460px;display:flex;
+        flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;
+        padding:40px;background:rgba(255,255,255,.015)">
+        <div style="font-size:44px;line-height:1">✨🖼</div>
+        <h3 style="font-size:19px;font-weight:800">Generative infographic — placeholder</h3>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.65;max-width:52ch">
+          This tab will render an <b style="color:var(--text)">AI-generated infographic image</b> synthesized from
+          the cart's contents — currently <b style="color:var(--text)">${srcs.length} source${srcs.length > 1 ? "s" : ""}
+          and ${recs.length} extraction${recs.length === 1 ? "" : "s"}</b> — designed for a one-glance scan of what
+          this engagement adds up to.</p>
+        <p style="font-size:12px;color:var(--faint);line-height:1.6;max-width:56ch;font-style:italic">
+          Integration point for the image-generation service: the generator receives the cart's synthesis
+          paragraph, extraction records (serials, severities, categories), and brand palette, and returns a
+          rendered graphic for this frame.</p>
+        <button class="btn btn-publish" style="margin-top:6px">✨ Generate infographic</button>
+        <span style="font-size:11px;color:var(--faint)">Button is a placeholder — no generator is connected in this mock.</span>
       </div>`;
   }
   if (synTab === "slides"){
-    synSlides = [
-      { k: "Cart synthesis", h: document.getElementById("synName").value || "Untitled cart",
-        b: [`${srcs.length} sources · ${recs.length} extractions`, srcs.map(s => s.t).join("  ·  ")] },
-      ...(crit.length ? [{ k: "What's burning", h: "Top severity", b: crit.slice(0, 4).map(c => `${c.sn} — ${c.t}`) }] : []),
-      ...GRP_ORDER.filter(g => ["Tasks","Decisions"].includes(g)).map(g => {
-        const it = recs.filter(c => c.dsn === g);
-        return it.length ? { k: g, h: g === "Tasks" ? "What we owe" : "What we settled", b: it.map(c => `${c.sn} — ${c.t}`) } : null;
-      }).filter(Boolean),
-      { k: "Close", h: "One number to remember", b: [`${crit.length} critical items across ${srcs.length} sources — all routed, all owned.`] }
-    ];
-    synSlideI = 0; renderSlide();
+    el.innerHTML = `
+      <div style="border:2px dashed var(--line-strong);border-radius:14px;min-height:460px;display:flex;
+        flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;
+        padding:40px;background:rgba(255,255,255,.015)">
+        <div style="font-size:44px;line-height:1">✨🎞</div>
+        <h3 style="font-size:19px;font-weight:800">Generative slide show — placeholder</h3>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.65;max-width:52ch">
+          This tab will render an <b style="color:var(--text)">AI-generated slide show</b> — a narrated,
+          NotebookLM-style walkthrough built from the cart's contents, currently
+          <b style="color:var(--text)">${srcs.length} source${srcs.length > 1 ? "s" : ""} and
+          ${recs.length} extraction${recs.length === 1 ? "" : "s"}</b> — for a few minutes of guided scanning.</p>
+        <p style="font-size:12px;color:var(--faint);line-height:1.6;max-width:56ch;font-style:italic">
+          Integration point for the slide-generation service: the generator receives the cart's synthesis
+          paragraph, extraction records (serials, severities, categories), transcript excerpts, and brand
+          palette, and returns a paged deck (optionally narrated) for this frame.</p>
+        <button class="btn btn-publish" style="margin-top:6px">✨ Generate slide show</button>
+        <span style="font-size:11px;color:var(--faint)">Button is a placeholder — no generator is connected in this mock.</span>
+      </div>`;
     return;
   }
   if (synTab === "tx"){
@@ -2808,6 +3066,9 @@ function synRenderTab(){
           <span class="cap-chip ${CAP[s.st][0]}">${CAP[s.st][1]}</span>
           <span style="font-size:11.5px;color:var(--faint)">${s.day} · ${s.tm}</span>
           ${s.sn.map(x => `<span class="chip outline" style="font-size:10px">${x}</span>`).join("")}
+          <a href="#" class="tx-orig" data-kind="${s.kind}">
+            ${s.kind === "mtg" ? `<img src="${MEET_ICO}" alt="" style="width:14px;height:auto">Original transcripts`
+                               : `✉ Original thread`} <span style="font-size:10px">↗</span></a>
         </div>
         ${s.tx.length ? s.tx.map(l => `<div class="tx-line"><span class="tc">${l[0]}</span><span class="sp">${l[1]}</span><span class="tx">${l[2]}</span></div>`).join("") +
           `<div style="font-size:11px;color:var(--faint);font-style:italic;margin-top:6px">Excerpt — full ${s.kind === "mtg" ? "transcript" : "thread"} opens from the source system.</div>`
@@ -2852,6 +3113,11 @@ document.getElementById("synContent").addEventListener("click", e => {
   const mini = e.target.closest(".syn-mini");
   if (mini && !e.target.closest(".chip.sev, .menu, .qbtn")) openInsight(+mini.dataset.ins, mini);
   if (e.target.closest(".cal-add")) toast("Capture companion opens — drop files, links, or a quick note");
+  const to = e.target.closest(".tx-orig");
+  if (to){
+    e.preventDefault();
+    toast(`↗ Opens the original in ${to.dataset.kind === "mtg" ? "Google Meet transcripts" : "Gmail"} — new window`);
+  }
 });
 /* cart chat — canned but cart-grounded */
 let synQn = 0;
@@ -2893,6 +3159,408 @@ document.getElementById("synDelete").addEventListener("click", () => {
   closeSyn(); calRender();
   toast(i >= 0 ? `Cart “${name}” deleted — selection cleared` : "Cart discarded — selection cleared");
 });
+
+/* ---------- Open source overlay — raw provenance ---------- */
+const FULLNAME = { Scout:"Scout Underwood", Vu:"Vu Pham", Duc:"Duc Huy Tran", Sally:"Sally Nanyoung Oh",
+  Mitch:"Mitch Amos", Jeremy:"Jeremy Thomas", "External guest":"External guest", "(external)":"External sender" };
+const MEET_ICO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAhCAYAAACr8emlAAAFZ0lEQVR42sWYX4xcdRXHP+f8fneY7uy/jrVgSv8oaEhN1GoFmphOlyLW8iR0G5uQ2MYXTNDIiw+S2O6DJoQXHlUwbWJMaheIGJUuJE7HF+OTaFICBHD5UxFkW7rTnb079/5+x4eZ1i27Mzu77eiZTO4kc+fmc+4553u+d4QOYZWKl1ot/8dte3dtfujF37svzIxwSQQ14VpCiBRokHKCi3yfsxgTmIAtd7p2g/vn3Tt2jpTnn7VM1xMR4NrgAAwlpUSZhxjluzJBpIpbksapccdR1HeCe2v3zi8PqDyPMtqMMfoOyawxAgsoxn3A4+whLkpAEIyDkwHALwf3ZmXHzhGvpw1GGyGE9YjjekYL4b8JH2sfT407ZDIwPu74dvp1svhXvxzcsE+mTKSchjyoJNcXrlNUK56xyZwTd21i9NKvSJIK9WzaXwU39sUvDaufEpHyfAhBnTj7H7Ad/Ox2z1itycm772SdP0miW5lJcxLd5hfDjbhkCmjBibgOg3X9GtFQzORpkSaT+x6gIE8gFJnLAiqe3MxL7U/52b17d5Rk/vkgbTj1LgCIYeIISAQixmqYFek8WFHAKU1ETJ6558cU3Q9JA4QYkXbPC+Ltc3ZHyN75rVMtN0IMAyLOzFqComALjoFCUxlCUcCtKCOt32bA/PLClJlIgtHElTi175c2JA9wsRkwUUSuSsp/b/fvXhgiG2oEi17s6p6zGMUlekfj9PED9Z/+OcwV1LmFuKLOCRFjF0WOkBIX38nchCQxfX0m4Zv/+sztsklu52IzgLjlkpFNj5rlhqks/ToauS/hz11gnB/JUy1VynvT4ykOMMwks+QI3oBggk+M6oclDr20hfcKQya3ro8WO9fFDzWbJh02hGG4Bc8GSYderOJPTD/iD2+bWImwlUXG0OV+vdy6PjGefLfMd16/mTwabiCXYN2H0Udx0rlaBuJoUowyRl45eowjR7oDWhVkjNymWtshN/AKIvCDNz7BY2/fiPiIaiT0sNZ9P2UkmuCdMRuVb726hd98MIpLcqIJsUfP0TfAeZR1SeS1tMCBV7bxt/oAPsnJV2mG+ga4Lon85cIg9/59KzOZXxNcR7t1LbHnTAWAQ+du466XbmEmU5yPa4LrC2BtT+t4svRpGps3It4IwdbsJLVfJdaQIsNF7JM3wg0eQlwTZN8AI2B5hGICn9oIpSLkq4fUfsoMIhAMnMK2DbC+1IbsndJbFxU3wAzMZUq14qenT3iqlZWVoVqB8+2lL+2LAGwuQ8HB+/XeAb06um0S56FQL9YZq+VvUetlEbfOefqr9SXljAY3jULi4Z3zEO3yFuxYSX9+9sPOgBZV54pcKj93L89+pSxpWc2lK7gZUcQikV1kETC9qvHyCBsGQRXm5oWCCmkernjAjwK+98H7XXooKguDsOXsYQaTw7EASKG32mQR0sBH/R0CNIPx8ZJQSl4mDQsMFz7PbJYjSxeHly4lRgCv2EKM1LNIM6NlrnsyXEvM56LRjDhxOPc2A3KARv5rhpN91LMcw7HI+qnR7XWlvxURj7CKt+iKzhtK7D89yzdO72cuPE4p8e2hipeHoL8ys/JdDhjCqXHlvuceppE9SKKBglOiZSjyfwYEBGOy/Vx8/9TPWMi/BrzLx4oJZk2l38+WvcT27cZYLada8Rx84Y/U011k8SeY7veICNFit0fE619ZMWTR/zHHgAlgrJZjRxWZeBN4pKX6MfyBdeX9pBdsVTvo2srqKDjhUvYMAGfOaHt9g0xEjqLsqSj/3mjCg69txPgF4u8hNj2YXAGVCM1B2PFz2Fptfe5ZZjqsJsXw2iCLx4nDD3N20pig40X/A3kAXyHxl9KJAAAAAElFTkSuQmCC";
+const srcOvl = document.getElementById("srcOvl"), srcScrim = document.getElementById("srcScrim");
+let srcCur = null, srcTab = "raw";
+function sourceFor(c){
+  const s = SRC.find(x => x.sn.includes(c.sn));
+  if (s) return s;
+  // synthesize a minimal source view for records outside the demo week
+  const mtg = c.src !== "Gmail";
+  const names = c.m.split("·").map(x => x.trim());
+  return { id: "auto-" + c.sn, kind: mtg ? "mtg" : "eml", t: `${c.src} — source of ${c.sn}`,
+    day: c.ts.split(",")[0], tm: c.ts.split("·")[1].trim(), st: "ok", p: names.map(n => n.split(" ")[0]).join(" · "),
+    sn: [c.sn], as: [], msgs: 1,
+    tx: mtg
+      ? [[c.ts.split("·")[1].trim(), names[0].split(" ")[0], c.s.split(". ")[0] + "."],
+         [c.ts.split("·")[1].trim(), (names[1] || names[0]).split(" ")[0], "Agreed — logging it so it doesn't get lost."]]
+      : [[c.ts.split("·")[1].trim(), names[0].split(" ")[0], c.s]] };
+}
+function openSource(i, trigger){
+  const c = ALL[i]; if (!c) return;
+  srcCur = { c, s: sourceFor(c) }; srcTab = "raw";
+  document.querySelectorAll("#srcOvl .syn-tab").forEach(t => t.setAttribute("aria-selected", t.dataset.st === "raw"));
+  const s = srcCur.s, chunks = Math.max(1, Math.ceil(s.tx.length / 2));
+  document.getElementById("srcTitle").textContent = s.t;
+  document.getElementById("srcSub").textContent =
+    `${s.kind === "mtg" ? "Google Meet" : "Gmail"} · ${chunks} chunk${chunks > 1 ? "s" : ""} · ${s.day} · ${s.tm} · ${CAP[s.st][1].toLowerCase()}`;
+  document.getElementById("srcOrig").textContent = "";
+  document.getElementById("srcOrig").insertAdjacentHTML("beforeend",
+    `${s.kind === "mtg" ? `<img src="${MEET_ICO}" alt="" style="width:15px;height:auto;display:inline-block">Original transcripts` : "Original thread"} <span style="font-size:11px">↗</span>`);
+  document.querySelector('#srcTabs, .src-tabs').querySelector('[data-st="att"]').textContent =
+    `Attendees (${s.p.split("·").length})`;
+  srcRenderTab();
+  srcOvl.classList.add("show"); srcScrim.classList.add("show");
+  document.getElementById("srcClose").focus();
+}
+function closeSource(){
+  if (!srcOvl.classList.contains("show")) return;
+  srcOvl.classList.remove("show"); srcScrim.classList.remove("show");
+}
+function srcRenderTab(){
+  const { c, s } = srcCur, el = document.getElementById("srcBody");
+  const recs = s.sn.map(x => ALL.find(r => r.sn === x)).filter(Boolean);
+  if (srcTab === "raw"){
+    const head = s.kind === "mtg"
+      ? `Conference: conferenceRecords/l6gD1Itkymc9obr4iYMUDxIYOAIIigIgABgBCA\nMeeting space: spaces/GWlfb9LNxpwB\nStarted: ${s.day}, 2026 · ${s.tm.split("–")[0].trim()}\nEnded: ${s.day}, 2026 · ${(s.tm.split("–")[1] || s.tm).trim()}\n\nTranscript\n\n`
+      : `Thread: ${s.t}\nMessages: ${s.msgs || s.tx.length}\nFirst message: ${s.day}, 2026 · ${s.tm}\n\n`;
+    const lines = s.tx.map(l => `[${l[0]}] <b>${FULLNAME[l[1]] || l[1]}</b>: ${l[2]}`);
+    const chunkArr = [];
+    for (let i = 0; i < lines.length; i += 2) chunkArr.push(lines.slice(i, i + 2));
+    el.innerHTML = (chunkArr.length ? chunkArr : [[]]).map((ck, i) => `
+      <div class="src-chunk"><span class="ck">Chunk #${i}</span>
+        <pre>${i === 0 ? head : ""}${ck.join("\n")}${!s.tx.length ? "No content captured for this source." : ""}</pre></div>`).join("") +
+      `<p style="font-size:11px;color:var(--faint);font-style:italic">Excerpt of the ingested raw content — the full record lives in the source system.</p>`;
+  }
+  if (srcTab === "sum"){
+    el.innerHTML = `
+      <div class="card" style="border-style:solid;padding:14px 18px;margin-bottom:14px">
+        <h4 style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-orange);font-weight:800;margin-bottom:7px">Source summary</h4>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.6">${s.kind === "mtg"
+          ? `A ${s.p.split("·").length}-person ${s.t.includes("offsite") ? "offsite session" : "meeting"} on ${s.day}. The brain extracted ${recs.length} item${recs.length === 1 ? "" : "s"} from its transcript${s.as.length ? ` and ${s.as.length} attached asset${s.as.length > 1 ? "s" : ""}` : ""}.`
+          : `An email thread of ${s.msgs || 1} message${(s.msgs || 1) > 1 ? "s" : ""} on ${s.day}. The brain extracted ${recs.length} item${recs.length === 1 ? "" : "s"} from its content.`}</p>
+      </div>
+      <h4 style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:800;margin-bottom:8px">Derived extractions</h4>
+      ${recs.map(r => `<div class="sig-row" data-ins="${ALL.indexOf(r)}">
+        <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--faint)">${r.sn}</span>
+        <span style="font-size:13.5px;font-weight:600;flex:1">${r.t}</span>
+        <span class="chip sev-${TIER(r)}" style="font-size:10.5px;cursor:default">${AXLABEL(r)}</span></div>`).join("")}`;
+  }
+  if (srcTab === "sig"){
+    const why = r => {
+      const base = (r.d && r.d[0]) ? r.d[0] : r.s;
+      const sentences = base.match(/[^.!?]+[.!?]+/g) || [base];
+      return sentences.slice(0, 2).join(" ").trim();
+    };
+    el.innerHTML = recs.map(r => `
+      <div class="sig-row sig-tall" data-ins="${ALL.indexOf(r)}">
+        <div class="sig-top">
+          <span class="chip outline" style="font-size:10px">${r.tag}</span>
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--faint)">${r.sn}</span>
+          <span style="font-size:13.5px;font-weight:600;flex:1">${r.t}</span>
+          ${r.attn ? '<span class="attn" style="font-size:11px">Needs attention</span>' : ""}
+          <span style="font-size:11px;color:var(--faint)" title="AI extraction confidence"><b style="color:var(--muted)">(${r.conf}%)</b></span>
+          <span class="chip sev-${TIER(r)}" style="font-size:10.5px;cursor:default">${AXLABEL(r)}</span>
+        </div>
+        <p class="sig-why"><b>Why it's a signal:</b> ${why(r)}</p>
+      </div>`).join("") +
+      `<p style="font-size:11px;color:var(--faint);font-style:italic;margin-top:8px">Each signal links to its full record — click through to review or adjust.</p>`;
+  }
+  if (srcTab === "att"){
+    el.innerHTML = s.p.split("·").map(x => {
+      const first = x.trim(), full = FULLNAME[first] || first;
+      const wp = PEOPLE[full] || "WP-?";
+      return `<div class="att-row">
+        <span class="av">${full.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()}</span>
+        <b>${full}</b><span class="wp">${wp}</span></div>`;
+    }).join("");
+  }
+  if (srcTab === "meta"){
+    el.innerHTML = `<div class="kv">
+      <div class="k">Source ID</div><div class="v">${s.id}</div>
+      <div class="k">Channel</div><div class="v">${s.kind === "mtg" ? "Google Meet" : "Gmail"}</div>
+      <div class="k">Event</div><div class="v">${s.day}, 2026 · ${s.tm}</div>
+      <div class="k">Capture status</div><div class="v">${CAP[s.st][1]}</div>
+      <div class="k">Chunks</div><div class="v">${Math.max(1, Math.ceil(s.tx.length / 2))}</div>
+      <div class="k">Extractions</div><div class="v">${recs.length} — ${s.sn.join(", ") || "none"}</div>
+      <div class="k">Prompt version</div><div class="v">v4 (published Jul 22)</div>
+      <div class="k">Workspace</div><div class="v">93e9fa60-e607-449c-83d7-f5c033c4a930</div>
+    </div>`;
+  }
+}
+document.querySelector(".src-tabs").addEventListener("click", e => {
+  const t = e.target.closest(".syn-tab");
+  if (t){ srcTab = t.dataset.st;
+    document.querySelectorAll("#srcOvl .syn-tab").forEach(x => x.setAttribute("aria-selected", x === t));
+    srcRenderTab(); }
+});
+document.getElementById("srcOrig").addEventListener("click", e => {
+  e.preventDefault();
+  toast(`↗ Opens the original in ${srcCur && srcCur.s.kind === "mtg" ? "Google Meet transcripts" : "Gmail"} — new window`);
+});
+document.getElementById("srcClose").addEventListener("click", closeSource);
+srcScrim.addEventListener("click", closeSource);
+document.getElementById("srcBody").addEventListener("click", e => {
+  const r = e.target.closest(".sig-row");
+  if (r){ closeSource(); openInsight(+r.dataset.ins, null); }
+});
+document.addEventListener("click", e => {
+  const os = e.target.closest(".open-src");
+  if (os){
+    e.preventDefault();
+    const m = os.closest(".menu"); if (m) m.classList.remove("open");
+    openSource(+os.dataset.ins, os);
+  }
+});
+
+/* ---------- Chat page ---------- */
+(function(){
+  const greetH = new Date().getHours();
+  document.getElementById("chatGreet").textContent =
+    `Good ${greetH < 12 ? "morning" : greetH < 18 ? "afternoon" : "evening"}, Scout.`;
+  const empty = document.getElementById("chatEmpty"), convo = document.getElementById("chatConvo"),
+        msgs = document.getElementById("chatMsgs");
+  let qn = 0;
+  const ser = sn => `<span class="ser">${sn}</span>`;
+  const ANSWERS = [
+    { html: `<p>Two dependencies gate the sign-off, and neither is owned inside WP-13:</p>
+        <p><b>1. Vu's fix estimate</b> for the two sync defects — every downstream plan (tester restart,
+        demo narrative) waits on this date.${ser("T-00034")}${ser("B-00003")}</p>
+        <p><b>2. The battery-vendor data-rights draft</b> — 21 days with counsel; evidence packaging is
+        frozen until it lands.${ser("F-00019")}${ser("B-00011")}</p>
+        <p>Duc set the quality bar explicitly at the offsite; the path is intact but has zero slack.</p>`,
+      cites: ["T-00034","B-00003","F-00019","B-00011"], tx: "▶ Offsite day 2 · 00:41:22", n: "4 extractions · 1 transcript" },
+    { html: `<p>Three responses are currently owed to you, ranked by how overdue they are:</p>
+        <p><b>Vendor counsel</b> — the data-rights draft, 21 days out and past two polite nudges; Duc's
+        escalation is the live play.${ser("F-00019")}</p>
+        <p><b>WP-08</b> — the ingestion checklist, silent for 12 days with a one-week deadline now set.${ser("F-00047")}</p>
+        <p><b>Tester #3</b> — availability unconfirmed for 8 days; if there's no answer by Aug 4 the restart
+        plan assumes a cohort of four.${ser("F-00071")}</p>`,
+      cites: ["F-00019","F-00047","F-00071"], tx: "▶ Weekly PLANA USA · 00:19:02", n: "3 extractions · 1 transcript" },
+    { html: `<p>One decision was ratified this week and two remain open:</p>
+        <p><b>Ratified:</b> tester onboarding is managed as blocked work, not late work — approved at the
+        offsite and now the framing every status report inherits.${ser("D-00012")}</p>
+        <p><b>Open:</b> the Vu-versus-restart either/or (structurally due by Aug 8), and the low-stakes
+        filming question aging in a no-reply thread.${ser("D-00007")}${ser("D-00021")}</p>`,
+      cites: ["D-00012","D-00007","D-00021"], tx: "▶ Offsite day 2 · 00:41:22", n: "3 extractions · 1 transcript" }
+  ];
+  function chatAsk(q){
+    if (!q.trim()) return;
+    empty.hidden = true; convo.hidden = false;
+    msgs.insertAdjacentHTML("beforeend", `<div class="chat-u">${q.replace(/</g, "&lt;")}</div>`);
+    const a = ANSWERS[qn++ % ANSWERS.length];
+    msgs.insertAdjacentHTML("beforeend", `
+      <div class="chat-a">${a.html}
+        <div class="chat-src"><div class="lb">Sources · ${a.n}</div>
+          <div class="row">${a.cites.map(ser).join("")}
+            <a href="#" class="tx-orig" data-kind="mtg" style="font-size:11px">${a.tx}</a></div></div>
+        <div class="chat-acts"><button class="chat-copy">Copy</button><button>Retry</button></div>
+      </div>`);
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  }
+  document.getElementById("chatHeroSend").addEventListener("click", () =>
+    chatAsk(document.getElementById("chatHeroIn").value));
+  document.getElementById("chatHeroIn").addEventListener("keydown", e => {
+    if (e.key === "Enter") chatAsk(e.target.value);
+  });
+  document.querySelectorAll(".chat-sug").forEach(b =>
+    b.addEventListener("click", () => chatAsk(b.textContent)));
+  document.getElementById("chatReplySend").addEventListener("click", () => {
+    const i = document.getElementById("chatReplyIn"); chatAsk(i.value); i.value = "";
+  });
+  document.getElementById("chatReplyIn").addEventListener("keydown", e => {
+    if (e.key === "Enter"){ chatAsk(e.target.value); e.target.value = ""; }
+  });
+  document.getElementById("chatClear").addEventListener("click", () => {
+    msgs.innerHTML = ""; convo.hidden = true; empty.hidden = false;
+    document.getElementById("chatHeroIn").value = ""; qn = 0;
+  });
+  document.getElementById("chatToDoc").addEventListener("click", () => {
+    if (!msgs.children.length){ toast("Nothing to save yet"); return; }
+    toast(`📄 Saved to Google Docs — “Workspace chat · ${new Date().toLocaleDateString("en-US",{month:"short",day:"numeric"})}” in your Drive, with citations preserved`);
+  });
+  /* ----- Scope builder ----- */
+  const SCB = {
+    members: [["All", null, "grp0"],
+      ["WP-13 — group", "WP-13", "grp"], ["Scout Underwood", "Scout", "sub"], ["Vu Pham", "Vu", "sub"], ["Sally Nanyoung Oh", "Sally", "sub"],
+      ["Duc Huy Tran · WP-01", "Duc"], ["Mitch Amos · WP-04", "Mitch"], ["Jeremy Thomas · WP-11", "Jeremy"], ["External guest", "External guest"]],
+    chans: [["All", null, "grp0"],
+      ["Google Meet", "Google Meet", "grp"], ["GMeet transcripts", "Google Meet", "sub"], ["GMeet summaries", "Google Meet", "sub b"], ["Meeting chat space", "Google Meet", "sub b"],
+      ["Gmail", "Gmail"], ["Google Calendar", "Google Calendar"], ["Google Chat", "Google Chat", "b"]],
+    types: [["All", null, "grp0"], ["Issues", "Issues"], ["Risks", "Risks"], ["Tasks", "Tasks"],
+      ["Follow-ups", "Follow-ups"], ["Decisions", "Decisions"], ["Blockers", "Blockers"], ["Changes", "Changes"]],
+    wins: ["All time","Today","Week to date","Last 7 days","Last 30 days","Month to date","Last month","Quarter to date"]
+  };
+  let scbWin = "All time", scbApplied = null;
+  document.getElementById("scbCols").innerHTML = `
+    <div class="scb-col"><h6><span class="ic">👥</span>Team members</h6>
+      ${SCB.members.map((m, i) => `<label class="scb-row ${m[2] && m[2].includes("sub") ? "sub" : ""}">
+        <input type="checkbox" data-col="members" data-v="${m[1] ?? ""}" ${i === 0 ? "checked data-all" : ""}>
+        <span class="l">${m[0]}</span></label>`).join("")}
+    </div>
+    <div class="scb-col"><h6><span class="ic">🎥</span>Engagement channel</h6>
+      ${SCB.chans.map((m, i) => `<label class="scb-row ${m[2] && m[2].includes("sub") ? "sub" : ""}">
+        <input type="checkbox" data-col="chans" data-v="${m[1] ?? ""}" ${i === 0 ? "checked data-all" : ""}>
+        <span class="l">${m[0]}</span>${m[2] && m[2].split(" ").includes("b") ? '<span class="beta">BETA</span>' : ""}</label>`).join("")}
+    </div>
+    <div class="scb-col"><h6><span class="ic">⚡</span>Engagement callouts</h6>
+      ${SCB.types.map((m, i) => `<label class="scb-row">
+        <input type="checkbox" data-col="types" data-v="${m[1] ?? ""}" ${i === 0 ? "checked data-all" : ""}>
+        <span class="l">${m[0]}</span></label>`).join("")}
+    </div>
+    <div class="scb-col"><h6><span class="ic">📅</span>Time window</h6>
+      <div class="scb-pills">${SCB.wins.map(w =>
+        `<button type="button" class="scb-pill ${w === "All time" ? "on" : ""}" data-win="${w}">${w}</button>`).join("")}</div>
+      <div class="scb-dates">
+        <label>From <input type="date" id="scbFrom"></label>
+        <label>To <input type="date" id="scbTo"></label>
+      </div>
+    </div>`;
+  function scbState(){
+    const on = col => [...document.querySelectorAll(`#scbCols input[data-col="${col}"]:checked:not([data-all])`)]
+      .map(i => i.dataset.v).filter(Boolean);
+    const now = new Date(); let from = null, to = null;
+    const day = d => { const x = new Date(now); x.setDate(now.getDate() - d); x.setHours(0,0,0,0); return x; };
+    if (scbWin === "Today") from = day(0);
+    if (scbWin === "Week to date"){ from = day((now.getDay() + 6) % 7); }
+    if (scbWin === "Last 7 days") from = day(7);
+    if (scbWin === "Last 30 days") from = day(30);
+    if (scbWin === "Month to date") from = new Date(now.getFullYear(), now.getMonth(), 1);
+    if (scbWin === "Last month"){ from = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      to = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59); }
+    if (scbWin === "Quarter to date") from = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
+    const f = document.getElementById("scbFrom").value, t = document.getElementById("scbTo").value;
+    if (f) from = new Date(f + "T00:00:00");
+    if (t) to = new Date(t + "T23:59:59");
+    return { members: [...new Set(on("members"))], chans: [...new Set(on("chans"))],
+             types: on("types"), from, to };
+  }
+  const SCB_GRP = { "WP-13": ["Scout", "Vu", "Sally"] };   // group token → member expansion
+  function scbMatch(c, s){
+    if (s.members.length && !s.members.some(p => (SCB_GRP[p] || [p]).some(x => c.m.includes(x)))) return false;
+    if (s.chans.length && !s.chans.includes(c.src)) return false;
+    if (s.types.length && !s.types.includes(c.dsn)) return false;
+    if (s.from && c.tsDate < s.from) return false;
+    if (s.to && c.tsDate > s.to) return false;
+    return true;
+  }
+  function scbSummary(s){
+    const seg = (arr, all, short) => arr.length ? arr.map(short).join("+") : all;
+    return [
+      seg(s.members, "PLANA", x => x.split(" ")[0]),
+      seg(s.chans, "all channels", x => x.replace("Google ", "")),
+      seg(s.types, "all callouts", x => x.toLowerCase()),
+      (document.getElementById("scbFrom").value || document.getElementById("scbTo").value) ? "custom range" : scbWin.toLowerCase()
+    ].join(" · ");
+  }
+  function scbPrint(){
+    const s = scbState(), n = ALL.filter(c => scbMatch(c, s)).length;
+    document.getElementById("scbPrint").innerHTML =
+      `<b>${scbSummary(s)}</b> — <span class="n-match">${n} of ${ALL.length}</span> loaded extractions fall inside this
+       boundary. Chat retrieval, citations, and the sources block will be restricted to it; guardrail items
+       (safety · legal · HR · financial) always remain visible.`;
+  }
+  const scbOvl = document.getElementById("scbOvl"), scbScrim = document.getElementById("scbScrim");
+  function scbOpenFn(){ scbPrint(); scbOvl.classList.add("show"); scbScrim.classList.add("show");
+    document.getElementById("scbClose").focus(); }
+  function scbCloseFn(){ scbOvl.classList.remove("show"); scbScrim.classList.remove("show"); }
+  window.closeScopeBuilder = scbCloseFn;
+  document.getElementById("scbOpen1").addEventListener("click", scbOpenFn);
+  document.getElementById("scbOpen2").addEventListener("click", scbOpenFn);
+  document.getElementById("scbClose").addEventListener("click", scbCloseFn);
+  document.getElementById("scbCancel").addEventListener("click", scbCloseFn);
+  scbScrim.addEventListener("click", scbCloseFn);
+  document.getElementById("scbCols").addEventListener("change", e => {
+    const box = e.target.closest("input[type=checkbox]");
+    if (box){
+      const col = box.dataset.col;
+      if (box.hasAttribute("data-all")){
+        if (box.checked) document.querySelectorAll(`#scbCols input[data-col="${col}"]:not([data-all])`)
+          .forEach(i => i.checked = false);
+        else box.checked = true;                    // All can't be unchecked directly
+      } else if (box.checked){
+        document.querySelector(`#scbCols input[data-col="${col}"][data-all]`).checked = false;
+      } else if (!document.querySelector(`#scbCols input[data-col="${col}"]:checked`)){
+        document.querySelector(`#scbCols input[data-col="${col}"][data-all]`).checked = true;
+      }
+      // WP-13 group and its member sub-rows are mutually exclusive (the group already covers them)
+      if (col === "members" && box.checked){
+        const grp = document.querySelector('#scbCols input[data-col="members"][data-v="WP-13"]');
+        if (box === grp) document.querySelectorAll('#scbCols .scb-row.sub input[data-col="members"]')
+          .forEach(i => i.checked = false);
+        else if (grp && box.closest(".scb-row").classList.contains("sub")) grp.checked = false;
+      }
+    }
+    scbPrint();
+  });
+  document.getElementById("scbCols").addEventListener("click", e => {
+    const p = e.target.closest(".scb-pill");
+    if (p){
+      scbWin = p.dataset.win;
+      document.querySelectorAll(".scb-pill").forEach(x => x.classList.toggle("on", x === p));
+      document.getElementById("scbFrom").value = ""; document.getElementById("scbTo").value = "";
+      scbPrint();
+    }
+  });
+  ["scbFrom","scbTo"].forEach(id => document.getElementById(id).addEventListener("input", scbPrint));
+  document.getElementById("scbApply").addEventListener("click", () => {
+    const s = scbState(); scbApplied = s;
+    const sum = scbSummary(s), n = ALL.filter(c => scbMatch(c, s)).length;
+    const dflt = !s.members.length && !s.chans.length && !s.types.length && !s.from && !s.to;
+    document.getElementById("chatScopeSum").textContent = sum;
+    document.getElementById("chatScopeSum2").textContent = dflt ? "PLANA · all" : sum.split(" · ").slice(0, 2).join(" · ") + " · …";
+    document.getElementById("chatScopeLb").textContent = sum;
+    document.getElementById("scbOpen1").classList.toggle("on", !dflt);
+    document.getElementById("scbOpen2").classList.toggle("on", !dflt);
+    scbCloseFn();
+    toast(`Scope applied — ${n} of ${ALL.length} extractions in the retrieval boundary`);
+  });
+  msgs.addEventListener("click", e => {
+    if (e.target.classList.contains("chat-copy")) toast("Answer copied — citations included");
+    // engagement label IS the source — skip the peek, open the transcript evidence directly
+    const to = e.target.closest(".tx-orig");
+    if (to){
+      e.preventDefault();
+      const firstSer = to.closest(".chat-src")?.querySelector(".ser");
+      const ci = firstSer ? ALL.findIndex(c => c.sn === firstSer.textContent.trim()) : -1;
+      if (ci >= 0) openSource(ci, to);
+    }
+  });
+  /* ---- citation peek (Option A): serial click = anchored record preview ---- */
+  const peek = document.getElementById("serPeek");
+  let peekIdx = -1;
+  function peekClose(){
+    peek.classList.remove("show");
+    peek.querySelectorAll(".menu.open").forEach(m => m.classList.remove("open"));
+  }
+  window.closeSerPeek = peekClose;
+  document.getElementById("chatPage").addEventListener("click", e => {
+    const s = e.target.closest(".ser");
+    if (!s) return;
+    const ci = ALL.findIndex(c => c.sn === s.textContent.trim());
+    if (ci < 0) return;
+    peekIdx = ci;
+    const c = ALL[ci];
+    peek.innerHTML = `
+      <div class="sp-head"><span class="ser">${c.sn}</span>
+        <span class="sp-kind">${c.dsn.replace(/s$/, "")}</span>${quadChip(c, "spQuad")}</div>
+      <div class="sp-title">${c.t}</div>
+      <div class="sp-sum">${c.s}</div>
+      <div class="sp-meta"><span>${c.src === "Gmail" ? "✉" : "🎥"} ${c.src} · ${c.ts}</span>
+        <span>Confidence ${c.conf}% · ${c.official ? "Human approved" : c.edited ? "✎ Human edited" : "AI suggested"}</span></div>
+      <div class="sp-acts"><button class="sp-rec">Open record</button>
+        <button class="sp-src">Open source ↗</button></div>`;
+    peek.classList.add("show");
+    // anchor below the serial, clamped to the viewport; flip above if it would overflow
+    const r = s.getBoundingClientRect(), pw = 380;
+    peek.style.left = Math.min(Math.max(10, r.left - 40), innerWidth - pw - 10) + "px";
+    peek.style.top = "0px";
+    const ph = peek.getBoundingClientRect().height;
+    peek.style.top = (r.bottom + 10 + ph > innerHeight - 10
+      ? Math.max(10, r.top - ph - 10) : r.bottom + 10) + "px";
+  });
+  peek.addEventListener("click", e => {
+    if (e.target.closest(".sp-rec")){ peekClose(); openInsight(peekIdx); }
+    if (e.target.closest(".sp-src")){ peekClose(); openSource(peekIdx); }
+  });
+  document.addEventListener("click", e => {
+    if (peek.classList.contains("show") &&
+        !e.target.closest("#serPeek") && !e.target.closest("#chatPage .ser")) peekClose();
+  });
+  // the top bar is an entry point to this tab: seed the question and land here
+  function goChat(){
+    const seed = document.getElementById("ask").value.trim();
+    document.getElementById("ask").value = "";
+    document.querySelector('.tab[data-pview="chat"]').click();
+    if (seed) chatAsk(seed);
+  }
+  document.getElementById("askBtn").addEventListener("click", goChat);
+  document.getElementById("ask").addEventListener("keydown", e => { if (e.key === "Enter") goChat(); });
+})();
 
 /* ---------- extraction tuning drawer ---------- */
 const drawer = document.getElementById("tuneDrawer"),
@@ -3122,6 +3790,9 @@ document.querySelectorAll('[role="tablist"]').forEach(list => {
     if (e.key === "ArrowLeft"){ tabs[(i-1+tabs.length)%tabs.length].focus(); e.preventDefault(); }
   });
 });
+
+/* ---------- landing page: Chat ---------- */
+document.querySelector('.tab[data-pview="chat"]').click();
 </script>
 </body>
 </html>
