@@ -148,6 +148,11 @@ h1{font-size:15px;font-weight:800;letter-spacing:.01em;white-space:nowrap}
 .counts{font-size:12.5px;color:var(--muted)}
 .counts b{color:var(--text)}
 .controls{display:flex;gap:2px;align-items:center;margin:8px 0 16px;flex-wrap:wrap}
+/* provenance legend — quiet, right-aligned on each Insights feed */
+.prov-legend{margin-left:auto;display:inline-flex;gap:14px;align-items:center;font-size:11px;color:var(--faint)}
+.prov-legend span{display:inline-flex;gap:5px;align-items:center}
+.prov-legend svg{display:block}
+.prov-legend .pl-ed{color:#fff;font-size:12px}
 .qf{position:relative;display:inline-flex}
 .qf::after{content:"▾";position:absolute;right:4px;top:50%;transform:translateY(-50%);
   font-size:9px;color:var(--muted);pointer-events:none}
@@ -225,17 +230,23 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .mo-meta{display:flex;gap:8px;align-items:center;padding:12px 20px 0}
 .mo-body{overflow-y:auto;padding:6px 20px 20px}
 .mo-body p{font-size:13.5px;color:var(--muted);line-height:1.65;margin-top:12px}
-.meta{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.meta{display:flex;align-items:center;gap:8px;margin-top:24px;flex-wrap:wrap}
 .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;
   border-radius:6px;padding:3px 9px;min-height:24px;letter-spacing:.02em}
 .chip.outline{border:1px solid var(--line-strong);color:var(--muted);font-weight:600}
 .chip.dashed{border:1px dashed var(--line-strong);color:var(--muted);font-weight:600}
 .chip.approved{background:#fff;color:#000}
+/* icon-only provenance: green bust = human approved · ✨ = AI suggested (labels live in tooltips) */
+.chip.prov-ico{border:none;background:none;padding:0 2px;font-size:14px;line-height:1;cursor:default}
+.chip.prov-ico svg{display:block}
+/* text edits are marked at the title, not in the provenance chip */
+.edited-tag{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--muted);margin-left:8px;
+  vertical-align:super;text-transform:uppercase;cursor:default}
 .chip.sev{cursor:pointer}
 .chip.sev::after{content:"▾";font-size:9px;opacity:.8;margin-left:2px}
 .chip.sev:hover{filter:brightness(1.12)}
 .chip.sev-critical{background:linear-gradient(120deg,var(--brand-red) 30%,var(--brand-orange) 140%);color:#fff}
-.chip.sev-high{background:var(--brand-orange);color:#000}
+.chip.sev-high{background:none;border:1px solid var(--brand-orange);color:var(--brand-orange)}
 .chip.sev-medium{border:1px solid var(--line-strong);color:var(--text);background:var(--raised)}
 .src{font-size:12px;color:var(--muted);display:inline-flex;gap:5px;align-items:center}
 .when{font-size:12px;color:var(--muted)}
@@ -281,6 +292,15 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .details{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:12px;
   font-size:13px;color:var(--muted)}
 .card.open .details{display:block}
+.det-caret{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;
+  padding:2px 6px;margin-top:8px;line-height:1;display:inline-flex;align-items:center;gap:6px}
+.det-caret:hover{color:var(--text)}
+.det-arr{display:inline-block;transition:transform .15s}
+.card.open .det-caret .det-arr{transform:rotate(180deg)}
+.det-lb{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:10.5px;
+  letter-spacing:.08em;color:var(--faint)}
+.det-caret:hover .det-lb{color:var(--text)}
+.details .members{margin-bottom:10px}
 .details a{color:var(--brand-orange)}
 .details .conf{font-weight:700;color:var(--text);cursor:help}
 .details .det-row{display:flex;align-items:center;gap:12px}
@@ -506,7 +526,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .ff-active .lab{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);font-weight:700}
 .ff-active .clear{font-size:12px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
 .ff-active .clear:hover{color:var(--text)}
-.ff-hit{margin-bottom:14px;padding:13px 16px;cursor:pointer}
+.ff-hit{margin:28px 0;padding:13px 16px;cursor:pointer}
 .ff-hit:hover{background:linear-gradient(180deg,#232326 0%,var(--surface) 55%,#1a1a1c 100%);border-color:var(--line-strong)}
 .ff-hit .hit-top{display:flex;align-items:center;gap:9px;margin-bottom:6px}
 .ff-hit .hit-top .chip{font-size:10.5px;letter-spacing:.06em}
@@ -587,7 +607,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .tl-dot.high{background:var(--brand-orange)}
 .tl-dot.medium{background:var(--line-strong)}
 .tl-dot.low{background:var(--line)}
-.tl-card{margin:6px 0 6px 8px !important;padding:12px 16px !important}
+.tl-card{margin:12px 0 12px 8px !important;padding:12px 16px !important}
 .tl-card .t1{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .tl-card .t1 .mono{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.06em;color:var(--faint)}
 .tl-card h4{font-size:26px !important;margin:5px 0 6px;line-height:1.2}
@@ -919,6 +939,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 
       <div class="side-label">Discovery</div>
       <button class="side-item"><span class="ico">▤</span>Group Knowledge</button>
+      <button class="side-item"><span class="ico">⌕</span>Due Diligence</button>
     </div>
     <div class="side-foot">
       <button class="btn" style="width:100%;justify-content:center">⇌ Integrations</button>
@@ -2058,10 +2079,13 @@ const firstNames = m => m.split("·").map(p => p.trim()).map(p => {
 }).join(" · ");
 
 /* shared editability primitives — one control, every surface */
+const edTag = c => c.edited ? `<span class="edited-tag" title="Text edited by ${c.editedBy || "a human"}${c.editedTs ? " · " + c.editedTs : ""}">Edited</span>` : "";
 function provChip(c){
-  return c.official ? `<span class="chip approved">Human approved</span>`
-    : c.edited ? `<span class="chip edited">✎ Human edited</span>`
-    : `<span class="chip dashed">AI suggested</span>`;
+  // binary: a human touching the severity axes flips ✨ → green bust; text edits are marked at the title instead
+  const ci = ALL.indexOf(c);
+  return (c.official || c.human)
+    ? `<span class="chip prov-ico" data-prov="${ci}" title="Human approved" aria-label="Human approved"><svg width="14" height="14" viewBox="0 0 24 24" fill="#3fb950" aria-hidden="true"><path d="M12 12a4.8 4.8 0 1 0 0-9.6 4.8 4.8 0 0 0 0 9.6zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>`
+    : `<span class="chip prov-ico" data-prov="${ci}" title="AI suggested" aria-label="AI suggested">✨</span>`;
 }
 function quadChip(c, id){
   return `<span style="position:relative;display:inline-flex">
@@ -2101,7 +2125,7 @@ function cardHTML(c, i){
   return `
   <article class="card ${c.official ? "official-card" : ""} ${c.reviewed ? "reviewed" : ""} sev-${TIER(c)}" data-ins="${ci}">
     <div class="card-top">
-      <h4><button class="details-toggle" aria-expanded="false">${c.t}</button></h4>
+      <h4><button class="details-toggle" aria-expanded="false">${c.t}</button>${edTag(c)}</h4>
       <div class="quick">
         ${c.official
           ? `<span class="chip approved">Official</span>`
@@ -2134,13 +2158,14 @@ function cardHTML(c, i){
     <div class="meta">
       ${prov}
       ${sevChip}
-      ${c.attn ? `<span class="attn">Needs attention</span>` : ""}
       ${c.type ? `<span class="chip outline">${c.type}</span>` : ""}
       <span class="when">${c.when}</span>
     </div>
-    <div class="members"><b>Members</b>${firstNames(c.m)}
-      <span class="src has-tip" tabindex="0" data-tip="${c.ts}">${srcIcon(c.src)} ${c.src}</span></div>
+    <button class="details-toggle det-caret" aria-expanded="false" aria-label="Show members and details"
+      title="Members & details"><span class="det-arr">▾</span><span class="det-lb">Details</span></button>
     <div class="details">
+      <div class="members"><b>Members</b>${firstNames(c.m)}
+        <span class="src has-tip" tabindex="0" data-tip="${c.ts}">${srcIcon(c.src)} ${c.src}</span></div>
       <div class="det-row">
         <span class="conf" title="AI extraction confidence">(${c.conf}%)</span>
         <a href="#" class="open-src" data-ins="${ci}">Open source ↗</a>
@@ -2238,6 +2263,17 @@ document.addEventListener("click", e => {
     const ci = +menu.dataset.card, c = ALL[ci];
     c[qb.dataset.ax] = qb.dataset.val === "1";
     c.setBy = "Scout Underwood"; c.setTs = nowStamp();
+    // a human touched the severity axes: provenance flips ✨ → green bust, everywhere this record renders
+    if (!c.official && !c.human){
+      c.human = true;
+      document.querySelectorAll(`[data-prov="${ci}"]`).forEach(el => el.outerHTML = provChip(c));
+      // timeline rows render no chip while AI-suggested — insert the bust in place
+      document.querySelectorAll(`.tl-card[data-ins="${ci}"] .t1`).forEach(t1 => {
+        if (!t1.querySelector(".chip.prov-ico"))
+          t1.querySelector(".more-wrap").insertAdjacentHTML("beforebegin",
+            `<span style="font-size:10.5px">${provChip(c)}</span>`);
+      });
+    }
     // update the chip that owns THIS menu (covers overlay-hosted chips with no card ancestor)
     const chip = document.querySelector(`[data-menu="${menu.id}"]`);
     if (chip){ chip.className = `chip sev sev-${TIER(c)}`; chip.textContent = AXLABEL(c); }
@@ -2478,7 +2514,7 @@ function ffRender(){
         <span class="when" style="margin-left:auto">${c.when}</span>
         ${moreMenu(c, `ffm-${ALL.indexOf(c)}`)}
       </div>
-      <h4>${c.t}</h4>
+      <h4>${c.t}${edTag(c)}</h4>
       <div class="hit-meta">
         ${provChip(c)}
         ${quadChip(c, `ffq-${ALL.indexOf(c)}`)}
@@ -2603,7 +2639,6 @@ function insRender(c, editing){
   const meta = `<div class="meta" style="margin-top:12px">
       ${provChip(c)}
       ${quadChip(c, `ins${editing ? "e" : ""}q-${ALL.indexOf(c)}`)}
-      ${c.attn ? '<span class="attn">Needs attention</span>' : ""}
       ${c.type ? `<span class="chip outline">${c.type}</span>` : ""}
       <span class="when">${c.when}</span>
       <span class="when" title="AI extraction confidence"><b style="color:var(--text)">(${c.conf}%)</b> confidence</span>
@@ -2630,7 +2665,7 @@ function insRender(c, editing){
     document.getElementById("insTitleEd").focus();
   } else {
     document.getElementById("insBody").innerHTML = `
-      <h3 id="insTitle">${c.t}</h3>${strips}${meta}
+      <h3 id="insTitle">${c.t}${edTag(c)}</h3>${strips}${meta}
       <p class="summary" id="insSummary" style="max-width:none;margin-top:14px">${c.s}</p>${tail}`;
     document.getElementById("insFoot").innerHTML = `
       <span class="ver-info" id="insProv">${c.dsn} · extracted from ${c.src} · event ${c.ts} ·
@@ -2657,15 +2692,16 @@ document.getElementById("insFoot").addEventListener("click", e => {
   if (e.target.id === "insSaveBtn"){
     c.t = document.getElementById("insTitleEd").value.trim() || c.t;
     c.s = document.getElementById("insSumEd").value.trim() || c.s;
-    if (!c.official){ c.edited = true; }
+    c.edited = true;                       // universal: any text edit marks the title, official or not
     c.editedBy = "Scout Underwood"; c.editedTs = nowStamp();
     // patch dashboard card in place; streams re-render wholesale
     document.querySelectorAll(`.groups-box .card[data-ins="${insIdx}"]`).forEach(card => {
       const tt = card.querySelector("h4 .details-toggle"); if (tt) tt.textContent = c.t;
+      const h4 = card.querySelector("h4");
+      if (h4 && c.edited && !h4.querySelector(".edited-tag")) h4.insertAdjacentHTML("beforeend", edTag(c));
       const sum = card.querySelector(".summary");
       if (sum) sum.innerHTML = `${c.s} <button class="more-link" data-more="${insIdx}"
         aria-haspopup="dialog" aria-controls="moreOvl">(more)</button>`;
-      const prov = card.querySelector(".meta .chip"); if (prov) prov.outerHTML = provChip(c);
     });
     if (typeof tlRender === "function") tlRender();
     if (typeof ffRender === "function") ffRender();
@@ -2765,10 +2801,10 @@ function tlRender(){
             <span class="chip outline" style="font-size:10.5px;letter-spacing:.06em">${c.tag}</span>
             <span class="mono">${c.sn}</span>
             <span style="font-size:11px;color:var(--faint)" title="AI extraction confidence"><b style="color:var(--muted)">(${c.conf}%)</b></span>
-            ${c.official || c.edited ? `<span style="font-size:10.5px">${provChip(c)}</span>` : ""}
+            ${c.official || c.human ? `<span style="font-size:10.5px">${provChip(c)}</span>` : ""}
             ${moreMenu(c, `tlm-${ALL.indexOf(c)}`)}
           </div>
-          <h4>${c.t}</h4>
+          <h4>${c.t}${edTag(c)}</h4>
           <div class="t2">
             ${quadChip(c, `tlq-${ALL.indexOf(c)}`)}
             <span class="src">${srcIcon(c.src)} ${c.src}</span>
@@ -3242,7 +3278,6 @@ function srcRenderTab(){
           <span class="chip outline" style="font-size:10px">${r.tag}</span>
           <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--faint)">${r.sn}</span>
           <span style="font-size:13.5px;font-weight:600;flex:1">${r.t}</span>
-          ${r.attn ? '<span class="attn" style="font-size:11px">Needs attention</span>' : ""}
           <span style="font-size:11px;color:var(--faint)" title="AI extraction confidence"><b style="color:var(--muted)">(${r.conf}%)</b></span>
           <span class="chip sev-${TIER(r)}" style="font-size:10.5px;cursor:default">${AXLABEL(r)}</span>
         </div>
@@ -3528,10 +3563,10 @@ document.addEventListener("click", e => {
     peek.innerHTML = `
       <div class="sp-head"><span class="ser">${c.sn}</span>
         <span class="sp-kind">${c.dsn.replace(/s$/, "")}</span>${quadChip(c, "spQuad")}</div>
-      <div class="sp-title">${c.t}</div>
+      <div class="sp-title">${c.t}${edTag(c)}</div>
       <div class="sp-sum">${c.s}</div>
       <div class="sp-meta"><span>${c.src === "Gmail" ? "✉" : "🎥"} ${c.src} · ${c.ts}</span>
-        <span>Confidence ${c.conf}% · ${c.official ? "Human approved" : c.edited ? "✎ Human edited" : "AI suggested"}</span></div>
+        <span>Confidence ${c.conf}%</span>${provChip(c)}</div>
       <div class="sp-acts"><button class="sp-rec">Open record</button>
         <button class="sp-src">Open source ↗</button></div>`;
     peek.classList.add("show");
@@ -3790,6 +3825,12 @@ document.querySelectorAll('[role="tablist"]').forEach(list => {
     if (e.key === "ArrowLeft"){ tabs[(i-1+tabs.length)%tabs.length].focus(); e.preventDefault(); }
   });
 });
+
+/* ---------- provenance legend on every Insights feed ---------- */
+document.querySelectorAll("section.feed[data-view] .controls").forEach(ct =>
+  ct.insertAdjacentHTML("beforeend", `<span class="prov-legend" aria-label="Provenance legend">
+    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="#3fb950" aria-hidden="true"><path d="M12 12a4.8 4.8 0 1 0 0-9.6 4.8 4.8 0 0 0 0 9.6zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>Human approved</span>
+    <span>✨ AI suggested</span></span>`));
 
 /* ---------- landing page: Chat ---------- */
 document.querySelector('.tab[data-pview="chat"]').click();
