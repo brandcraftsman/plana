@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en" class="dark" style="color-scheme: dark;">
 <head>
@@ -91,6 +92,11 @@ a.side-item.ext{text-decoration:none}
 .side-item.sub .unpin ~ .ext-mark{margin-left:6px}
 .side-item.disabled,.side-item.disabled:hover{background:none;color:var(--faint);cursor:not-allowed;opacity:.55}
 .side-item.disabled .ico{color:var(--faint)}
+/* Work Package composer (dashboard views) */
+.wp-row{cursor:pointer;display:flex;gap:8px;align-items:center}
+.wp-row input{accent-color:var(--brand-orange);width:13px;height:13px;flex:none;margin:0}
+.wp-caret{transition:transform .15s}
+#wpToggle[aria-expanded="true"] .wp-caret{transform:rotate(180deg);color:var(--brand-orange)}
 .side-foot{border-top:1px solid var(--line);padding:12px}
 .user{display:flex;gap:10px;align-items:center;margin-top:10px;width:100%;text-align:left;
   padding:6px;border-radius:8px;cursor:pointer}
@@ -319,6 +325,60 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .details a{color:var(--brand-orange)}
 .details .conf{font-weight:700;color:var(--text);cursor:help}
 .details .det-row{display:flex;align-items:center;gap:12px}
+/* expanded card: RACI · Impact · Leadership action */
+.det-x{display:grid;grid-template-columns:1fr 1.45fr 1.45fr;gap:28px;margin-top:14px;
+  border-top:1px solid var(--line);padding-top:14px}
+.dx-h{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
+  margin-bottom:10px;display:flex;gap:7px;align-items:center}
+.dx-h .conf2{text-transform:none;letter-spacing:0;font-weight:700;color:var(--text)}
+.raci-edit{text-transform:none;letter-spacing:0;font-weight:600;color:var(--brand-orange);
+  background:none;border:none;cursor:pointer;padding:0;font-size:11px}
+.raci-edit:hover{text-decoration:underline;text-underline-offset:3px}
+.dx-row{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.dx-l{width:20px;height:20px;border-radius:6px;border:1px solid var(--line-strong);color:var(--muted);
+  font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.dx-role{font-size:11px;color:var(--faint);width:76px;flex:none}
+.dx-who{font-size:12.5px;color:var(--text)}
+.dx-txt{font-size:12.5px;color:var(--muted);line-height:1.65}
+.dx-note{font-size:10px;color:var(--faint);margin-top:10px;line-height:1.5}
+.dx-foot{margin-top:14px;font-size:10px;color:var(--faint)}
+/* RACI pop-up editor */
+#raciScrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:86;display:none}
+#raciScrim.show{display:block}
+#raciOvl{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(540px,94vw);z-index:87;display:none;
+  background:linear-gradient(180deg,#1e1e21,#161618);border:1px solid var(--line-strong);border-radius:14px;
+  box-shadow:0 24px 80px rgba(0,0,0,.7)}
+#raciOvl.show{display:block}
+.raci-head{display:flex;gap:10px;align-items:baseline;padding:16px 20px 12px;border-bottom:1px solid var(--line)}
+.raci-head .t{font-size:12px;color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.raci-body{padding:16px 20px 6px}
+.raci-row{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.raci-row input{flex:1;min-height:34px;background:var(--bg);border:1px solid var(--line-strong);border-radius:8px;
+  color:var(--text);padding:0 11px;font:inherit;font-size:13px}
+.raci-row input:focus{outline:none;border-color:var(--brand-orange)}
+.raci-foot{display:flex;gap:10px;align-items:center;padding:12px 20px 16px;border-top:1px solid var(--line)}
+.raci-foot .who{font-size:10.5px;color:var(--faint);flex:1;line-height:1.5}
+/* tag-style people fields (multi-person per role) */
+.tagf{flex:1;min-height:36px;background:var(--bg);border:1px solid var(--line-strong);border-radius:8px;
+  padding:4px 6px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;position:relative;cursor:text}
+.tagf:focus-within{border-color:var(--brand-orange)}
+.tagf .tags{display:contents}
+.tag{display:inline-flex;align-items:center;gap:6px;background:var(--raised);border:1px solid var(--line-strong);
+  border-radius:6px;padding:3px 8px;font-size:12px;color:var(--text)}
+.tag .tx{background:none;border:none;color:var(--faint);cursor:pointer;font-size:10px;padding:0;line-height:1}
+.tag .tx:hover{color:var(--brand-red)}
+.tag-in{flex:1;min-width:70px;background:none;border:none;color:var(--text);font:inherit;font-size:12.5px;padding:2px}
+.tag-in:focus{outline:none}
+.tag-in::placeholder{color:var(--faint)}
+.tag-drop{position:absolute;left:-1px;right:-1px;top:calc(100% + 4px);z-index:5;background:var(--raised);
+  border:1px solid var(--line-strong);border-radius:10px;box-shadow:0 14px 40px rgba(0,0,0,.55);
+  max-height:190px;overflow:auto;padding:6px}
+.tag-drop .hd{font-size:10px;color:var(--faint);padding:4px 8px 6px;letter-spacing:.04em}
+.tag-opt{display:flex;gap:8px;align-items:center;width:100%;padding:6px 8px;border-radius:7px;border:none;
+  background:none;color:var(--text);font-size:12.5px;cursor:pointer;text-align:left}
+.tag-opt:hover{background:var(--surface)}
+.tag-opt .wp{margin-left:auto;font-size:10px;color:var(--faint)}
+.tag-opt.create{color:var(--brand-orange)}
 .details .det-raci{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
 
 .load-note{text-align:center;color:var(--muted);font-size:13px;padding:10px}
@@ -812,6 +872,22 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
   color:var(--text);padding:0 12px;font:inherit;font-size:13px}
 .syn-ask input:focus{outline:none;border-color:var(--brand-orange)}
 /* infographic + slides + transcripts + assets */
+/* generation loading state — rotating PLANA mark (shares the .chat-mark gradient+mask) */
+@keyframes igspin{to{transform:rotate(360deg)}}
+.ig-spin.ig-spin{width:64px;height:64px;margin:0;animation:igspin 1.5s linear infinite}
+@media (prefers-reduced-motion: reduce){.ig-spin.ig-spin{animation:igspin 6s linear infinite}}
+/* rendered infographic frame + fullscreen viewer */
+.ig-frame{border:1px solid var(--line-strong);border-radius:14px;overflow:hidden;position:relative;background:#0c0c0d}
+.ig-tools{position:absolute;top:10px;right:24px;display:flex;gap:8px;z-index:3}
+.ig-tool{background:rgba(20,20,22,.88);border:1px solid var(--line-strong);color:var(--text);border-radius:8px;
+  padding:6px 11px;font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;display:flex;gap:6px;align-items:center;
+  backdrop-filter:blur(6px)}
+.ig-tool:hover{border-color:var(--brand-orange);color:var(--brand-orange)}
+#igFull{position:fixed;inset:0;z-index:97;display:none;background:rgba(10,10,11,.97);flex-direction:column}
+#igFull.show{display:flex}
+.igf-bar{display:flex;align-items:center;gap:8px;padding:10px 18px;border-bottom:1px solid var(--line);flex:none;background:var(--surface)}
+.igf-body{flex:1;overflow:auto;padding:28px}
+#igfDoc{width:880px;margin:0 auto}
 .ig-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
 .ig-tile{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:rgba(255,255,255,.015)}
 .ig-tile .big{font-size:30px;font-weight:800;letter-spacing:-.02em}
@@ -869,7 +945,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 /* ============ Chat ============ */
 .chat-empty{min-height:calc(100vh - 200px);display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:0;padding-bottom:60px}
-.chat-mark{width:40px;height:40px;display:block;margin:0 auto;
+.chat-mark,.ig-spin{width:40px;height:40px;display:block;margin:0 auto;
   background:linear-gradient(120deg,var(--brand-red),var(--brand-orange));
   -webkit-mask:url("data:image/png;base64,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") center/contain no-repeat;mask:url("data:image/png;base64,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") center/contain no-repeat}
 .chat-empty h2{font-size:30px;font-weight:700;letter-spacing:-.02em;text-align:center;margin-top:14px}
@@ -1058,15 +1134,24 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
     </div>
     <div class="side-scroll">
       <div class="side-label">Dashboard views</div>
-      <button class="side-item active"><span class="ico">⚡</span>Me</button>
-      <button class="side-item disabled" disabled aria-disabled="true"
-        title="Not available yet"><span class="ico">⇄</span>WP-13</button>
-      <button class="side-item disabled" disabled aria-disabled="true"
-        title="Not available yet"><span class="ico">⇄</span>PLANA Blockers</button>
-      <button class="side-item disabled" disabled aria-disabled="true"
-        title="Coming soon — the company board's dashboard"><span class="ico">▣</span>Board</button>
-      <button class="side-item disabled" disabled aria-disabled="true"
-        title="Coming soon — the engineering dashboard"><span class="ico">⌬</span>Engineering</button>
+      <button class="side-item active" data-dv="me"
+        title="Records you're on"><span class="ico">⚡</span>Me</button>
+      <button class="side-item" data-dv="wp" id="wpToggle" aria-expanded="false"
+        title="Compose a view from whole work packages"><span class="ico">⇄</span>Work Package<span
+        id="wpBadge" style="margin-left:auto;font-size:10px;color:var(--brand-orange);font-weight:800" hidden></span><span
+        class="wp-caret" style="font-size:10px;color:var(--muted);margin-left:6px">▾</span></button>
+      <div id="wpList" hidden>
+        <label class="side-item sub wp-row"><input type="checkbox" data-wp="ALL"><span style="font-weight:600;color:var(--text)">All work packages</span></label>
+        <label class="side-item sub wp-row"><input type="checkbox" data-wp="WP-01"><span>WP-01</span></label>
+        <label class="side-item sub wp-row"><input type="checkbox" data-wp="WP-04"><span>WP-04</span></label>
+        <label class="side-item sub wp-row"><input type="checkbox" data-wp="WP-08"><span>WP-08</span></label>
+        <label class="side-item sub wp-row"><input type="checkbox" data-wp="WP-11"><span>WP-11</span></label>
+        <label class="side-item sub wp-row"><input type="checkbox" data-wp="WP-13"><span>WP-13</span></label>
+        <div style="padding:6px 14px 4px 32px;font-size:9.5px;color:var(--faint);line-height:1.5">
+          Executive access — every work package is visible. Feeds, insights, and chat synthesize across the checked set.</div>
+      </div>
+      <button class="side-item" data-dv="biz"
+        title="Executive communications — investments, market, board and partner motion"><span class="ico">▣</span>The Business</button>
 
       <div class="side-label">Launchpad</div>
       <a class="side-item ext" href="https://plana.atlassian.net" target="_blank" rel="noopener"
@@ -1493,14 +1578,29 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
       </div>
     </div>
 
+    <div class="tfield" id="tf-fullcontext">
+      <button class="tfield-head" aria-expanded="false">
+        <b>Full context — the (more) expansion</b><span class="fstate inherited">Inherited</span><span class="field-caret">▼</span>
+      </button>
+      <div class="tfield-body">
+        <div class="base"><b>Company base prompt (locked)</b>
+          Write 2–3 paragraphs expanding the summary: what happened and when, why it was classified this way,
+          and the recommended next step. Ground every claim in the source transcript or thread; never introduce
+          facts absent from the sources.</div>
+        <label class="sr-only" for="ta-fullcontext">WP-13 guidance for Full context</label>
+        <textarea id="ta-fullcontext" placeholder="Add WP-13 guidance… e.g. End the last paragraph with a single recommended next step and its owner. Reference test campaigns by name."></textarea>
+        <button class="revert">Revert to company default</button>
+      </div>
+    </div>
+
     <div class="tfield" id="tf-impact">
       <button class="tfield-head" aria-expanded="false">
-        <b>Impact</b><span class="fstate inherited">Inherited</span><span class="field-caret">▼</span>
+        <b>Possible impact</b><span class="fstate inherited">Inherited</span><span class="field-caret">▼</span>
       </button>
       <div class="tfield-body">
         <div class="base"><b>Company base prompt (locked)</b>
           State the consequence of inaction with a timeframe. If impact cannot be grounded in the sources, say so and cap confidence at 40%.</div>
-        <label class="sr-only" for="ta-impact">WP-13 guidance for Impact</label>
+        <label class="sr-only" for="ta-impact">WP-13 guidance for Possible impact</label>
         <textarea id="ta-impact" placeholder="Add WP-13 guidance… e.g. Express impact against demo dates, certification evidence, or budget."></textarea>
         <button class="revert">Revert to company default</button>
       </div>
@@ -1508,12 +1608,12 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 
     <div class="tfield" id="tf-action">
       <button class="tfield-head" aria-expanded="false">
-        <b>Leadership action</b><span class="fstate inherited">Inherited</span><span class="field-caret">▼</span>
+        <b>Possible action</b><span class="fstate inherited">Inherited</span><span class="field-caret">▼</span>
       </button>
       <div class="tfield-body">
         <div class="base"><b>Company base prompt (locked)</b>
           Recommend the smallest decision or intervention that unblocks the situation. Must be something leadership can do.</div>
-        <label class="sr-only" for="ta-action">WP-13 guidance for Leadership action</label>
+        <label class="sr-only" for="ta-action">WP-13 guidance for Possible action</label>
         <textarea id="ta-action" placeholder="Add WP-13 guidance… e.g. If the action is 'approve budget', always name the amount and the WP line item."></textarea>
         <button class="revert">Revert to company default</button>
       </div>
@@ -1561,6 +1661,27 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 </aside>
 <!-- ============ "More" expansion modal ============ -->
 <div id="moreScrim"></div>
+<!-- ============ RACI pop-up editor ============ -->
+<div id="raciScrim"></div>
+<section id="raciOvl" role="dialog" aria-modal="true" aria-labelledby="raciHead">
+  <div class="raci-head"><b id="raciHead" style="font-size:14px;flex:none">RACI</b>
+    <span class="t" id="raciT"></span>
+    <button class="btn" id="raciClose" aria-label="Close" style="min-height:28px">✕</button></div>
+  <div class="raci-body">
+    <div class="raci-row"><span class="dx-l">R</span><span class="dx-role">Responsible</span>
+      <div class="tagf" data-f="R"><span class="tags"></span><input class="tag-in" aria-label="Responsible — add person" placeholder="Add…"></div></div>
+    <div class="raci-row"><span class="dx-l">A</span><span class="dx-role">Accountable</span>
+      <div class="tagf" data-f="A"><span class="tags"></span><input class="tag-in" aria-label="Accountable — add person" placeholder="Add…"></div></div>
+    <div class="raci-row"><span class="dx-l">C</span><span class="dx-role">Consulted</span>
+      <div class="tagf" data-f="C"><span class="tags"></span><input class="tag-in" aria-label="Consulted — add person" placeholder="Add…"></div></div>
+    <div class="raci-row"><span class="dx-l">I</span><span class="dx-role">Informed</span>
+      <div class="tagf" data-f="I"><span class="tags"></span><input class="tag-in" aria-label="Informed — add person" placeholder="Add…"></div></div>
+  </div>
+  <div class="raci-foot"><span class="who" id="raciWho"></span>
+    <button class="btn" id="raciCancel">Cancel</button>
+    <button class="btn btn-publish" id="raciSave">Save</button></div>
+</section>
+
 <section id="moreOvl" role="dialog" aria-modal="true" aria-labelledby="moTitle">
   <div class="mo-head">
     <h5 id="moTitle"></h5>
@@ -1820,6 +1941,21 @@ Tool notifications with no decision attached.</textarea>
 
 <button id="jumpTop" aria-label="Jump to top" title="Jump to top">↑</button>
 <div id="serPeek" role="dialog" aria-label="Citation preview"></div>
+
+<!-- infographic fullscreen viewer — zoomable; on the platform this wraps the rendered image -->
+<div id="igFull" role="dialog" aria-modal="true" aria-label="Infographic — full screen">
+  <div class="igf-bar">
+    <span style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:var(--muted)">INFOGRAPHIC — FULL SCREEN</span>
+    <span id="igfName" style="font-size:12px;color:var(--faint)"></span>
+    <span style="flex:1"></span>
+    <button class="ig-tool" id="igZoomOut" title="Zoom out">−</button>
+    <span id="igZoomPct" style="font-size:12px;font-weight:700;min-width:46px;text-align:center">100%</span>
+    <button class="ig-tool" id="igZoomIn" title="Zoom in">＋</button>
+    <button class="ig-tool" id="igZoomFit" title="Fit to window width">Fit</button>
+    <button class="ig-tool" id="igFullClose" title="Close (Esc)">✕</button>
+  </div>
+  <div class="igf-body"><div id="igfDoc"></div></div>
+</div>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -1840,7 +1976,7 @@ const CARDS = [
    "If it is suspicious, block and report through the standard channel; if legitimate, dismissing this card records that decision and improves future sender classification."]},
  {t:"Integration connect/disconnect buttons unresponsive",
   s:"Investigate why the integration disconnect/connect buttons remain unresponsive after refreshing, despite Vu Pham indicating it works from his side. The mismatch between reported state and observed behavior suggests a stale session or a frontend state bug worth a focused look.",
-  sev:"high", when:"seen Jul 28", src:"Gmail", m:"Vu Pham (PLANA) · Scout Underwood · Duc (UX)",
+  sev:"high", when:"seen Jul 28", src:"Gmail", m:"Vu Pham (PLANA) · Duc (UX)",
   d:["Vu reported on Jul 27 that disconnecting and reconnecting the integration works from his environment, but users still see unresponsive connect/disconnect buttons after a refresh. The state reported by the backend and the state rendered in the UI disagree, which points at either a stale session token surviving the refresh or a frontend cache that isn't invalidated when integration state changes.",
    "This matters beyond the buttons themselves: the integrations panel is the first thing new testers touch during onboarding, and an unresponsive control there erodes trust in the whole platform. It is also one of the two defects currently blocking the tester onboarding restart.",
    "A focused session reproducing the refresh path — ideally Vu and Duc (UX) together, comparing backend state against what the client renders — should localize the fault quickly. Capturing the session/cache behavior in the bug report will prevent the fix from being verified only in the environment where it already works."]},
@@ -1858,7 +1994,7 @@ const CARDS = [
    "A one-click re-confirm (or decline with a note) closes the loop. If the new time conflicts, flagging it now gives the organizer three business days to adjust rather than three hours."]},
  {t:"Blocked item needs a new owner",
   s:"Reassign this blocked item to a different owner to unblock it. The current owner has not engaged since the item was flagged, and no alternate owner has been proposed in any channel. Reassigning to an active owner is the smallest step that gets it moving again.",
-  sev:"medium", when:"seen Jul 22", src:"Google Meet", m:"Scout Underwood · Jeremy Thomas",
+  sev:"medium", when:"seen Jul 22", src:"Google Meet", m:"Jeremy Thomas · Mitch Amos",
   d:["This item was flagged as blocked on Jul 22. Since then the assigned owner has not engaged in any ingested channel — no thread replies, no meeting mentions, no status change — and no alternate owner has been proposed anywhere.",
    "Blocked items with absent owners tend to age invisibly: everyone assumes someone else is watching it. Reassignment is deliberately suggested as the smallest unblocking step because it requires no scope decision, no budget, and no escalation — just a name.",
    "Jeremy was active in the originating Google Meet discussion and is the natural candidate; if he can't take it, the reassignment conversation itself usually surfaces who can."]},
@@ -1911,13 +2047,13 @@ const RISKS = [
  {t:"Sync architecture knowledge is concentrated in one person",
   s:"Vu is the only person who fully understands the ingestion-to-dashboard sync architecture — the exact subsystem where both open defects live. Any absence or departure would stall the critical path with no warm backup.",
   sev:"high", when:"seen Jul 24", src:"Google Meet",
-  m:"Vu Pham · Scout Underwood",
+  m:"Vu Pham · Duc Huy Tran",
   d:["Both open defects, the fix estimates leadership is waiting on, and the eventual multi-WP rollout all route through a single engineer's head. Nothing is written down beyond commit messages.",
    "Low likelihood, high exposure — the classic bus-factor shape. A half-day architecture walkthrough recorded for the second developer converts most of the exposure into documentation, and scheduling it costs nothing while fixes are in progress."]},
  {t:"Ingestion pipeline is untested beyond WP-13 data volumes",
   s:"The rollout plan takes the platform from one work package to thirteen, but the ingestion pipeline has only ever run at WP-13 scale. Throughput and dedup behavior at 10× volume are unknowns sitting directly under the expansion story.",
   sev:"high", when:"seen Jul 23", src:"Google Meet",
-  m:"Vu Pham · Scout Underwood",
+  m:"Vu Pham · Jeremy Thomas",
   d:["No load test has run against a multi-WP corpus, and several pipeline stages are single-threaded by design decisions made during the PoC. If scale problems surface during rollout, they surface in front of the newly onboarded WPs.",
    "A synthetic 3-WP load test before the rollout commitment would either retire the risk or price the re-engineering while it's still cheap."]},
  {t:"Platform spend is approaching the $25k self-approval ceiling",
@@ -1950,7 +2086,7 @@ const TASKS = [
  {t:"Send the tester cohort a restart-estimate touchpoint",
   s:"Message the five confirmed testers with an honest status and a restart estimate before their July calendar holds expire. Keeping the cohort warm costs one email; re-recruiting costs four to six weeks.",
   sev:"critical", when:"due Aug 1", src:"Gmail",
-  m:"Sally Nanyoung Oh · Scout Underwood",
+  m:"Sally Nanyoung Oh",
   d:["The cohort's goodwill is a depreciating asset — three of five are external volunteers with no obligation to wait quietly. A dated, honest touchpoint ('fixes are in progress, restart estimated for <date>') preserves the relationship even if the date later moves.",
    "Sally owns the checklist and the relationships; the only input she needs is the fix estimate from Vu — or, failing that, permission to send a holding message without one."]},
  {t:"Record Vu's sync-architecture walkthrough for the second developer",
@@ -2102,14 +2238,14 @@ const CHGS = [
   delta:{o:"Ingestion sources: 12", n:"13 (+WP-08 supplier feed)"},
   s:"New source expands cross-WP coverage — and inherits the unresolved data-rights posture, so its documents are auto-tagged from day one.",
   sev:"high", type:"Scope", when:"Tue 4:02 PM", src:"Google Meet",
-  m:"Vu Pham · Scout Underwood",
+  m:"Vu Pham · Mitch Amos",
   d:["First source onboarded from outside WP-13 — a quiet milestone for the rollout story, and a live test of the provenance tagging shipped for the data-rights exposure work.",
    "Auto-tagging from ingestion means this feed never enters the untagged backlog; if the vendor agreement lands with restrictions, its documents are already quarantinable by query."]},
  {t:"External guest added to the weekly PLANA USA call", tg:"week", reviewed:true,
   delta:{o:"Attendees: 5 internal", n:"6 (+1 external guest)"},
   s:"Roster change only — no agenda impact. Surfaced because external participation changes what can be discussed on the call.",
   sev:"low", type:"People", when:"Mon 10:20 AM", src:"Google Meet",
-  m:"Mitch Amos · Scout Underwood",
+  m:"Mitch Amos · Duc Huy Tran",
   d:["The guest joins under Mitch's UX-testing coordination; standing norm is that pre-release metrics and personnel topics move to the internal thread while externals attend.",
    "Marked reviewed — kept in the log so the roster history stays reconstructible."]},
  {t:"Extraction prompt v4 published for WP-13", tg:"lastweek",
@@ -2123,7 +2259,7 @@ const CHGS = [
   delta:{o:"Proposed: 11:30 AM – 12:30 PM", n:"Final: Fri 9 – 10 AM PT"},
   s:"The organizer locked the earlier slot after the availability round. Attendee list closed at seven.",
   sev:"medium", type:"Schedule", when:"Jul 23 11:15 AM", src:"Gmail",
-  m:"Duc Huy Tran · Scout Underwood · Mitch Amos",
+  m:"Duc Huy Tran · Mitch Amos",
   d:["Finalization resolved the unconfirmed-availability issue (I-00548) — all seven attendees re-confirmed against the new time within two days.",
    "Reviewed and retained as the record of when the slot locked, in case post-hoc scheduling questions surface."]}
 ];
@@ -2179,6 +2315,88 @@ BLKS.forEach((c, i) => c.ts = BTS[i]);
 const CHTS = ["Jul 30, 2026 · 9:41 AM","Jul 30, 2026 · 8:15 AM","Jul 27, 2026 · 9:00 AM","Jul 28, 2026 · 4:02 PM",
   "Jul 27, 2026 · 10:20 AM","Jul 22, 2026 · 3:05 PM","Jul 23, 2026 · 11:15 AM"];
 CHGS.forEach((c, i) => c.ts = CHTS[i]);
+/* ---------- "The Business" — executive-tier records (biz lens only) ----------
+   A separate content domain: investments, market studies, board and partner
+   motion between executives. Never mixed into Me / Work Package views —
+   ffMatch gates on c.biz. Prod: this scope comes from executive-tier
+   permissions on the records themselves, not a client-side flag. */
+CARDS.push(
+ {t:"Series B data room carries stale certification memos",
+  s:"Replace the two certification memos in the investor data room that predate the July special-condition update. Two diligence teams are working from documents the certification affiliate has since superseded — every day they stay up, diligence conclusions drift further from the current basis of certification.",
+  sev:"critical", attn:true, when:"seen Jul 29", src:"Gmail", biz:true,
+  m:"Braden Cole · Alex Marsh · External counsel", sn:"I-00801", conf:84, ts:"Jul 29, 2026 · 8:20 AM",
+  d:["Counsel's diligence tracker shows both investor teams citing the March certification memo in their question lists, but the certification affiliate issued a superseding special-condition update in July. The data room was never refreshed, so external conclusions are being drawn from a basis of certification that no longer exists.",
+   "If either diligence team files findings against the stale basis, correcting the record mid-raise reads as a disclosure problem rather than a filing lag — a materially worse conversation. The certification narrative is the spine of the raise; it cannot be the part diligence catches out of date.",
+   "Swap both memos for the July versions, add a change-log page so the correction is self-documenting, and send a one-line notice to both diligence leads before they surface it first."]},
+ {t:"Insurance carrier queries demo-flight liability limits",
+  s:"Answer the carrier's question on liability limits for the October public demonstration before the quote window closes. The underwriter flagged that the current hull-and-liability structure was scoped for closed-site testing — not a public event with press and partners on the ground.",
+  sev:"high", when:"seen Jul 28", src:"Gmail", biz:true,
+  m:"Alex Marsh · External broker", sn:"I-00817", conf:77, ts:"Jul 28, 2026 · 3:05 PM",
+  d:["The broker relayed the underwriter's query on Jul 28: the in-force policy contemplates closed-site flight testing, and the October demonstration adds public attendees, press, and partner principals to the exposure picture. The carrier wants revised limits before it will hold the quote.",
+   "An uncovered public demo is not an option the board would accept, and re-marketing coverage after this carrier lapses would run six to eight weeks — past the demo date. The quote window is the constraint that makes this an issue rather than a task.",
+   "Have the broker table the revised limit structure this week, and put the premium delta into the demo budget line before it becomes a surprise in the September close."]});
+RISKS.push(
+ {t:"Competitor's certification milestone may reset valuation talks",
+  s:"A competing eVTOL program is signaling a type-certification milestone announcement inside our raise window. If it lands before term-sheet signatures, comparable-company framing shifts and the lead's valuation committee may reopen terms.",
+  sev:"high", when:"seen Jul 27", src:"Gmail", biz:true,
+  m:"Braden Cole · Dana Whitfield", sn:"R-00420", conf:68, ts:"Jul 27, 2026 · 11:40 AM",
+  d:["Two banker notes and one trade-press signal point to a competitor milestone announcement in the next six weeks — squarely inside the window between term sheet and close. The lead's valuation committee benchmarks against announced certification progress.",
+   "If the announcement lands first, the comparable set re-anchors and the committee has procedural cover to reopen the price. The risk is not the competitor's progress itself — it is the sequencing of announcements against signatures.",
+   "Compress the signature timeline where the process allows, and pre-brief the lead on our own certification position so the comparison lands on our framing rather than the press release's."]},
+ {t:"Regional air-mobility TAM estimate rests on one dataset",
+  s:"Treat the $9B regional TAM figure as single-sourced until the second market study lands. The banker deck and our own board materials both trace to the same consultancy dataset — a diligence analyst pulling the thread will find one source, not two.",
+  sev:"medium", when:"seen Jul 25", src:"Gmail", biz:true,
+  m:"Dana Whitfield · Alex Marsh", sn:"R-00433", conf:73, ts:"Jul 25, 2026 · 2:15 PM",
+  d:["The market-sizing chain was traced during pre-read prep: the banker deck cites the consultancy study, and the board materials cite the banker deck. Every instance of the $9B figure resolves to a single dataset with a single methodology.",
+   "Single-sourced TAM is a standard diligence finding, and it lands hardest when the company presents the number as corroborated. The exposure is credibility, not the figure itself — the second study may well confirm it.",
+   "Commission or license the second study now, and until it lands, footnote the figure as single-sourced in anything investor-facing. A disclosed limitation is a footnote; a discovered one is a finding."]});
+TASKS.push(
+ {t:"Engage counsel on the term-sheet exclusivity clause",
+  s:"Get outside counsel's read on the 60-day exclusivity clause before responding to the lead investor. As drafted it would bar the sovereign-fund conversation entirely — including the introduction already in motion.",
+  sev:"high", when:"seen Jul 29", src:"Gmail", biz:true,
+  m:"Braden Cole · External counsel", sn:"T-00305", conf:88, ts:"Jul 29, 2026 · 10:02 AM",
+  d:["The lead's draft term sheet arrived Jul 28 with a 60-day exclusivity clause covering any financing discussion, not just competing term sheets. Read literally, it forecloses the sovereign-fund introduction that is already being scheduled.",
+   "Signing as drafted converts an open funnel into a single-counterparty negotiation for two months — precisely when the competitor's announcement risk argues for optionality. The clause is negotiable now and unnegotiable after signature.",
+   "Ask counsel for a carve-out limited to competing lead positions, preserving passive and strategic conversations. Respond to the lead only after that language is in hand."]},
+ {t:"Circulate the market-study executive summary before the board pre-read",
+  s:"Send the two-page market-study summary to directors ahead of the Aug 27 pre-read deadline so the TAM discussion happens before the meeting, not during it.",
+  sev:"medium", when:"seen Jul 26", src:"Gmail", biz:true,
+  m:"Dana Whitfield · Braden Cole", sn:"T-00318", conf:81, ts:"Jul 26, 2026 · 9:30 AM",
+  d:["The Q3 board agenda gives market sizing fifteen minutes, and the single-source TAM caveat needs to be absorbed before directors reach the table. The two-page summary exists; it has simply not been circulated.",
+   "A director encountering the caveat live tends to expand fifteen minutes into forty-five and to remember the surprise longer than the substance. Pre-reads are cheap insurance against exactly this.",
+   "Attach the summary to the pre-read packet with the caveat stated plainly in the first paragraph, and flag that the second study is already commissioned."]});
+FUPS.push(
+ {t:"Sovereign-fund introduction waiting on the partner's calendar",
+  s:"The August introduction to the infrastructure fund is still unscheduled — the connecting partner has gone quiet for two weeks. A nudge now keeps the option alive without signaling urgency.",
+  sev:"medium", when:"seen Jul 27", src:"Gmail", biz:true,
+  m:"Braden Cole · External investor", sn:"F-00140", conf:70, ts:"Jul 27, 2026 · 4:25 PM",
+  d:["The connecting partner proposed an August introduction on Jul 11 and has not answered two scheduling replies since. Silence at the introduction stage usually means calendar friction, not lost interest — but the window interacts with the exclusivity clause under review.",
+   "If exclusivity signs before the introduction happens, the conversation is barred for 60 days and the fund's interest cools on its own schedule. The sequencing risk is invisible unless someone is watching both threads.",
+   "One light-touch nudge this week, framed around the fund's stated Q3 planning cycle. If exclusivity is likely to sign first, tell the partner plainly so the introduction parks warm instead of dying quietly."]});
+DECS.push(
+ {t:"Hold the Series B at $40M — no extension tranche",
+  s:"Keep the raise at $40M rather than adding the $10M extension tranche the second fund proposed. The extension's governance asks — a board seat plus a protective provision on certification spend — price worse than the capital is worth at this stage.",
+  sev:"high", when:"seen Jul 24", src:"Google Meet", biz:true,
+  m:"Braden Cole · Alex Marsh · Dana Whitfield", sn:"D-00038", conf:86, ts:"Jul 24, 2026 · 4:30 PM",
+  d:["The second fund's extension proposal was weighed in the Jul 24 executive session: $10M additional capital against a board seat and a protective provision giving the fund consent rights over certification-program spend above a threshold.",
+   "Certification spend is the company's core discretionary lever through 2027; encumbering it for a 25% larger round inverts the risk the capital is meant to reduce. Runway math at $40M still clears the certification milestone with margin.",
+   "Decision recorded: hold at $40M. Revisit only if the demo slips or the second study materially cuts the TAM — either would change the runway calculus the decision rests on."]});
+BLKS.push(
+ {t:"Launch-operator LOI blocked on the route-economics annex",
+  s:"The letter of intent with the launch operator cannot go to signature until the route-economics annex is agreed. Their side wants seat-mile cost bands committed; ours wants them illustrative until certification fixes the operating envelope.",
+  sev:"critical", attn:true, when:"seen Jul 28", src:"Gmail", biz:true, dir:"in",
+  m:"Dana Whitfield · External partner", sn:"B-00041", conf:79, ts:"Jul 28, 2026 · 1:55 PM",
+  d:["Both sides initialed the LOI body on Jul 21; only the route-economics annex is open. The operator's board wants committed seat-mile cost bands; our position is that no committed figure survives contact with the final certified operating envelope.",
+   "The LOI is the raise's flagship commercial proof point — named in the banker deck and expected by both diligence teams. Every week it sits unsigned, the 'signed launch partner' slide stays hypothetical at exactly the moment it carries the most weight.",
+   "Offer banded figures with an explicit certification-contingency clause — commitment in structure, flexibility in level. If their board rejects banding, escalate to a principals' call rather than another annex redline cycle."]});
+CHGS.push(
+ {t:"Board meeting moved to Sep 3 — pre-reads due Aug 27",
+  s:"The Q3 board meeting moved from Aug 28 to Sep 3 at the lead director's request. Pre-read deadline shifts to Aug 27; the raise-timeline discussion stays on the agenda.",
+  sev:"low", when:"seen Jul 30", src:"Google Calendar", biz:true, tg:"today",
+  m:"Braden Cole · Alex Marsh", sn:"C-00052", conf:95, ts:"Jul 30, 2026 · 8:45 AM",
+  d:["The lead director's office requested the move on Jul 30; all other directors confirmed the new date within the day. The agenda is unchanged — raise timeline, market study, demo readiness.",
+   "The six-day shift lands the meeting after the expected competitor announcement window, which slightly changes the conversation directors will arrive with. Pre-read content should assume the announcement has happened.",
+   "Materials owners have one extra week; the pre-read deadline of Aug 27 is the date that binds. No action beyond calendar hygiene."]});
 /* Quad B model — urgency × impact (issues, tasks) / likelihood × impact (risks) / timing × impact (follow-ups) */
 CARDS.forEach(c => { c.axU = "Urgent"; c.axUneg = "Not urgent"; c.axName = "Urgency"; });
 RISKS.forEach(c => { c.axU = "Likely"; c.axUneg = "Unlikely"; c.axName = "Likelihood"; });
@@ -2274,6 +2492,63 @@ function moreMenu(c, id){
     </div>
   </div>`;
 }
+/* ---- expanded-card extras: RACI (editable, provenance-tracked) + generated Impact / Leadership action ---- */
+function raciOf(c){
+  if (!c.raci){
+    const full = c.m.split("·").map(p => p.trim()).filter(Boolean);
+    c.raci = { R: full[0] ? [full[0]] : [], A: full[1] ? [full[1]] : full.slice(0, 1),
+               C: full[2] ? [full[2]] : full.slice(0, 1), I: full[3] ? [full[3]] : full.slice(1, 2) };
+  }
+  // normalize legacy string values into arrays
+  ["R","A","C","I"].forEach(k => {
+    if (typeof c.raci[k] === "string") c.raci[k] = c.raci[k].split(/[,·]/).map(s => s.trim()).filter(s => s && s !== "—");
+  });
+  return c.raci;
+}
+const raciDisp = p => p === "External guest" ? p : p.split(" ")[0];   // cards speak first names
+function raciRows(c){
+  const r = raciOf(c);
+  return [["R","Responsible",r.R],["A","Accountable",r.A],["C","Consulted",r.C],["I","Informed",r.I]]
+    .map(([l, role, who]) => `<div class="dx-row"><span class="dx-l">${l}</span>
+      <span class="dx-role">${role}</span><span class="dx-who">${who.length ? who.map(raciDisp).join(" · ") : "—"}</span></div>`).join("");
+}
+function raciProv(c, ci){
+  // RACI has its own provenance, independent of severity (data-raci, NOT data-prov — keeps quad propagation away)
+  return c.raciBy
+    ? `<span class="chip prov-ico dx-prov" data-raci="${ci}" title="Human verified — by ${c.raciBy} · ${c.raciTs}" aria-label="RACI human verified by ${c.raciBy}"><svg width="12" height="12" viewBox="0 0 24 24" fill="#3fb950" aria-hidden="true"><path d="M12 12a4.8 4.8 0 1 0 0-9.6 4.8 4.8 0 0 0 0 9.6zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>`
+    : `<span class="chip prov-ico dx-prov" data-raci="${ci}" title="AI suggested" aria-label="RACI is AI suggested" style="font-size:12px">✨</span>`;
+}
+const raciNote = c => c.raciBy
+  ? `Corrected by ${c.raciBy} · ${c.raciTs} — corrections train future extractions.`
+  : `AI-suggested from the transcript — (edit) to correct; corrections train future extractions.`;
+function firstSents(t, n){
+  const m = (t || "").match(/[^.!?]+[.!?]/g);
+  return m ? m.slice(0, n).join(" ").trim() : (t || "").trim();
+}
+function detGen(c){
+  if (!c.dx){
+    c.dx = {
+      impact: firstSents(c.d && c.d[1] || c.s, 2),
+      action: firstSents(c.d && c.d[2] || "", 2) || "Review with the owning member and agree the next step.",
+      iConf: Math.max(35, (c.conf || 70) - 14),
+      aConf: Math.max(30, (c.conf || 70) - 21)
+    };
+  }
+  return c.dx;
+}
+function detExtras(c){
+  const ci = ALL.indexOf(c), g = detGen(c);
+  return `<div class="det-x">
+    <div><div class="dx-h">RACI ${raciProv(c, ci)}<button class="raci-edit" data-ins="${ci}">(edit)</button></div>
+      <div data-raci-rows="${ci}">${raciRows(c)}</div>
+      <div class="dx-note" data-raci-note="${ci}">${raciNote(c)}</div></div>
+    <div><div class="dx-h">Possible impact <span class="conf2">(${g.iConf}%)</span></div>
+      <div class="dx-txt">${g.impact}</div></div>
+    <div><div class="dx-h">Possible action <span class="conf2">(${g.aConf}%)</span></div>
+      <div class="dx-txt">${g.action}</div></div>
+  </div>
+  <div class="dx-foot">Possible impact and Possible action are generated by their prompts — tune per category via ⚙</div>`;
+}
 function cardHTML(c, i){
   const ci = ALL.indexOf(c);
   const sevChip = quadChip(c, `sev-${i}`);
@@ -2326,7 +2601,7 @@ function cardHTML(c, i){
         <span class="conf" title="AI extraction confidence">(${c.conf}%)</span>
         <a href="#" class="open-src" data-ins="${ci}">Open source ↗</a>
       </div>
-      <div class="det-raci">RACI placeholder</div>
+      ${detExtras(c)}
     </div>
     <button class="serial" title="Copy issue ID">${c.sn}</button>
   </article>`;
@@ -2518,12 +2793,16 @@ document.addEventListener("click", e => {
 document.addEventListener("keydown", e => {
   if (e.key === "Escape"){
     document.querySelectorAll(".menu.open").forEach(m => m.classList.remove("open"));
+    const igf = document.getElementById("igFull");
+    if (igf && igf.classList.contains("show")){ if (typeof window.closeIgFull === "function") window.closeIgFull(); return; }
     const pk = document.getElementById("serPeek");
     if (pk && pk.classList.contains("show")){ if (typeof window.closeSerPeek === "function") window.closeSerPeek(); return; }
     const guide = document.getElementById("guideOvl");
     if (guide && guide.classList.contains("show")){ guide.classList.remove("show"); return; }
     const so = document.getElementById("srcOvl");
     if (so && so.classList.contains("show")){ if (typeof closeSource === "function") closeSource(); return; }
+    const ra = document.getElementById("raciOvl");
+    if (ra && ra.classList.contains("show")){ if (typeof window.closeRaci === "function") window.closeRaci(); return; }
     const mo = document.getElementById("moreOvl");
     if (mo && mo.classList.contains("show")){ if (typeof closeMore === "function") closeMore(); return; }
     const io = document.getElementById("insOvl");
@@ -2645,7 +2924,41 @@ function ffState(){
            q: el("ffSearch").value.trim().toLowerCase(),
            from: el("ffFrom") ? el("ffFrom").value : "", to: el("ffTo") ? el("ffTo").value : "" };
 }
+/* ---------- Dashboard views (left sidebar) — a scope lens UNDER the rail filters.
+   Me ⊂ My team (WP-13) ⊂ Company; runs through ffMatch so feeds, counts, active-chip
+   rows, and the Ask-this-view boundary all follow it automatically. ---------- */
+const SIDE_VIEWS = {
+  me:  { lab: "Me", people: ["Scout"] },
+  wp:  "composed",     // multi-select — see WPS / wpSel
+  biz: "the business"  // executive content domain — records flagged c.biz
+};
+/* Work packages are whole teams. Records match a WP through its members
+   (prod: records carry team ids; WP-08 is matched by reference here because
+   the demo roster has no WP-08 individual). */
+const WPS = [
+  { id: "WP-01", people: ["Duc"] },
+  { id: "WP-04", people: ["Mitch"] },
+  { id: "WP-08", people: [], rx: /WP-08/ },
+  { id: "WP-11", people: ["Jeremy"] },
+  { id: "WP-13", people: ["Scout", "Vu", "Sally"] },
+];
+let sideView = "me";
+let wpSel = new Set();
+function wpMatch(c){
+  return WPS.some(w => wpSel.has(w.id) &&
+    (w.people.some(p => c.m.includes(p)) || (w.rx && (w.rx.test(c.t) || w.rx.test(c.s)))));
+}
+function lensLab(){
+  if (sideView === "me") return "Me";
+  if (sideView === "wp") return wpSel.size === WPS.length ? "All work packages" : [...wpSel].sort().join(" + ");
+  return "The Business";
+}
 function ffMatch(c, s){
+  // the three views are disjoint content domains, not nested widenings:
+  // Me / Work Package = engineering & product records; The Business = executive records (c.biz)
+  if (sideView === "biz"){ if (!c.biz) return false; }
+  else if (sideView === "wp"){ if (c.biz || !wpMatch(c)) return false; }
+  else if (c.biz || !SIDE_VIEWS.me.people.some(p => c.m.includes(p))) return false;
   if (s.status && s.status.length && !s.status.includes(c.st || "Active")) return false;
   if (s.type.length && !s.type.includes(c.dsn)) return false;
   if (s.tier.length && !s.tier.includes(TIER(c))) return false;
@@ -2678,8 +2991,12 @@ function ffRender(){
   const parts = act.map(i => chip(i.closest(".ff-row").querySelector(".l").textContent.trim(), i.dataset.f, i.dataset.v));
   if (s.from || s.to) parts.push(chip(`${s.from || "…"} → ${s.to || "…"}`, "date", ""));
   if (s.q) parts.push(chip(`“${s.q}”`, "q", ""));
-  const html = parts.length
-    ? `<span class="lab">Active:</span>${parts.join("")}<button class="clear ff-clear-all">Clear all</button>
+  // dashboard-view lens rides in the same row, but its ✕ widens to Company (it isn't a rail filter)
+  const lab = lensLab();
+  // the lens chip is an indicator, not a filter control — views switch in the sidebar
+  const scopeChip = lab ? `<span class="acc-chip">View: ${lab}</span>` : "";
+  const html = (parts.length || lab)
+    ? `<span class="lab">Active:</span>${scopeChip}${parts.join("")}${parts.length ? `<button class="clear ff-clear-all">Clear all</button>` : ""}
        <span class="in-view">${inView} of ${ALL.length} in view — grouping and pins unchanged</span>`
     : "";
   document.querySelectorAll(".dash-active").forEach(el => { el.innerHTML = html; el.hidden = !html; });
@@ -2717,6 +3034,52 @@ document.addEventListener("click", e => {
     ffRender();
   }
 });
+/* ---------- dashboard-view switching (Me · Work Package composer · Company) ---------- */
+(() => {
+  const btns = [...document.querySelectorAll('.side-item[data-dv]')];
+  const wpBtn = document.getElementById("wpToggle"), list = document.getElementById("wpList"),
+        badge = document.getElementById("wpBadge");
+  const boxes = [...list.querySelectorAll('input[data-wp]')];
+  const allBox = boxes.find(b => b.dataset.wp === "ALL"), wpBoxes = boxes.filter(b => b !== allBox);
+  function paint(){
+    btns.forEach(b => b.classList.toggle("active", b.dataset.dv === sideView));
+    badge.textContent = wpSel.size;
+    badge.hidden = !(sideView === "wp" && wpSel.size);
+    wpBoxes.forEach(b => b.checked = wpSel.has(b.dataset.wp));
+    allBox.checked = wpSel.size === WPS.length;
+  }
+  window.setSideView = v => {
+    if (!(v in SIDE_VIEWS)) return;
+    sideView = v;
+    paint();
+    ffRender();
+  };
+  btns.filter(b => b !== wpBtn).forEach(b => b.addEventListener("click", () => {
+    window.setSideView(b.dataset.dv);
+    document.querySelector('.tab[data-pview="dash"]').click();   // views live on Insights
+  }));
+  // Work Package row = expand/collapse the composer; the checkboxes drive the lens
+  wpBtn.addEventListener("click", () => {
+    const open = list.hidden;
+    list.hidden = !open;
+    wpBtn.setAttribute("aria-expanded", String(open));
+  });
+  list.addEventListener("change", e => {
+    const cb = e.target.closest("input[data-wp]"); if (!cb) return;
+    if (cb === allBox){
+      wpSel = cb.checked ? new Set(WPS.map(w => w.id)) : new Set();
+    } else {
+      cb.checked ? wpSel.add(cb.dataset.wp) : wpSel.delete(cb.dataset.wp);
+    }
+    if (!wpSel.size){
+      window.setSideView("me");
+      toast("No work packages selected — back to Me");
+    } else {
+      window.setSideView("wp");
+    }
+    document.querySelector('.tab[data-pview="dash"]').click();
+  });
+})();
 /* ---------- saved views ---------- */
 const FF_VIEWS = [
   // views are type-free in the merged model — the extraction tabs carry the type dimension
@@ -2813,7 +3176,7 @@ function insRender(c, editing){
   const tail = `${detail}
     <div class="ins-sec"><h6>Members</h6><div class="members" style="margin-top:2px">
       ${firstNames(c.m)}<span class="src has-tip" tabindex="0" data-tip="${c.ts}">${srcIcon(c.src)} ${c.src}</span></div></div>
-    <div class="ins-sec"><h6>RACI</h6><div style="color:var(--muted);font-size:13px">RACI placeholder</div></div>`;
+    <div class="ins-sec">${detExtras(c)}</div>`;
   if (editing){
     document.getElementById("insBody").innerHTML = `
       <input class="ins-ed-title" id="insTitleEd" value="${c.t.replace(/"/g, "&quot;")}">
@@ -3032,11 +3395,13 @@ calRender();
 /* ----- synthesis overlay ----- */
 const synOvl = document.getElementById("synOvl"), synScrim = document.getElementById("synScrim");
 let synTab = "summary", synAsView = "list";
+let igState = "idle", igTimer = null, igZoom = 1;   // infographic: idle | loading | done
 const cartSrcs = () => [...cart].map(srcByI);
 const cartRecs = () => cartSrcs().flatMap(srcRecs);
 function openSyn(){
   if (!cart.size){ toast("Select at least one source first"); return; }
   synTab = "summary";
+  igState = "idle"; clearTimeout(igTimer);
   document.querySelectorAll(".syn-tab").forEach(t => t.setAttribute("aria-selected", t.dataset.syn === synTab));
   const srcs = cartSrcs(), recs = cartRecs(), as = srcs.reduce((a, s) => a + s.as.length, 0);
   document.getElementById("synCount").innerHTML =
@@ -3087,14 +3452,44 @@ function synRenderTab(){
       </div>`).join("");
   }
   if (synTab === "info"){
+    if (igState === "loading"){
+      /* generating — rotating PLANA mark; on the platform this state is driven by the
+         generation job's status and swaps to the rendered image when it resolves */
+      el.innerHTML = `
+        <div style="border:2px dashed var(--line-strong);border-radius:14px;min-height:460px;display:flex;
+          flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;
+          padding:40px;background:rgba(255,255,255,.015)">
+          <span class="ig-spin" role="img" aria-label="Generating"></span>
+          <h3 style="font-size:16px;font-weight:800">Generating infographic…</h3>
+          <p style="font-size:12.5px;color:var(--muted);line-height:1.6;max-width:46ch">
+            Synthesizing <b style="color:var(--text)">${srcs.length} source${srcs.length > 1 ? "s" : ""} and
+            ${recs.length} extraction${recs.length === 1 ? "" : "s"}</b> into a one-glance brief.</p>
+          <span style="font-size:11px;color:var(--faint)">Usually under a minute — the other tabs stay available while it renders.</span>
+        </div>`;
+      return;
+    }
+    if (igState === "done"){
+      el.innerHTML = `
+        <div class="ig-frame">
+          <div class="ig-tools"><button class="ig-tool" id="igFullBtn" title="View full screen — these render large; zoom in for the small text">⛶ Full screen</button></div>
+          <div style="max-height:560px;overflow:auto;padding:22px"><div style="max-width:900px;margin:0 auto">${igDocHTML(srcs, recs)}</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;margin-top:14px">
+          <button class="btn" id="igRegen">↻ Regenerate infographic</button>
+          <span style="font-size:11px;color:var(--faint)">Rendered from the cart at generation time — regenerate after the cart changes.</span>
+        </div>`;
+      el.querySelector("#igFullBtn").addEventListener("click", openIgFull);
+      el.querySelector("#igRegen").addEventListener("click", igGenerate);
+      return;
+    }
     el.innerHTML = `
       <div style="border:2px dashed var(--line-strong);border-radius:14px;min-height:460px;display:flex;
         flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;
         padding:40px;background:rgba(255,255,255,.015)">
         <div style="font-size:44px;line-height:1">✨🖼</div>
-        <h3 style="font-size:19px;font-weight:800">Generative infographic — placeholder</h3>
+        <h3 style="font-size:19px;font-weight:800">Generative infographic</h3>
         <p style="font-size:13.5px;color:var(--muted);line-height:1.65;max-width:52ch">
-          This tab will render an <b style="color:var(--text)">AI-generated infographic image</b> synthesized from
+          This tab renders an <b style="color:var(--text)">AI-generated infographic image</b> synthesized from
           the cart's contents — currently <b style="color:var(--text)">${srcs.length} source${srcs.length > 1 ? "s" : ""}
           and ${recs.length} extraction${recs.length === 1 ? "" : "s"}</b> — designed for a one-glance scan of what
           this engagement adds up to.</p>
@@ -3102,9 +3497,10 @@ function synRenderTab(){
           Integration point for the image-generation service: the generator receives the cart's synthesis
           paragraph, extraction records (serials, severities, categories), and brand palette, and returns a
           rendered graphic for this frame.</p>
-        <button class="btn btn-publish" style="margin-top:6px">✨ Generate infographic</button>
-        <span style="font-size:11px;color:var(--faint)">Button is a placeholder — no generator is connected in this mock.</span>
+        <button class="btn btn-publish" style="margin-top:6px" id="igGen">✨ Generate infographic</button>
+        <span style="font-size:11px;color:var(--faint)">In this prototype the button plays the loading state, then renders a sample brief.</span>
       </div>`;
+    el.querySelector("#igGen").addEventListener("click", igGenerate);
   }
   if (synTab === "slides"){
     el.innerHTML = `
@@ -3181,6 +3577,97 @@ function synRenderTab(){
         </div>`).join("");
   }
 }
+
+/* ---------- infographic generation + fullscreen viewer ----------
+   Engineering contract: igGenerate() models the async generation job — on the platform,
+   the "loading" state runs while the image service renders and resolves to the returned
+   image. igDocHTML() stands in for that image; openIgFull() wraps whatever the frame
+   holds (there: the rendered <img>) in a zoomable full-viewport viewer. */
+function igGenerate(){
+  igState = "loading";
+  if (synTab === "info") synRenderTab();
+  clearTimeout(igTimer);
+  igTimer = setTimeout(() => {
+    igState = "done";
+    if (synTab === "info" && synOvl.classList.contains("show")) synRenderTab();
+  }, 2800);
+}
+function igDocHTML(srcs, recs){
+  const TCOL = { critical: "#e50602", high: "#e56203", medium: "#8a6d3b", low: "#8a8880" };
+  const groups = GRP_ORDER.map(g => ({ g, n: recs.filter(c => c.dsn === g).length })).filter(x => x.n);
+  const decs = recs.filter(c => c.dsn === "Decisions");
+  const tierRank = { critical: 0, high: 1, medium: 2, low: 3 };
+  const top = [...recs].sort((a, b) => (tierRank[TIER(a)] ?? 9) - (tierRank[TIER(b)] ?? 9)).slice(0, 5);
+  const when = new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  const ser = sn => `<span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.05em;color:#6b6963">${sn}</span>`;
+  return `
+  <div style="background:#f5f3ed;color:#1c1b18;border-radius:10px;overflow:hidden;font-family:'Google Sans',system-ui,sans-serif;box-shadow:0 24px 70px rgba(0,0,0,.55)">
+    <div style="height:5px;background:linear-gradient(90deg,var(--brand-red),var(--brand-orange))"></div>
+    <div style="padding:34px 42px 30px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
+        <span class="chat-mark" style="width:26px;height:26px;margin:0"></span>
+        <span style="font-size:11px;font-weight:800;letter-spacing:.14em;color:#6b6963">PLANA · ENGAGEMENT BRIEF</span>
+        <span style="flex:1"></span>
+        <span style="font-size:11px;color:#8a8880">Generated ${when}</span>
+      </div>
+      <h2 style="font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-bottom:8px">What this engagement adds up to</h2>
+      <p style="font-size:13px;color:#57554f;line-height:1.6;max-width:60ch">Synthesized by the company brain from
+        <b>${srcs.length} source${srcs.length > 1 ? "s" : ""}</b> and <b>${recs.length} extraction${recs.length === 1 ? "" : "s"}</b> —
+        serials cite the underlying records.</p>
+      <div style="display:flex;gap:26px;margin:24px 0 28px;padding:16px 20px;background:#fff;border:1px solid #e3e0d6;border-radius:10px">
+        ${groups.map(x => `<div><div style="font-size:26px;font-weight:800;letter-spacing:-.02em">${x.n}</div>
+          <div style="font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#8a8880">${x.g}</div></div>`).join("")}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1.35fr;gap:26px">
+        <div style="background:#fff;border:1px solid #e3e0d6;border-radius:10px;padding:18px 20px">
+          <div style="font-size:10px;font-weight:800;letter-spacing:.11em;color:var(--brand-orange);margin-bottom:12px">SOURCE &amp; CONTEXT</div>
+          ${srcs.map(s => `<div style="display:flex;gap:9px;align-items:baseline;margin-bottom:10px">
+            <span style="font-size:13px">${s.kind === "mtg" ? "🗓" : "✉"}</span>
+            <div><div style="font-size:12.5px;font-weight:700">${s.t}</div>
+              <div style="font-size:10.5px;color:#8a8880">${s.day} · ${s.tm} · ${s.sn.map(x => x).join(" ")}</div></div></div>`).join("")}
+        </div>
+        <div style="background:#fff;border:1px solid #e3e0d6;border-radius:10px;padding:18px 20px">
+          <div style="font-size:10px;font-weight:800;letter-spacing:.11em;color:var(--brand-orange);margin-bottom:12px">${decs.length ? "DECISIONS" : "TOP ITEMS"}</div>
+          ${(decs.length ? decs : top).slice(0, 4).map(c => `<div style="display:flex;gap:10px;margin-bottom:11px">
+            <span style="width:8px;height:8px;border-radius:50%;background:${TCOL[TIER(c)] || "#8a8880"};flex:none;margin-top:5px"></span>
+            <div style="font-size:12.5px;line-height:1.45"><b>${c.t}</b> &nbsp;${ser(c.sn)}</div></div>`).join("")}
+        </div>
+      </div>
+      ${decs.length ? `<div style="margin-top:26px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.11em;color:var(--brand-orange);margin-bottom:12px">HIGHEST-SEVERITY THREADS</div>
+        ${top.filter(c => c.dsn !== "Decisions").slice(0, 3).map(c => `<div style="display:flex;gap:10px;align-items:baseline;margin-bottom:9px">
+          <span style="width:8px;height:8px;border-radius:50%;background:${TCOL[TIER(c)] || "#8a8880"};flex:none;position:relative;top:0"></span>
+          <div style="font-size:12.5px;line-height:1.45"><b>${c.t}</b> — <span style="color:#57554f">${c.dsn}</span> &nbsp;${ser(c.sn)}</div></div>`).join("")}
+      </div>` : ""}
+      <div style="margin-top:30px;padding-top:14px;border-top:1px solid #e3e0d6;display:flex;align-items:center;gap:10px">
+        <span style="height:2px;width:44px;background:linear-gradient(90deg,var(--brand-red),var(--brand-orange));border-radius:2px"></span>
+        <span style="font-size:10px;color:#8a8880">Rendered by the PLANA company brain · grounded only in the selected sources</span>
+      </div>
+    </div>
+  </div>`;
+}
+function igApplyZoom(){
+  document.getElementById("igfDoc").style.zoom = igZoom;
+  document.getElementById("igZoomPct").textContent = Math.round(igZoom * 100) + "%";
+}
+function igFitZoom(){
+  const body = document.querySelector("#igFull .igf-body");
+  igZoom = Math.min(2.4, Math.max(.4, (body.clientWidth - 56) / 880));
+  igApplyZoom();
+}
+function openIgFull(){
+  document.getElementById("igfDoc").innerHTML = igDocHTML(cartSrcs(), cartRecs());
+  const name = (document.getElementById("synName").value || "Untitled cart").trim();
+  document.getElementById("igfName").textContent = "· " + name;
+  document.getElementById("igFull").classList.add("show");
+  requestAnimationFrame(igFitZoom);
+}
+window.closeIgFull = () => document.getElementById("igFull").classList.remove("show");
+document.getElementById("igFullClose").addEventListener("click", window.closeIgFull);
+document.getElementById("igZoomIn").addEventListener("click", () => { igZoom = Math.min(3, igZoom + .25); igApplyZoom(); });
+document.getElementById("igZoomOut").addEventListener("click", () => { igZoom = Math.max(.4, igZoom - .25); igApplyZoom(); });
+document.getElementById("igZoomFit").addEventListener("click", igFitZoom);
+
 let synSlides = [], synSlideI = 0;
 function renderSlide(){
   const s = synSlides[synSlideI];
@@ -3878,6 +4365,7 @@ document.querySelectorAll('[role="tablist"]').forEach(list => {
 /* ---------- active-filter chip row on every Insights feed (fed by the rail) ---------- */
 document.querySelectorAll("section.feed[data-view] .controls").forEach(ct =>
   ct.insertAdjacentHTML("afterend", `<div class="dash-active" hidden></div>`));
+ffRender();   // re-run into the fresh rows so the default dashboard-view lens chip shows at load
 
 /* ---------- "Ask this view" — Insights-scoped chat, boundary = rail filters ---------- */
 (() => {
@@ -3892,6 +4380,8 @@ document.querySelectorAll("section.feed[data-view] .controls").forEach(ct =>
       .map(i => i.closest(".ff-row").querySelector(".l").textContent.trim());
     if (s.from || s.to) parts.push(`${s.from || "…"} → ${s.to || "…"}`);
     if (s.q) parts.push(`“${s.q}”`);
+    const lab = lensLab();
+    if (lab) parts.unshift(`View: ${lab}`);
     return { hits, n: hits.length, sum: parts.length ? parts.join(" · ") : "no filters — everything" };
   }
   function syncHeader(annotate){
@@ -4009,6 +4499,100 @@ document.querySelectorAll("section.feed[data-view] .controls").forEach(ct =>
   chics.forEach(c => c.addEventListener("click", () =>
     coActive === c.dataset.co ? closeCo() : openCo(c.dataset.co)));
   document.getElementById("coClose").addEventListener("click", closeCo);
+})();
+
+/* ---------- RACI pop-up editor — tag-style people picker (who + when tracked) ---------- */
+(() => {
+  const ovl = document.getElementById("raciOvl"), scrim = document.getElementById("raciScrim");
+  let raciIdx = null, draft = null;
+  // workspace directory: canonical names + WP numbers (typed free-entry is allowed but discouraged)
+  const DIR = ["Scout Underwood","Vu Pham","Duc Huy Tran","Mitch Amos","Sally Nanyoung Oh","Jeremy Thomas","Braden Cole","External guest"];
+  const WP = n => (typeof PEOPLE !== "undefined" && PEOPLE[n]) || "";
+  function renderTags(){
+    ovl.querySelectorAll(".tagf").forEach(tf => {
+      const f = tf.dataset.f;
+      tf.querySelector(".tags").innerHTML = draft[f].map((p, i) =>
+        `<span class="tag">${p}<button class="tx" data-f="${f}" data-i="${i}" aria-label="Remove ${p}">✕</button></span>`).join("");
+    });
+  }
+  function closeDrop(){ ovl.querySelectorAll(".tag-drop").forEach(d => d.remove()); }
+  function openDrop(tf){
+    closeDrop();
+    const f = tf.dataset.f, raw = tf.querySelector(".tag-in").value.trim(), q = raw.toLowerCase();
+    const opts = DIR.filter(n => !draft[f].includes(n) && n.toLowerCase().includes(q));
+    const exact = DIR.some(n => n.toLowerCase() === q);
+    const d = document.createElement("div");
+    d.className = "tag-drop";
+    d.innerHTML = `<div class="hd">Select a person or add one</div>` +
+      opts.map(n => `<button type="button" class="tag-opt" data-add="${n}">${n}<span class="wp">${WP(n)}</span></button>`).join("") +
+      (raw && !exact ? `<button type="button" class="tag-opt create" data-add="${raw}">＋ Add “${raw}”</button>` : "");
+    tf.appendChild(d);
+  }
+  function openRaci(ci){
+    const c = ALL[ci]; if (!c) return;
+    raciIdx = ci;
+    const r = raciOf(c);
+    draft = { R: [...r.R], A: [...r.A], C: [...r.C], I: [...r.I] };
+    document.getElementById("raciT").textContent = c.t;
+    ovl.querySelectorAll(".tag-in").forEach(i => i.value = "");
+    renderTags(); closeDrop();
+    document.getElementById("raciWho").textContent = c.raciBy
+      ? `Last edited by ${c.raciBy} · ${c.raciTs}`
+      : "AI-suggested from the transcript · your edit will be attributed to Scout Underwood";
+    ovl.classList.add("show"); scrim.classList.add("show");
+    ovl.querySelector('.tagf[data-f="R"] .tag-in').focus();
+  }
+  function closeRaci(){ closeDrop(); ovl.classList.remove("show"); scrim.classList.remove("show"); }
+  window.closeRaci = closeRaci;
+  document.addEventListener("click", e => {
+    const btn = e.target.closest(".raci-edit");
+    if (btn) openRaci(+btn.dataset.ins);
+  });
+  ovl.addEventListener("click", e => {
+    const opt = e.target.closest(".tag-opt");
+    if (opt){
+      const tf = opt.closest(".tagf");
+      draft[tf.dataset.f].push(opt.dataset.add);
+      tf.querySelector(".tag-in").value = "";
+      renderTags(); openDrop(tf); tf.querySelector(".tag-in").focus();
+      return;
+    }
+    const tx = e.target.closest(".tag .tx");
+    if (tx){ draft[tx.dataset.f].splice(+tx.dataset.i, 1); renderTags(); return; }
+    const tf = e.target.closest(".tagf");
+    if (tf){ tf.querySelector(".tag-in").focus(); openDrop(tf); }
+    else closeDrop();
+  });
+  ovl.addEventListener("input", e => { const tf = e.target.closest(".tagf"); if (tf) openDrop(tf); });
+  ovl.addEventListener("keydown", e => {
+    const inp = e.target.closest(".tag-in"); if (!inp) return;
+    const tf = inp.closest(".tagf"), f = tf.dataset.f;
+    if (e.key === "Enter"){
+      e.preventDefault();
+      const first = tf.querySelector(".tag-opt");
+      if (first) first.click();
+    }
+    if (e.key === "Backspace" && !inp.value && draft[f].length){
+      draft[f].pop(); renderTags(); openDrop(tf);
+    }
+    if (e.key === "Escape" && tf.querySelector(".tag-drop")){
+      closeDrop(); e.stopPropagation();          // first Esc = close picker; second Esc bubbles = close editor
+    }
+  });
+  document.getElementById("raciClose").addEventListener("click", closeRaci);
+  document.getElementById("raciCancel").addEventListener("click", closeRaci);
+  scrim.addEventListener("click", closeRaci);
+  document.getElementById("raciSave").addEventListener("click", () => {
+    const c = ALL[raciIdx]; if (!c) return;
+    c.raci = { R: [...draft.R], A: [...draft.A], C: [...draft.C], I: [...draft.I] };
+    c.raciBy = "Scout Underwood"; c.raciTs = nowStamp();
+    // patch every surface holding this record's RACI, in place
+    document.querySelectorAll(`[data-raci-rows="${raciIdx}"]`).forEach(el => el.innerHTML = raciRows(c));
+    document.querySelectorAll(`.dx-prov[data-raci="${raciIdx}"]`).forEach(el => el.outerHTML = raciProv(c, raciIdx));
+    document.querySelectorAll(`[data-raci-note="${raciIdx}"]`).forEach(el => el.textContent = raciNote(c));
+    closeRaci();
+    toast(`RACI updated on ${c.sn} — attributed to Scout Underwood`);
+  });
 })();
 
 /* ---------- Calendar legend: collapsed to ⓘ until asked for ---------- */
