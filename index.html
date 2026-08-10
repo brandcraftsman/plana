@@ -969,6 +969,31 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .cal-eml{position:relative;flex-wrap:wrap}
 .cal-eml .ttl{padding-right:24px}
 .cal-eml .cal-addbtn{flex-basis:100%;width:100%;margin:4px 0 2px}
+/* cart "GROUNDED IN" trigger + source dropdown (traceability boundary, always one click away) */
+.syn-src-trig{display:inline-flex;align-items:center;gap:7px;background:none;border:1px solid var(--line);
+  border-radius:8px;padding:5px 11px;cursor:pointer;font:inherit}
+.syn-src-trig:hover{border-color:var(--line-strong)}
+.syn-src-trig .lb{font-size:9px;font-weight:800;letter-spacing:.08em;color:var(--faint)}
+.syn-src-trig b{font-size:12px;color:var(--text)}
+.syn-src-trig .car{font-size:9px;color:var(--brand-orange)}
+.syn-src-dd{position:fixed;width:360px;z-index:95;background:var(--raised);border:1px solid var(--line-strong);
+  border-radius:12px;padding:6px;box-shadow:0 18px 60px rgba(0,0,0,.65)}
+.ssd-row{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;padding:8px 12px;
+  cursor:pointer;font:inherit;text-align:left;border-radius:7px}
+.ssd-row:hover{background:rgba(229,98,3,.08)}
+.ssd-row .ic{font-size:13px;flex:none}
+.ssd-row .mid{flex:1;min-width:0}
+.ssd-row .t{display:block;font-size:12px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ssd-row .m{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:9px;letter-spacing:.05em;color:var(--faint)}
+.ssd-row .go{font-size:11px;color:var(--faint);flex:none}
+.ssd-foot{padding:7px 12px 5px;font-size:9.5px;color:var(--faint);border-top:1px solid var(--line);margin-top:4px;line-height:1.5}
+/* synthesis stat mini-card — reusable three-stat component */
+.syn-stats{flex:none;display:flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 4px;align-self:center}
+.syn-stats .st{padding:2px 18px;text-align:center;border-right:1px solid var(--line)}
+.syn-stats .st:last-child{border-right:none}
+.syn-stats .n{font-size:24px;font-weight:800;letter-spacing:-.02em}
+.syn-stats .n.grad{background:linear-gradient(90deg,#ff6b69,var(--brand-orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+.syn-stats .lb{font-size:8.5px;font-weight:800;letter-spacing:.09em;color:var(--faint);margin-top:2px}
 .ig-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
 .ig-tile{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:rgba(255,255,255,.015)}
 .ig-tile .big{font-size:30px;font-weight:800;letter-spacing:-.02em}
@@ -2930,6 +2955,7 @@ document.addEventListener("keydown", e => {
     document.querySelectorAll(".menu.open").forEach(m => m.classList.remove("open"));
     const ocm = document.querySelector(".oc-menu");
     if (ocm){ ocm.remove(); return; }
+    if (document.querySelector(".syn-src-dd")){ if (typeof window.closeSynSrcDD === "function") window.closeSynSrcDD(); return; }
     const igf = document.getElementById("igFull");
     if (igf && igf.classList.contains("show")){ if (typeof window.closeIgFull === "function") window.closeIgFull(); return; }
     const pk = document.getElementById("serPeek");
@@ -3604,8 +3630,11 @@ function openSyn(){
   igState = "idle"; clearTimeout(igTimer);
   document.querySelectorAll(".syn-tab").forEach(t => t.setAttribute("aria-selected", t.dataset.syn === synTab));
   const srcs = cartSrcs(), recs = cartRecs(), as = srcs.reduce((a, s) => a + s.as.length, 0);
+  // ONE compact trigger — scales to any source count; the dropdown carries names + E-serials
   document.getElementById("synCount").innerHTML =
-    `<b>${srcs.length} source${srcs.length > 1 ? "s" : ""}</b> · ${srcs.map(s => s.t.replace(" — day 2", " ×2")).slice(0, 3).join(" · ")}${srcs.length > 3 ? " +" + (srcs.length - 3) : ""} · ${recs.length} extractions · ${as} assets`;
+    `<button id="synSrcTrig" class="syn-src-trig" aria-haspopup="menu" aria-expanded="false"
+       title="The engagements every answer on this screen traces back to">
+       <span class="lb">GROUNDED IN</span><b>${srcs.length} source${srcs.length > 1 ? "s" : ""}</b><span class="car">▾</span></button>`;
   document.getElementById("synChatSub").textContent =
     `Answers grounded ONLY in the ${srcs.length} selected source${srcs.length > 1 ? "s" : ""}`;
   document.getElementById("synMsgs").innerHTML = "";
@@ -3614,8 +3643,47 @@ function openSyn(){
 }
 function closeSyn(){
   if (!synOvl.classList.contains("show")) return;
+  if (typeof window.closeSynSrcDD === "function") window.closeSynSrcDD();
   synOvl.classList.remove("show"); synScrim.classList.remove("show");
 }
+/* "GROUNDED IN" dropdown — every source with its E-serial; rows open the source modal */
+(() => {
+  let dd = null;
+  function closeDD(){
+    if (dd){ dd.remove(); dd = null; }
+    document.getElementById("synSrcTrig")?.setAttribute("aria-expanded", "false");
+  }
+  window.closeSynSrcDD = closeDD;
+  document.addEventListener("click", e => {
+    const t = e.target.closest("#synSrcTrig");
+    if (t){
+      if (dd){ closeDD(); return; }
+      const r = t.getBoundingClientRect();
+      dd = document.createElement("div");
+      dd.className = "syn-src-dd";
+      dd.style.left = r.left + "px";
+      dd.style.top = (r.bottom + 6) + "px";
+      dd.innerHTML = cartSrcs().map(s => `
+        <button class="ssd-row" data-es-src="${s.id}" title="Open source — raw content, summary, attendees, metadata">
+          <span class="ic">${s.kind === "mtg" ? "🗓" : "✉"}</span>
+          <span class="mid"><span class="t">${s.t}</span>
+            <span class="m">${s.es} · ${s.day} · ${s.tm}</span></span>
+          <span class="go">↗</span></button>`).join("") +
+        `<div class="ssd-foot">Every answer on this screen traces to these engagements — click one to open its source record.</div>`;
+      document.body.appendChild(dd);
+      t.setAttribute("aria-expanded", "true");
+      return;
+    }
+    const row = e.target.closest(".ssd-row");
+    if (row){
+      const id = row.dataset.esSrc;
+      closeDD();
+      if (typeof openSourceForEngagement === "function") openSourceForEngagement(id);
+      return;
+    }
+    if (dd && !e.target.closest(".syn-src-dd")) closeDD();
+  });
+})();
 document.getElementById("cartOpen").addEventListener("click", openSyn);
 document.getElementById("synClose").addEventListener("click", closeSyn);
 synScrim.addEventListener("click", closeSyn);
@@ -3632,8 +3700,10 @@ function synRenderTab(){
   const crit = recs.filter(c => TIER(c) === "critical");
   if (synTab === "summary"){
     const groups = GRP_ORDER.map(g => ({ g, items: recs.filter(c => c.dsn === g) })).filter(x => x.items.length);
+    const asN = srcs.reduce((a, s) => a + s.as.length, 0);
     el.innerHTML = `
-      <div class="card" style="border-style:solid;padding:14px 18px;margin-bottom:18px">
+      <div class="card" style="border-style:solid;padding:14px 18px;margin-bottom:18px;display:flex;gap:22px;align-items:center">
+        <div style="flex:1;min-width:0">
         <h4 style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-orange);font-weight:800;margin-bottom:7px">
           Synthesis — what these ${srcs.length > 1 ? srcs.length + " sources" : "sources"} add up to</h4>
         <p style="font-size:13.5px;color:var(--muted);line-height:1.65">
@@ -3642,6 +3712,12 @@ function synRenderTab(){
           ${crit.length > 1 ? `The critical mass clusters around ${crit.length} interlocking threads; ` : ""}the
           synthesis, extractions, and chat on this screen are drawn only from the selected sources — nothing else in the workspace is consulted.
           <span style="color:var(--faint);font-style:italic">Coverage: ${Math.round(srcs.filter(s => s.st === "ok").length / srcs.length * 100)}% of selected sources fully processed.</span></p>
+        </div>
+        <div class="syn-stats" role="group" aria-label="Cart at a glance">
+          <div class="st"><div class="n">${recs.length}</div><div class="lb">EXTRACTED</div></div>
+          <div class="st"><div class="n grad">${crit.length}</div><div class="lb">TOP SEVERITY</div></div>
+          <div class="st"><div class="n">${asN}</div><div class="lb">ASSETS</div></div>
+        </div>
       </div>` +
       groups.map((x, i) => `<div class="syn-grp">
         <div class="grp-head"><h4 style="${i === 0 ? "background:linear-gradient(90deg,#ff6b69,var(--brand-orange));-webkit-background-clip:text;background-clip:text;color:transparent" : ""}">${x.g}</h4>
