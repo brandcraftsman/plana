@@ -313,10 +313,6 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .card.open .details{display:block}
 .det-caret{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;
   padding:2px 6px;margin-top:8px;line-height:1;display:inline-flex;align-items:center;gap:6px}
-/* Details toggle: ONE predictable spot in both states — centered at the card bottom,
-   on the serial's row. Only the arrow direction changes on expand. */
-.card:has(> .det-caret){padding-bottom:32px}
-.card > .det-caret{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);margin-top:0}
 .det-caret:hover{color:var(--text)}
 .det-arr{display:inline-block;transition:transform .15s}
 .card.open .det-caret .det-arr{transform:rotate(180deg)}
@@ -333,19 +329,9 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .dx-h{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
   margin-bottom:10px;display:flex;gap:7px;align-items:center}
 .dx-h .conf2{text-transform:none;letter-spacing:0;font-weight:700;color:var(--text)}
-.raci-edit,.dx-edit{text-transform:none;letter-spacing:0;font-weight:600;color:var(--brand-orange);
+.raci-edit{text-transform:none;letter-spacing:0;font-weight:600;color:var(--brand-orange);
   background:none;border:none;cursor:pointer;padding:0;font-size:11px}
-.raci-edit:hover,.dx-edit:hover{text-decoration:underline;text-underline-offset:3px}
-/* Possible impact / action pop-up editor (mirrors the RACI editor) */
-#dxScrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:86;display:none}
-#dxScrim.show{display:block}
-#dxOvl{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(560px,94vw);z-index:87;display:none;
-  background:linear-gradient(180deg,var(--raised),#1c1c1f);border:1px solid var(--line-strong);border-radius:14px;
-  box-shadow:0 18px 60px rgba(0,0,0,.65)}
-#dxOvl.show{display:block}
-#dxText{width:100%;min-height:160px;background:var(--bg);border:1px solid var(--line-strong);border-radius:8px;
-  color:var(--text);padding:10px 12px;font:inherit;font-size:12.5px;line-height:1.6;resize:vertical}
-#dxText:focus{outline:none;border-color:var(--brand-orange)}
+.raci-edit:hover{text-decoration:underline;text-underline-offset:3px}
 .dx-row{display:flex;gap:10px;align-items:center;margin-bottom:8px}
 .dx-l{width:20px;height:20px;border-radius:6px;border:1px solid var(--line-strong);color:var(--muted);
   font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
@@ -964,6 +950,25 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .oc-menu button:hover{background:rgba(229,98,3,.12);color:var(--brand-orange)}
 .oc-menu button.danger{color:var(--brand-red)}
 .oc-menu .oc-mhead{font-size:9.5px;font-weight:800;letter-spacing:.07em;color:var(--faint);padding:6px 10px 4px}
+/* engagement serials (E-MMDDYY-HHMM-NNN-X) — inline variant of the card-serial motif */
+.eser{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:9.5px;letter-spacing:.05em;
+  color:var(--faint);cursor:pointer;background:none;border:none;padding:0;white-space:nowrap}
+.eser:hover{color:var(--muted)}
+/* calendar engagement cards — ↗ opens the source overlay; full-width Add is the ONLY cart toggle */
+.cal-open{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:7px;background:none;
+  border:1px solid var(--line);color:var(--faint);font-size:12px;cursor:pointer;display:inline-flex;
+  align-items:center;justify-content:center;z-index:2;padding:0}
+.cal-open:hover{color:var(--brand-orange);border-color:rgba(229,98,3,.5)}
+.cal-addbtn{display:block;width:calc(100% - 20px);margin:10px auto;background:none;
+  border:1px solid var(--line);color:var(--faint);border-radius:7px;padding:6px 0;font:inherit;
+  font-size:11px;font-weight:600;cursor:pointer;text-align:center}
+.cal-addbtn:hover{border-color:var(--line-strong);color:var(--muted)}
+.cal-addbtn.added{border-color:rgba(229,98,3,.45);color:var(--brand-orange);font-weight:700}
+.cal-mtg{position:relative}
+.cal-mtg .band{padding-right:32px}
+.cal-eml{position:relative;flex-wrap:wrap}
+.cal-eml .ttl{padding-right:24px}
+.cal-eml .cal-addbtn{flex-basis:100%;width:100%;margin:4px 0 2px}
 .ig-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
 .ig-tile{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:rgba(255,255,255,.015)}
 .ig-tile .big{font-size:30px;font-weight:800;letter-spacing:-.02em}
@@ -1794,20 +1799,6 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
   <div class="raci-foot"><span class="who" id="raciWho"></span>
     <button class="btn" id="raciCancel">Cancel</button>
     <button class="btn btn-publish" id="raciSave">Save</button></div>
-</section>
-
-<div id="dxScrim"></div>
-<section id="dxOvl" role="dialog" aria-modal="true" aria-labelledby="dxHead">
-  <div class="raci-head"><b id="dxHead" style="font-size:14px;flex:none">Possible impact</b>
-    <span class="t" id="dxT"></span>
-    <button class="btn" id="dxClose" aria-label="Close" style="min-height:28px">✕</button></div>
-  <div class="raci-body">
-    <textarea id="dxText" aria-label="Edit the generated text"></textarea>
-    <div style="font-size:10px;color:var(--faint);margin-top:8px;line-height:1.5" id="dxHint"></div>
-  </div>
-  <div class="raci-foot"><span class="who" id="dxWho"></span>
-    <button class="btn" id="dxCancel">Cancel</button>
-    <button class="btn btn-publish" id="dxSave">Save</button></div>
 </section>
 
 <section id="moreOvl" role="dialog" aria-modal="true" aria-labelledby="moTitle">
@@ -2662,15 +2653,6 @@ function raciProv(c, ci){
     ? `<span class="chip prov-ico dx-prov" data-raci="${ci}" title="Human verified — by ${c.raciBy} · ${c.raciTs}" aria-label="RACI human verified by ${c.raciBy}"><svg width="12" height="12" viewBox="0 0 24 24" fill="#3fb950" aria-hidden="true"><path d="M12 12a4.8 4.8 0 1 0 0-9.6 4.8 4.8 0 0 0 0 9.6zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>`
     : `<span class="chip prov-ico dx-prov" data-raci="${ci}" title="AI suggested" aria-label="RACI is AI suggested" style="font-size:12px">✨</span>`;
 }
-/* Possible impact / Possible action provenance — SAME philosophy as RACI:
-   each generated field has its own channel (data-dxp), ✨ until a human
-   adjusts it via the pop-up editor, then the green bust w/ attribution. */
-function dxProv(c, ci, f){
-  const ed = c.dxEdit && c.dxEdit[f];
-  return ed
-    ? `<span class="chip prov-ico" data-dxp="${f}-${ci}" title="Human verified — by ${ed.by} · ${ed.ts}" aria-label="Human verified by ${ed.by}"><svg width="12" height="12" viewBox="0 0 24 24" fill="#3fb950" aria-hidden="true"><path d="M12 12a4.8 4.8 0 1 0 0-9.6 4.8 4.8 0 0 0 0 9.6zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>`
-    : `<span class="chip prov-ico" data-dxp="${f}-${ci}" title="AI suggested" aria-label="AI suggested" style="font-size:12px">✨</span>`;
-}
 const raciNote = c => c.raciBy
   ? `Corrected by ${c.raciBy} · ${c.raciTs} — corrections train future extractions.`
   : `AI-suggested from the transcript — (edit) to correct; corrections train future extractions.`;
@@ -2693,12 +2675,14 @@ function detExtras(c){
   const ci = ALL.indexOf(c), g = detGen(c);
   return `<div class="det-x">
     <div><div class="dx-h">RACI ${raciProv(c, ci)}<button class="raci-edit" data-ins="${ci}">(edit)</button></div>
-      <div data-raci-rows="${ci}">${raciRows(c)}</div></div>
-    <div><div class="dx-h">Possible impact ${c.dxEdit && c.dxEdit.impact ? "" : `<span class="conf2" data-dx-conf="impact-${ci}">(${g.iConf}%)</span>`}${dxProv(c, ci, "impact")}<button class="dx-edit" data-dxf="impact" data-ins="${ci}">(edit)</button></div>
-      <div class="dx-txt" data-dx-txt="impact-${ci}">${g.impact}</div></div>
-    <div><div class="dx-h">Possible action ${c.dxEdit && c.dxEdit.action ? "" : `<span class="conf2" data-dx-conf="action-${ci}">(${g.aConf}%)</span>`}${dxProv(c, ci, "action")}<button class="dx-edit" data-dxf="action" data-ins="${ci}">(edit)</button></div>
-      <div class="dx-txt" data-dx-txt="action-${ci}">${g.action}</div></div>
-  </div>`;
+      <div data-raci-rows="${ci}">${raciRows(c)}</div>
+      <div class="dx-note" data-raci-note="${ci}">${raciNote(c)}</div></div>
+    <div><div class="dx-h">Possible impact <span class="conf2">(${g.iConf}%)</span></div>
+      <div class="dx-txt">${g.impact}</div></div>
+    <div><div class="dx-h">Possible action <span class="conf2">(${g.aConf}%)</span></div>
+      <div class="dx-txt">${g.action}</div></div>
+  </div>
+  <div class="dx-foot">Possible impact and Possible action are generated by their prompts — tune per category via ⚙</div>`;
 }
 function cardHTML(c, i){
   const ci = ALL.indexOf(c);
@@ -2891,7 +2875,7 @@ document.addEventListener("click", e => {
       `${c.dsn} · extracted from ${c.src} · event ${c.ts} · severity last set by ${c.setBy} (${c.setTs})${c.edited ? ` · text edited by ${c.editedBy} (${c.editedTs})` : ""}`;
   }
   // serial — click to copy
-  const sn = e.target.closest(".serial");
+  const sn = e.target.closest(".serial, .eser");
   if (sn){
     const id = sn.textContent.trim();
     const done = () => toast(`${id} copied to clipboard`);
@@ -2954,8 +2938,6 @@ document.addEventListener("keydown", e => {
     if (guide && guide.classList.contains("show")){ guide.classList.remove("show"); return; }
     const so = document.getElementById("srcOvl");
     if (so && so.classList.contains("show")){ if (typeof closeSource === "function") closeSource(); return; }
-    const dxo = document.getElementById("dxOvl");
-    if (dxo && dxo.classList.contains("show")){ if (typeof window.closeDx === "function") window.closeDx(); return; }
     const ra = document.getElementById("raciOvl");
     if (ra && ra.classList.contains("show")){ if (typeof window.closeRaci === "function") window.closeRaci(); return; }
     const mo = document.getElementById("moreOvl");
@@ -3462,6 +3444,51 @@ const SRC = [
  {id:"m6", kind:"mtg", day:"Fri 31", t:"Sync defects triage w/ Vu", tm:"2:00 PM", st:"up",
   p:"Vu · Scout", sn:[], as:[], tx:[]},
 ];
+/* ---------- Engagement serials — E-MMDDYY-HHMM-NNN-X ----------
+   Minted at ingestion, immutable (fields frozen at mint — never re-derived if an
+   event is later rescheduled; store as an opaque string in prod). NNN = per-day
+   sequence (resets daily). X = channel: T meeting transcription · E email ·
+   C chat · N note. Every engagement gets one, captured or not. */
+const ES_DAY = { "Mon 27": "0727", "Tue 28": "0728", "Wed 29": "0729", "Thu 30": "0730", "Fri 31": "0731", "Sat 1": "0801" };
+const esTo24 = tm => {
+  const m = tm.match(/(\d{1,2})(?::(\d{2}))?\s*(?:–[^A-Z]*)?(AM|PM)/i) || tm.match(/(\d{1,2})(?::(\d{2}))?/);
+  if (!m) return "0000";
+  let h = +m[1]; const min = m[2] || "00";
+  const ap = (m[3] || (/PM/i.test(tm) ? "PM" : "AM")).toUpperCase();
+  if (ap === "PM" && h !== 12) h += 12;
+  if (ap === "AM" && h === 12) h = 0;
+  return String(h).padStart(2, "0") + min;
+};
+const esCounters = {};
+SRC.slice().sort((a, b) => ((ES_DAY[a.day] || "") + esTo24(a.tm)).localeCompare((ES_DAY[b.day] || "") + esTo24(b.tm)))
+  .forEach(s => {
+    const d = ES_DAY[s.day] || "0727";
+    esCounters[d] = (esCounters[d] || 0) + 1;
+    s.es = `E-${d}26-${esTo24(s.tm)}-${String(esCounters[d]).padStart(3, "0")}-${s.kind === "mtg" ? "T" : "E"}`;
+  });
+/* engagement serial for any record: its demo-week source's serial, or one minted
+   from the record's own event timestamp (synthesized sources outside the week) */
+function esFor(c){
+  if (c.esCache) return c.esCache;
+  const s = SRC.find(x => x.sn.includes(c.sn));
+  if (s) return (c.esCache = s.es);
+  const MO = { Jan:"01",Feb:"02",Mar:"03",Apr:"04",May:"05",Jun:"06",Jul:"07",Aug:"08",Sep:"09",Oct:"10",Nov:"11",Dec:"12" };
+  const m = (c.ts || "").match(/(\w{3}) (\d{1,2}), (\d{4}) · (\d{1,2}):(\d{2}) (AM|PM)/);
+  let d = "0728", yy = "26", t = "0900";
+  if (m){
+    d = (MO[m[1]] || "07") + String(+m[2]).padStart(2, "0"); yy = m[3].slice(2);
+    let h = +m[4]; if (m[6] === "PM" && h !== 12) h += 12; if (m[6] === "AM" && h === 12) h = 0;
+    t = String(h).padStart(2, "0") + m[5];
+  }
+  esCounters[d] = (esCounters[d] || 0) + 1;
+  const ch = c.src === "Gmail" ? "E" : c.src === "Google Chat" ? "C" : c.src === "Google Calendar" ? "N" : "T";
+  return (c.esCache = `E-${d}${yy}-${t}-${String(esCounters[d]).padStart(3, "0")}-${ch}`);
+}
+/* surface the engagement serial on every already-rendered card accordion (source row) */
+document.querySelectorAll('.card[data-ins] .det-row').forEach(row => {
+  const a = row.querySelector(".open-src"); if (!a) return;
+  a.insertAdjacentHTML("afterend", `<span class="eser" title="Copy engagement ID">${esFor(ALL[+a.dataset.ins])}</span>`);
+});
 const srcByI = id => SRC.find(s => s.id === id);
 const srcRecs = s => s.sn.map(x => ALL.find(c => c.sn === x)).filter(Boolean);
 const CAP = { ok:["cap-ok","PROCESSED"], run:["cap-run","PROCESSING"], no:["cap-no","NO CAPTURE"], up:["cap-up","UPCOMING"] };
@@ -3484,16 +3511,18 @@ function calRender(){
           ${s.st === "no" ? `<button class="cal-add">+ add what you have</button>` : ""}</div>`;
         return s.kind === "mtg" ? `
           <article class="card cal-mtg ${sel ? "sel" : ""}" data-src="${s.id}">
-            <div class="band"><span class="glyph">🗓</span><span class="tm">${s.tm}</span>
-              <input type="checkbox" ${sel ? "checked" : ""} aria-label="Select ${s.t}"></div>
+            <button class="cal-open" title="Open source — raw content, summary, attendees, metadata" aria-label="Open source for ${s.t}">↗</button>
+            <div class="band"><span class="glyph">🗓</span><span class="tm">${s.tm}</span></div>
             <div class="body"><div class="ttl">${s.t}</div>
               <div style="margin-top:7px"><span class="cap-chip ${cap[0]}">${cap[1]}</span></div>${stats}</div>
+            <button class="cal-addbtn ${sel ? "added" : ""}" aria-pressed="${sel}" aria-label="${sel ? "Remove" : "Add"} ${s.t} ${sel ? "from" : "to"} the cart">${sel ? "✓ Added" : "＋ Add"}</button>
           </article>` : `
           <div class="cal-eml ${sel ? "sel" : ""}" data-src="${s.id}">
+            <button class="cal-open" title="Open source — raw content, summary, attendees, metadata" aria-label="Open source for ${s.t}">↗</button>
             <span class="glyph">✉</span>
             <div style="min-width:0;flex:1"><div class="ttl">${s.t}</div>
               <div class="sub">${s.tm} · ${s.msgs} msg${s.msgs > 1 ? "s" : ""}${s.sn.length ? ` · ⚡ ${s.sn.length}` : ""}</div></div>
-            <input type="checkbox" ${sel ? "checked" : ""} aria-label="Select ${s.t}">
+            <button class="cal-addbtn ${sel ? "added" : ""}" aria-pressed="${sel}" aria-label="${sel ? "Remove" : "Add"} ${s.t} ${sel ? "from" : "to"} the cart">${sel ? "✓ Added" : "＋ Add"}</button>
           </div>`;
       }).join("") : `<div class="cal-empty">No activity</div>`}
     </div>`;
@@ -3523,7 +3552,15 @@ function cartBarRender(){
 }
 document.getElementById("calGrid").addEventListener("click", e => {
   if (e.target.closest(".cal-add")){ toast("Capture companion opens — drop files, links, or a quick note"); return; }
-  const el = e.target.closest("[data-src]");
+  const openB = e.target.closest(".cal-open");
+  if (openB){
+    const el2 = openB.closest("[data-src]");
+    if (el2 && typeof openSourceForEngagement === "function") openSourceForEngagement(el2.dataset.src);
+    return;
+  }
+  const ab = e.target.closest(".cal-addbtn");
+  if (!ab) return;   // the Add button is the only cart toggle — card body is inert
+  const el = ab.closest("[data-src]");
   if (!el) return;
   const id = el.dataset.src;
   cart.has(id) ? cart.delete(id) : cart.add(id);
@@ -3691,6 +3728,7 @@ function synRenderTab(){
       <div class="tx-src">
         <div class="tx-head">
           <span style="font-size:16px">${s.kind === "mtg" ? "🗓" : "✉"}</span><b style="font-size:14px">${s.t}</b>
+          <span class="eser" title="Copy engagement ID">${s.es}</span>
           <span class="cap-chip ${CAP[s.st][0]}">${CAP[s.st][1]}</span>
           <span style="font-size:11.5px;color:var(--faint)">${s.day} · ${s.tm}</span>
           ${s.sn.map(x => `<span class="chip outline" style="font-size:10px">${x}</span>`).join("")}
@@ -3787,7 +3825,7 @@ function igDocHTML(srcs, recs){
           ${srcs.map(s => `<div style="display:flex;gap:9px;align-items:baseline;margin-bottom:10px">
             <span style="font-size:13px">${s.kind === "mtg" ? "🗓" : "✉"}</span>
             <div><div style="font-size:12.5px;font-weight:700">${s.t}</div>
-              <div style="font-size:10.5px;color:#8a8880">${s.day} · ${s.tm} · ${s.sn.map(x => x).join(" ")}</div></div></div>`).join("")}
+              <div style="font-size:10.5px;color:#8a8880"><span style="font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.05em;color:#6b6963">${s.es}</span> · ${s.day} · ${s.tm} · ${s.sn.map(x => x).join(" ")}</div></div></div>`).join("")}
         </div>
         <div style="background:#fff;border:1px solid #e3e0d6;border-radius:10px;padding:18px 20px">
           <div style="font-size:10px;font-weight:800;letter-spacing:.11em;color:var(--brand-orange);margin-bottom:12px">${decs.length ? "DECISIONS" : "TOP ITEMS"}</div>
@@ -3922,12 +3960,21 @@ function sourceFor(c){
 }
 function openSource(i, trigger){
   const c = ALL[i]; if (!c) return;
-  srcCur = { c, s: sourceFor(c) }; srcTab = "raw";
+  srcOpen(c, sourceFor(c));
+}
+/* calendar cards' ↗ — open the overlay for an ENGAGEMENT (works with zero extractions) */
+function openSourceForEngagement(id){
+  const s = srcByI(id); if (!s) return;
+  const c0 = s.sn.length ? ALL.find(r => r.sn === s.sn[0]) : null;
+  srcOpen(c0, s);
+}
+function srcOpen(c, s){
+  srcCur = { c, s }; srcTab = "raw";
   document.querySelectorAll("#srcOvl .syn-tab").forEach(t => t.setAttribute("aria-selected", t.dataset.st === "raw"));
-  const s = srcCur.s, chunks = Math.max(1, Math.ceil(s.tx.length / 2));
+  const chunks = Math.max(1, Math.ceil(s.tx.length / 2));
   document.getElementById("srcTitle").textContent = s.t;
-  document.getElementById("srcSub").textContent =
-    `${s.kind === "mtg" ? "Google Meet" : "Gmail"} · ${chunks} chunk${chunks > 1 ? "s" : ""} · ${s.day} · ${s.tm} · ${CAP[s.st][1].toLowerCase()}`;
+  document.getElementById("srcSub").innerHTML =
+    `<span class="eser" title="Copy engagement ID">${s.es || (c ? esFor(c) : "")}</span> · ${s.kind === "mtg" ? "Google Meet" : "Gmail"} · ${chunks} chunk${chunks > 1 ? "s" : ""} · ${s.day} · ${s.tm} · ${CAP[s.st][1].toLowerCase()}`;
   document.getElementById("srcOrig").textContent = "";
   document.getElementById("srcOrig").insertAdjacentHTML("beforeend",
     `${s.kind === "mtg" ? `<img src="${MEET_ICO}" alt="" style="width:15px;height:auto;display:inline-block">Original transcripts` : "Original thread"} <span style="font-size:11px">↗</span>`);
@@ -4267,7 +4314,8 @@ document.addEventListener("click", e => {
         <span class="sp-kind">${c.dsn.replace(/s$/, "")}</span>${quadChip(c, "spQuad")}</div>
       <div class="sp-title">${c.t}${edTag(c)}</div>
       <div class="sp-sum">${c.s}</div>
-      <div class="sp-meta"><span>${c.src === "Gmail" ? "✉" : "🎥"} ${c.src} · ${c.ts}</span>
+      <div class="sp-meta"><span class="eser" title="Copy engagement ID">${esFor(c)}</span>
+        <span>${c.src === "Gmail" ? "✉" : "🎥"} ${c.src} · ${c.ts}</span>
         <span>Confidence ${c.conf}%</span>${provChip(c)}</div>
       <div class="sp-acts"><button class="sp-rec">Open record</button>
         <button class="sp-src">Open source ↗</button></div>`;
@@ -4992,60 +5040,9 @@ document.querySelectorAll("section.feed[data-view] .controls").forEach(ct =>
     // patch every surface holding this record's RACI, in place
     document.querySelectorAll(`[data-raci-rows="${raciIdx}"]`).forEach(el => el.innerHTML = raciRows(c));
     document.querySelectorAll(`.dx-prov[data-raci="${raciIdx}"]`).forEach(el => el.outerHTML = raciProv(c, raciIdx));
+    document.querySelectorAll(`[data-raci-note="${raciIdx}"]`).forEach(el => el.textContent = raciNote(c));
     closeRaci();
     toast(`RACI updated on ${c.sn} — attributed to Scout Underwood`);
-  });
-})();
-
-/* ---------- Possible impact / Possible action pop-up editor ----------
-   Mirrors the RACI editor: ✨ until a human adjusts, then the green bust
-   with attribution. Each field is its own provenance channel (data-dxp) —
-   independent of severity AND of RACI. Human-edited text drops the AI
-   confidence badge (confidence describes the generation, not the person). */
-(() => {
-  const ovl = document.getElementById("dxOvl"), scrim = document.getElementById("dxScrim");
-  const LAB = { impact: "Possible impact", action: "Possible action" };
-  let cur = null;   // { ci, f }
-  function openDx(ci, f){
-    const c = ALL[ci]; if (!c) return;
-    cur = { ci, f };
-    detGen(c);
-    document.getElementById("dxHead").textContent = LAB[f];
-    document.getElementById("dxT").textContent = `${c.sn} · ${c.t}`;
-    document.getElementById("dxText").value = c.dx[f];
-    const ed = c.dxEdit && c.dxEdit[f];
-    document.getElementById("dxWho").textContent = ed
-      ? `Last edited by ${ed.by} · ${ed.ts}`
-      : `AI-generated from the record's sources · your edit will be attributed to Scout Underwood`;
-    document.getElementById("dxHint").textContent =
-      `Corrections train future ${LAB[f].toLowerCase()} generations for this category — tune the underlying prompt via ⚙.`;
-    ovl.classList.add("show"); scrim.classList.add("show");
-    document.getElementById("dxText").focus();
-  }
-  function closeDx(){ cur = null; ovl.classList.remove("show"); scrim.classList.remove("show"); }
-  window.closeDx = closeDx;
-  window.dxEditorOpen = () => ovl.classList.contains("show");
-  document.addEventListener("click", e => {
-    const btn = e.target.closest(".dx-edit");
-    if (btn) openDx(+btn.dataset.ins, btn.dataset.dxf);
-  });
-  document.getElementById("dxClose").addEventListener("click", closeDx);
-  document.getElementById("dxCancel").addEventListener("click", closeDx);
-  scrim.addEventListener("click", closeDx);
-  document.getElementById("dxSave").addEventListener("click", () => {
-    if (!cur) return;
-    const c = ALL[cur.ci], f = cur.f, text = document.getElementById("dxText").value.trim();
-    if (!text){ toast("Nothing to save — the field can't be empty"); return; }
-    c.dx[f] = text;
-    c.dxEdit = c.dxEdit || {};
-    c.dxEdit[f] = { by: "Scout Underwood", ts: nowStamp() };
-    // patch every surface holding this field, in place
-    document.querySelectorAll(`[data-dx-txt="${f}-${cur.ci}"]`).forEach(el => el.textContent = text);
-    document.querySelectorAll(`[data-dxp="${f}-${cur.ci}"]`).forEach(el => el.outerHTML = dxProv(c, cur.ci, f));
-    document.querySelectorAll(`[data-dx-conf="${f}-${cur.ci}"]`).forEach(el => el.remove());
-    const sn = c.sn;
-    closeDx();
-    toast(`${LAB[f]} updated on ${sn} — attributed to Scout Underwood`);
   });
 })();
 
