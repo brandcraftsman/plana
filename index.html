@@ -313,6 +313,10 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .card.open .details{display:block}
 .det-caret{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;
   padding:2px 6px;margin-top:8px;line-height:1;display:inline-flex;align-items:center;gap:6px}
+/* Details toggle: ONE predictable spot in both states — centered at the card bottom,
+   on the serial's row. Only the arrow direction changes on expand. */
+.card:has(> .det-caret){padding-bottom:32px}
+.card > .det-caret{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);margin-top:0}
 .det-caret:hover{color:var(--text)}
 .det-arr{display:inline-block;transition:transform .15s}
 .card.open .det-caret .det-arr{transform:rotate(180deg)}
@@ -329,9 +333,19 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .dx-h{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
   margin-bottom:10px;display:flex;gap:7px;align-items:center}
 .dx-h .conf2{text-transform:none;letter-spacing:0;font-weight:700;color:var(--text)}
-.raci-edit{text-transform:none;letter-spacing:0;font-weight:600;color:var(--brand-orange);
+.raci-edit,.dx-edit{text-transform:none;letter-spacing:0;font-weight:600;color:var(--brand-orange);
   background:none;border:none;cursor:pointer;padding:0;font-size:11px}
-.raci-edit:hover{text-decoration:underline;text-underline-offset:3px}
+.raci-edit:hover,.dx-edit:hover{text-decoration:underline;text-underline-offset:3px}
+/* Possible impact / action pop-up editor (mirrors the RACI editor) */
+#dxScrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:86;display:none}
+#dxScrim.show{display:block}
+#dxOvl{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(560px,94vw);z-index:87;display:none;
+  background:linear-gradient(180deg,var(--raised),#1c1c1f);border:1px solid var(--line-strong);border-radius:14px;
+  box-shadow:0 18px 60px rgba(0,0,0,.65)}
+#dxOvl.show{display:block}
+#dxText{width:100%;min-height:160px;background:var(--bg);border:1px solid var(--line-strong);border-radius:8px;
+  color:var(--text);padding:10px 12px;font:inherit;font-size:12.5px;line-height:1.6;resize:vertical}
+#dxText:focus{outline:none;border-color:var(--brand-orange)}
 .dx-row{display:flex;gap:10px;align-items:center;margin-bottom:8px}
 .dx-l{width:20px;height:20px;border-radius:6px;border:1px solid var(--line-strong);color:var(--muted);
   font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
@@ -1782,6 +1796,20 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
     <button class="btn btn-publish" id="raciSave">Save</button></div>
 </section>
 
+<div id="dxScrim"></div>
+<section id="dxOvl" role="dialog" aria-modal="true" aria-labelledby="dxHead">
+  <div class="raci-head"><b id="dxHead" style="font-size:14px;flex:none">Possible impact</b>
+    <span class="t" id="dxT"></span>
+    <button class="btn" id="dxClose" aria-label="Close" style="min-height:28px">✕</button></div>
+  <div class="raci-body">
+    <textarea id="dxText" aria-label="Edit the generated text"></textarea>
+    <div style="font-size:10px;color:var(--faint);margin-top:8px;line-height:1.5" id="dxHint"></div>
+  </div>
+  <div class="raci-foot"><span class="who" id="dxWho"></span>
+    <button class="btn" id="dxCancel">Cancel</button>
+    <button class="btn btn-publish" id="dxSave">Save</button></div>
+</section>
+
 <section id="moreOvl" role="dialog" aria-modal="true" aria-labelledby="moTitle">
   <div class="mo-head">
     <h5 id="moTitle"></h5>
@@ -2634,6 +2662,15 @@ function raciProv(c, ci){
     ? `<span class="chip prov-ico dx-prov" data-raci="${ci}" title="Human verified — by ${c.raciBy} · ${c.raciTs}" aria-label="RACI human verified by ${c.raciBy}"><svg width="12" height="12" viewBox="0 0 24 24" fill="#3fb950" aria-hidden="true"><path d="M12 12a4.8 4.8 0 1 0 0-9.6 4.8 4.8 0 0 0 0 9.6zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>`
     : `<span class="chip prov-ico dx-prov" data-raci="${ci}" title="AI suggested" aria-label="RACI is AI suggested" style="font-size:12px">✨</span>`;
 }
+/* Possible impact / Possible action provenance — SAME philosophy as RACI:
+   each generated field has its own channel (data-dxp), ✨ until a human
+   adjusts it via the pop-up editor, then the green bust w/ attribution. */
+function dxProv(c, ci, f){
+  const ed = c.dxEdit && c.dxEdit[f];
+  return ed
+    ? `<span class="chip prov-ico" data-dxp="${f}-${ci}" title="Human verified — by ${ed.by} · ${ed.ts}" aria-label="Human verified by ${ed.by}"><svg width="12" height="12" viewBox="0 0 24 24" fill="#3fb950" aria-hidden="true"><path d="M12 12a4.8 4.8 0 1 0 0-9.6 4.8 4.8 0 0 0 0 9.6zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>`
+    : `<span class="chip prov-ico" data-dxp="${f}-${ci}" title="AI suggested" aria-label="AI suggested" style="font-size:12px">✨</span>`;
+}
 const raciNote = c => c.raciBy
   ? `Corrected by ${c.raciBy} · ${c.raciTs} — corrections train future extractions.`
   : `AI-suggested from the transcript — (edit) to correct; corrections train future extractions.`;
@@ -2656,14 +2693,12 @@ function detExtras(c){
   const ci = ALL.indexOf(c), g = detGen(c);
   return `<div class="det-x">
     <div><div class="dx-h">RACI ${raciProv(c, ci)}<button class="raci-edit" data-ins="${ci}">(edit)</button></div>
-      <div data-raci-rows="${ci}">${raciRows(c)}</div>
-      <div class="dx-note" data-raci-note="${ci}">${raciNote(c)}</div></div>
-    <div><div class="dx-h">Possible impact <span class="conf2">(${g.iConf}%)</span></div>
-      <div class="dx-txt">${g.impact}</div></div>
-    <div><div class="dx-h">Possible action <span class="conf2">(${g.aConf}%)</span></div>
-      <div class="dx-txt">${g.action}</div></div>
-  </div>
-  <div class="dx-foot">Possible impact and Possible action are generated by their prompts — tune per category via ⚙</div>`;
+      <div data-raci-rows="${ci}">${raciRows(c)}</div></div>
+    <div><div class="dx-h">Possible impact ${c.dxEdit && c.dxEdit.impact ? "" : `<span class="conf2" data-dx-conf="impact-${ci}">(${g.iConf}%)</span>`}${dxProv(c, ci, "impact")}<button class="dx-edit" data-dxf="impact" data-ins="${ci}">(edit)</button></div>
+      <div class="dx-txt" data-dx-txt="impact-${ci}">${g.impact}</div></div>
+    <div><div class="dx-h">Possible action ${c.dxEdit && c.dxEdit.action ? "" : `<span class="conf2" data-dx-conf="action-${ci}">(${g.aConf}%)</span>`}${dxProv(c, ci, "action")}<button class="dx-edit" data-dxf="action" data-ins="${ci}">(edit)</button></div>
+      <div class="dx-txt" data-dx-txt="action-${ci}">${g.action}</div></div>
+  </div>`;
 }
 function cardHTML(c, i){
   const ci = ALL.indexOf(c);
@@ -2919,6 +2954,8 @@ document.addEventListener("keydown", e => {
     if (guide && guide.classList.contains("show")){ guide.classList.remove("show"); return; }
     const so = document.getElementById("srcOvl");
     if (so && so.classList.contains("show")){ if (typeof closeSource === "function") closeSource(); return; }
+    const dxo = document.getElementById("dxOvl");
+    if (dxo && dxo.classList.contains("show")){ if (typeof window.closeDx === "function") window.closeDx(); return; }
     const ra = document.getElementById("raciOvl");
     if (ra && ra.classList.contains("show")){ if (typeof window.closeRaci === "function") window.closeRaci(); return; }
     const mo = document.getElementById("moreOvl");
@@ -4955,9 +4992,60 @@ document.querySelectorAll("section.feed[data-view] .controls").forEach(ct =>
     // patch every surface holding this record's RACI, in place
     document.querySelectorAll(`[data-raci-rows="${raciIdx}"]`).forEach(el => el.innerHTML = raciRows(c));
     document.querySelectorAll(`.dx-prov[data-raci="${raciIdx}"]`).forEach(el => el.outerHTML = raciProv(c, raciIdx));
-    document.querySelectorAll(`[data-raci-note="${raciIdx}"]`).forEach(el => el.textContent = raciNote(c));
     closeRaci();
     toast(`RACI updated on ${c.sn} — attributed to Scout Underwood`);
+  });
+})();
+
+/* ---------- Possible impact / Possible action pop-up editor ----------
+   Mirrors the RACI editor: ✨ until a human adjusts, then the green bust
+   with attribution. Each field is its own provenance channel (data-dxp) —
+   independent of severity AND of RACI. Human-edited text drops the AI
+   confidence badge (confidence describes the generation, not the person). */
+(() => {
+  const ovl = document.getElementById("dxOvl"), scrim = document.getElementById("dxScrim");
+  const LAB = { impact: "Possible impact", action: "Possible action" };
+  let cur = null;   // { ci, f }
+  function openDx(ci, f){
+    const c = ALL[ci]; if (!c) return;
+    cur = { ci, f };
+    detGen(c);
+    document.getElementById("dxHead").textContent = LAB[f];
+    document.getElementById("dxT").textContent = `${c.sn} · ${c.t}`;
+    document.getElementById("dxText").value = c.dx[f];
+    const ed = c.dxEdit && c.dxEdit[f];
+    document.getElementById("dxWho").textContent = ed
+      ? `Last edited by ${ed.by} · ${ed.ts}`
+      : `AI-generated from the record's sources · your edit will be attributed to Scout Underwood`;
+    document.getElementById("dxHint").textContent =
+      `Corrections train future ${LAB[f].toLowerCase()} generations for this category — tune the underlying prompt via ⚙.`;
+    ovl.classList.add("show"); scrim.classList.add("show");
+    document.getElementById("dxText").focus();
+  }
+  function closeDx(){ cur = null; ovl.classList.remove("show"); scrim.classList.remove("show"); }
+  window.closeDx = closeDx;
+  window.dxEditorOpen = () => ovl.classList.contains("show");
+  document.addEventListener("click", e => {
+    const btn = e.target.closest(".dx-edit");
+    if (btn) openDx(+btn.dataset.ins, btn.dataset.dxf);
+  });
+  document.getElementById("dxClose").addEventListener("click", closeDx);
+  document.getElementById("dxCancel").addEventListener("click", closeDx);
+  scrim.addEventListener("click", closeDx);
+  document.getElementById("dxSave").addEventListener("click", () => {
+    if (!cur) return;
+    const c = ALL[cur.ci], f = cur.f, text = document.getElementById("dxText").value.trim();
+    if (!text){ toast("Nothing to save — the field can't be empty"); return; }
+    c.dx[f] = text;
+    c.dxEdit = c.dxEdit || {};
+    c.dxEdit[f] = { by: "Scout Underwood", ts: nowStamp() };
+    // patch every surface holding this field, in place
+    document.querySelectorAll(`[data-dx-txt="${f}-${cur.ci}"]`).forEach(el => el.textContent = text);
+    document.querySelectorAll(`[data-dxp="${f}-${cur.ci}"]`).forEach(el => el.outerHTML = dxProv(c, cur.ci, f));
+    document.querySelectorAll(`[data-dx-conf="${f}-${cur.ci}"]`).forEach(el => el.remove());
+    const sn = c.sn;
+    closeDx();
+    toast(`${LAB[f]} updated on ${sn} — attributed to Scout Underwood`);
   });
 })();
 
