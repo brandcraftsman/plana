@@ -60,6 +60,13 @@ button{cursor:pointer;background:none;border:none}
 .app{transition:grid-template-columns .22s ease}
 .app.side-collapsed{grid-template-columns:0 1fr}
 .app.side-collapsed .sidebar{overflow:hidden;border-right:none;min-width:0;white-space:nowrap}
+/* narrow viewports: expanded sidebar overlays content instead of squeezing it */
+@media(max-width:700px){
+  .app,.app.side-collapsed{grid-template-columns:1fr}   /* sidebar is fixed (out of flow) — main takes the whole row */
+  .sidebar{position:fixed;left:0;top:0;bottom:0;width:min(280px,84vw);z-index:80;height:100%;
+    box-shadow:24px 0 60px rgba(0,0,0,.45);overflow-y:auto}
+  .app.side-collapsed .sidebar{display:none}
+}
 #sideExpand{display:none;width:34px;height:34px;padding:0;justify-content:center;font-size:14px;flex-shrink:0}
 .app.side-collapsed #sideExpand{display:inline-flex}
 .ws img{display:block;height:30px;width:auto;margin-left:-4px}
@@ -112,7 +119,7 @@ a.side-item.ext{text-decoration:none}
 .btn-danger-ghost:hover{border-color:var(--brand-red);color:#ff6b69}
 
 /* ============ Header / chrome (collapsed to 3 slim rows) ============ */
-.main{min-width:0}
+.main{min-width:0;padding-right:52px}   /* clears the fixed 52px Company strip everywhere */
 .topbar{display:flex;align-items:center;gap:14px;padding:10px 24px;border-bottom:1px solid var(--line);
   background:var(--bg);position:sticky;top:0;z-index:40}
 .crumbs{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted);white-space:nowrap}
@@ -152,6 +159,11 @@ h1{font-size:15px;font-weight:800;letter-spacing:.01em;white-space:nowrap}
 /* category tabs — sticky, with counts */
 .cats{display:flex;gap:2px;align-items:center;padding:8px 24px;border-bottom:1px solid var(--line);
   background:var(--bg);position:sticky;top:106px;z-index:38;overflow-x:auto}
+/* scrollable tab rows: thin, quiet scrollbars (default Windows bars are heavy chrome) */
+.cats,.src-tabs,.syn-tabs,.oc-tree{scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}
+.cats::-webkit-scrollbar,.src-tabs::-webkit-scrollbar,.syn-tabs::-webkit-scrollbar,.oc-tree::-webkit-scrollbar{height:7px}
+.cats::-webkit-scrollbar-thumb,.src-tabs::-webkit-scrollbar-thumb,.syn-tabs::-webkit-scrollbar-thumb,.oc-tree::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:4px}
+.cats::-webkit-scrollbar-track,.src-tabs::-webkit-scrollbar-track,.syn-tabs::-webkit-scrollbar-track,.oc-tree::-webkit-scrollbar-track{background:transparent}
 .cat{display:flex;align-items:center;gap:7px;padding:7px 12px;min-height:34px;font-size:13.5px;
   color:var(--muted);border-radius:7px;white-space:nowrap}
 .cat:hover{color:var(--text);background:var(--raised)}
@@ -226,7 +238,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
   border-radius:10px 0 0 10px}
 .card.sev-critical::before{background:linear-gradient(180deg,var(--brand-red),var(--brand-orange))}
 .card.sev-high::before{background:var(--brand-orange)}
-.card-top{display:flex;align-items:flex-start;gap:12px}
+.card-top{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
 .card h4{font-size:30px;font-weight:700;line-height:1.2;flex:1;letter-spacing:-.01em}
 .card h4 button.details-toggle{font:inherit;font-weight:700;text-align:left;color:var(--text)}
 .card h4 button.details-toggle:hover{text-decoration:underline;text-underline-offset:3px}
@@ -294,7 +306,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .menu button.danger{color:#ff6b69}
 .menu button[aria-checked="true"]::before{content:"✓ ";font-weight:700}
 /* Quad B severity panel */
-.menu.quad{min-width:330px;padding:14px;cursor:default}
+.menu.quad{min-width:min(330px,calc(100vw - 24px));padding:14px;cursor:default}
 #insBody .menu.quad,#moreOvl .menu.quad{left:0;right:auto}   /* open rightward inside overlays, not off their left edge */
 .quad-title{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
 .quad-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -331,6 +343,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 /* expanded card: RACI · Impact · Leadership action */
 .det-x{display:grid;grid-template-columns:1fr 1.45fr 1.45fr;gap:28px;margin-top:14px;
   border-top:1px solid var(--line);padding-top:14px}
+@media(max-width:660px){.det-x{grid-template-columns:1fr;gap:16px}}
 .dx-h{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
   margin-bottom:10px;display:flex;gap:7px;align-items:center}
 .dx-h .conf2{text-transform:none;letter-spacing:0;font-weight:700;color:var(--text)}
@@ -581,7 +594,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .dash-wrap.rail-open .ff-rail{display:block}
 .dash-wrap.rail-open #railToggle{display:none}
 .rail-collapse{width:28px;height:28px;min-height:28px;padding:0;justify-content:center}
-.dash-wrap{display:flex;gap:26px;max-width:1420px;margin:0 auto;padding:18px 76px 64px 24px;align-items:flex-start}   /* right padding clears the 52px Company strip */
+.dash-wrap{display:flex;gap:26px;max-width:1420px;margin:0 auto;padding:18px 24px 64px;align-items:flex-start}   /* .main now clears the Company strip globally */
 .dash-wrap .ff-rail{flex:0 0 264px;top:150px}
 .dash-col{flex:1;min-width:0}
 .dash-col section.feed{max-width:none;margin:0;padding:0}
@@ -611,6 +624,13 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 #askViewFab:hover{filter:brightness(1.1)}
 .dash-wrap.chat-open #askViewFab{display:none}   /* the open panel's ✕ is the close affordance */
 #jumpTop.fab-neighbor{bottom:84px}   /* stack above the FAB on Insights */
+/* narrow viewports: the Ask-this-view panel and filter rail overlay the feed instead of squeezing it */
+@media(max-width:900px){
+  .dash-wrap.chat-open #insChat{position:fixed;top:114px;bottom:14px;right:64px;left:auto;
+    width:min(380px,calc(100vw - 88px));z-index:60;box-shadow:0 24px 70px rgba(0,0,0,.6)}
+  .dash-wrap.rail-open .ff-rail{position:fixed;left:12px;top:114px;bottom:12px;width:min(300px,86vw);
+    max-height:none;z-index:60;background:var(--surface);box-shadow:0 24px 70px rgba(0,0,0,.6);overflow-y:auto}
+}
 
 /* ============ Company rail (global right strip + drawer) ============ */
 #coStrip{position:fixed;top:0;right:0;bottom:0;width:52px;z-index:70;background:var(--surface);
@@ -661,7 +681,6 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .co-ext{font-size:11px;color:var(--faint);flex:none}
 .co-note{color:var(--faint);font-size:10.5px;text-align:center;margin-top:14px;line-height:1.6}
 /* global furniture clears the strip */
-.topbar{padding-right:76px}
 #jumpTop{right:74px}
 #askViewFab{right:74px}
 .ff-rail{background:rgba(255,255,255,.015);border:1px solid var(--line);border-radius:10px;
@@ -856,11 +875,11 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
   background:linear-gradient(180deg,#1e1e21 0%,var(--surface) 25%,#161618 100%);
   border:1px solid var(--line-strong);border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.7);overflow:hidden}
 #synOvl.show{display:flex}
-.syn-head{display:flex;align-items:center;gap:12px;padding:14px 22px;border-bottom:1px solid var(--line)}
+.syn-head{display:flex;align-items:center;gap:12px;row-gap:8px;flex-wrap:wrap;padding:14px 22px;border-bottom:1px solid var(--line)}
 #synName{background:none;border:none;border-bottom:1px dashed var(--line-strong);color:var(--text);
   font-size:15px;font-weight:700;font-family:inherit;width:160px;padding:2px 0}
 #synName:focus{outline:none;border-bottom-color:var(--brand-orange)}
-.syn-tabs{display:flex;gap:2px;padding:8px 22px 0;border-bottom:1px solid var(--line)}
+.syn-tabs{display:flex;gap:2px;padding:8px 22px 0;border-bottom:1px solid var(--line);overflow-x:auto}
 .syn-tab{background:none;border:none;cursor:pointer;padding:9px 14px;font-size:13.5px;font-family:inherit;
   position:relative;color:var(--muted)}
 .syn-tab:hover{color:var(--text)}
@@ -917,7 +936,8 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .oc-pill.editing{color:#fff;border:none;background:linear-gradient(120deg,var(--brand-red),var(--brand-orange))}
 .oc-band-label{font-size:9.5px;font-weight:800;letter-spacing:.09em;color:var(--faint);text-transform:uppercase;margin:0 0 10px}
 .oc-gov{display:flex;gap:12px;justify-content:center;margin-bottom:4px}
-.oc-tree ul{display:flex;justify-content:center;padding-top:24px;position:relative;margin:0}
+.oc-tree{overflow-x:auto;padding-bottom:10px}   /* tree pans inside its own container — never the page */
+.oc-tree ul{display:flex;justify-content:center;padding-top:24px;position:relative;margin:0;min-width:max-content}
 .oc-tree li{list-style:none;text-align:center;position:relative;padding:24px 9px 0}
 .oc-tree li::before,.oc-tree li::after{content:'';position:absolute;top:0;right:50%;border-top:1px solid var(--line-strong);width:50%;height:24px}
 .oc-tree li::after{right:auto;left:50%;border-left:1px solid var(--line-strong)}
@@ -989,7 +1009,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .syn-src-trig .lb{font-size:9px;font-weight:800;letter-spacing:.08em;color:var(--faint)}
 .syn-src-trig b{font-size:12px;color:var(--text)}
 .syn-src-trig .car{font-size:9px;color:var(--brand-orange)}
-.syn-src-dd{position:fixed;width:360px;z-index:95;background:var(--raised);border:1px solid var(--line-strong);
+.syn-src-dd{position:fixed;width:min(360px,calc(100vw - 24px));z-index:95;background:var(--raised);border:1px solid var(--line-strong);
   border-radius:12px;padding:6px;box-shadow:0 18px 60px rgba(0,0,0,.65)}
 .ssd-row{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;padding:8px 12px;
   cursor:pointer;font:inherit;text-align:left;border-radius:7px}
@@ -1073,7 +1093,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 @media (prefers-reduced-motion: reduce){.chat-empty .chat-mark{animation:none}}
 .chat-empty h2{font-size:30px;font-weight:700;letter-spacing:-.02em;text-align:center;margin-top:14px}
 .chat-tag{font-size:14px;color:var(--muted);margin-top:8px}
-.chat-hero{width:min(760px,92vw);background:linear-gradient(180deg,var(--raised),#1c1c1f);
+.chat-hero{width:min(760px,100%);background:linear-gradient(180deg,var(--raised),#1c1c1f);
   border:1px solid var(--line-strong);border-radius:18px;padding:18px 18px 12px;
   box-shadow:0 18px 50px rgba(0,0,0,.4);margin-top:26px}
 .chat-hero input{width:100%;min-height:52px;background:none;border:none;color:var(--text);
@@ -1090,7 +1110,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .chat-sug{border-radius:99px;font-size:12.5px;color:var(--muted)}
 .chat-sug:hover{color:var(--text);border-color:var(--brand-orange)}
 .chat-foot{font-size:11px;color:var(--faint);margin-top:26px}
-.chat-convo{width:min(800px,94vw);margin:0 auto;display:flex;flex-direction:column;gap:18px;
+.chat-convo{width:min(800px,100%);margin:0 auto;display:flex;flex-direction:column;gap:18px;
   padding:10px 0 150px}
 .chat-head{display:flex;align-items:center;gap:12px}
 .chat-head h2{font-size:15px;font-weight:800}
@@ -1113,7 +1133,8 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .chat-acts{display:flex;gap:10px;margin-top:10px}
 .chat-acts button{background:none;border:none;color:var(--faint);cursor:pointer;font-size:12px;padding:0}
 .chat-acts button:hover{color:var(--text)}
-.chat-pill{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;width:min(800px,94vw);
+.chat-pill{position:fixed;left:calc((100vw - 52px)/2);transform:translateX(-50%);bottom:24px;
+  width:min(800px,calc(100vw - 76px));   /* centered in the content area, clear of the Company strip */
   background:linear-gradient(180deg,var(--raised),#1c1c1f);border:1px solid var(--line-strong);
   border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;
   box-shadow:0 18px 50px rgba(0,0,0,.55);z-index:45}
@@ -1145,7 +1166,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 #serPeek .menu.quad{right:0;left:auto}
 
 /* ============ Scope builder ============ */
-.scb-open{gap:7px;font-size:12px;color:var(--muted);max-width:340px}
+.scb-open{gap:7px;font-size:12px;color:var(--muted);max-width:340px;min-width:0;flex-shrink:1}
 .scb-open:hover{color:var(--brand-orange);border-color:var(--brand-orange)}
 .scb-open .scb-sum{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .scb-open.on{color:var(--brand-orange);border-color:var(--brand-orange)}
@@ -1205,7 +1226,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 #srcOvl.show{display:flex}
 .src-head{display:flex;align-items:flex-start;gap:12px;padding:16px 22px 12px}
 .src-head h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
-.src-tabs{display:flex;gap:2px;align-items:center;padding:0 22px;border-bottom:1px solid var(--line)}
+.src-tabs{display:flex;gap:2px;align-items:center;padding:0 22px;border-bottom:1px solid var(--line);overflow-x:auto}
 .src-orig{margin-left:auto;font-size:13px;font-weight:700;color:var(--brand-orange);text-decoration:none;
   padding:9px 4px;display:inline-flex;gap:5px;align-items:center}
 .src-orig:hover{text-decoration:underline;text-underline-offset:3px}
@@ -1562,7 +1583,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 
     <!-- ============ Org Chart page (Discovery) — roster from the team slide ============ -->
     <section id="orgPage" hidden aria-label="Org Chart">
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap;row-gap:8px">
         <h1 style="font-size:24px;font-weight:800;letter-spacing:-.02em">Org Chart</h1>
         <span class="oc-pill" id="ocAccess">EXECUTIVE ACCESS — EDITABLE</span>
         <span style="flex:1"></span>
@@ -2881,6 +2902,15 @@ document.addEventListener("click", e => {
     const m = document.getElementById(trigger.dataset.menu);
     const open = m.classList.toggle("open");
     trigger.setAttribute("aria-expanded", open);
+    // keep the menu inside the viewport (severity quad can otherwise clip off-screen)
+    m.style.transform = "";
+    if (open){
+      const mr = m.getBoundingClientRect();
+      let dx = 0;
+      if (mr.left < 8) dx = 8 - mr.left;
+      else if (mr.right > innerWidth - 8) dx = (innerWidth - 8) - mr.right;
+      if (dx) m.style.transform = `translateX(${Math.round(dx)}px)`;
+    }
   }
   // Quad B — axis selection updates chip, card tier, and group
   const qb = e.target.closest(".qbtn");
@@ -3696,7 +3726,8 @@ function closeSyn(){
       const r = t.getBoundingClientRect();
       dd = document.createElement("div");
       dd.className = "syn-src-dd";
-      dd.style.left = r.left + "px";
+      const ddW = Math.min(360, innerWidth - 24);
+      dd.style.left = Math.max(12, Math.min(r.left, innerWidth - ddW - 12)) + "px";
       dd.style.top = (r.bottom + 6) + "px";
       dd.innerHTML = cartSrcs().map(s => `
         <button class="ssd-row" data-es-src="${s.id}" title="Open source — raw content, summary, attendees, metadata">
@@ -4682,7 +4713,7 @@ window.addEventListener("scroll", () => {
 jumpTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 // quiet filters — highlight when non-default + shrink-to-fit current value
 const qMeasure = document.createElement("span");
-qMeasure.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;font-size:12.5px";
+qMeasure.style.cssText = "position:absolute;top:0;left:-9999px;visibility:hidden;white-space:nowrap;font-size:12.5px";
 document.body.appendChild(qMeasure);
 function fitQuiet(s){
   qMeasure.style.fontWeight = s.classList.contains("changed") ? "600" : "400";
