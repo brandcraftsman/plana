@@ -852,6 +852,42 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 #legItems[hidden]{display:none}
 #legClose{background:none;border:none;color:var(--faint);cursor:pointer;font-size:11px;padding:2px 4px}
 #legClose:hover{color:var(--text)}
+/* mobile calendar — day view with week strip (Option B, approved Aug 11) */
+.wkstrip{display:none}
+@media(max-width:700px){
+  .feed-head{flex-wrap:wrap}
+  .feed-head h2{order:0}
+  #legToggle{order:1;margin-left:auto}
+  .feed-head .counts{order:2;width:100%}
+  .feed-head > div{order:3;width:100%;margin-left:0 !important}
+  .cal-legend{margin:2px 0 10px;min-height:0}
+  .wkstrip{display:flex;gap:4px;margin:2px 0 14px;position:sticky;top:106px;z-index:36;background:var(--bg);padding:6px 0 10px}
+  .wkstrip button{flex:1;min-width:0;background:none;border:1px solid transparent;border-radius:9px;
+    padding:6px 0 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
+  .wkstrip .dw{font-size:9.5px;font-weight:700;letter-spacing:.06em;color:var(--faint)}
+  .wkstrip .dn{font-size:14px;font-weight:700;color:var(--muted)}
+  .wkstrip .dots{display:flex;gap:2px;min-height:5px}
+  .wkstrip .dots i{width:4px;height:4px;border-radius:50%;background:var(--line-strong)}
+  .wkstrip button.on{border-color:var(--brand-orange);background:rgba(229,98,3,.08)}
+  .wkstrip button.on .dw,.wkstrip button.on .dn{color:var(--brand-orange)}
+  .wkstrip button.on .dots i{background:var(--brand-orange)}
+  .wkstrip button:disabled{opacity:.4;cursor:default}
+  #calGrid.cal-grid{display:block}   /* id beats the later base display:grid rule */
+  .cal-grid > div{display:none;min-width:0}
+  .cal-grid > div.day-on{display:block;opacity:1 !important}
+  .cal-grid > div.day-on .cal-dayhead{display:none}   /* the strip replaces the column header */
+  .cal-mtg,.cal-eml{margin-bottom:12px}
+  .cal-mtg .ttl{font-size:14.5px}
+  .cal-eml .ttl{font-size:13px}
+  /* legend becomes a full-screen sheet */
+  #legItems:not([hidden]){position:fixed;inset:0;z-index:120;background:var(--bg);flex-direction:column;
+    align-items:flex-start;gap:20px;padding:64px 26px 26px;font-size:13.5px;overflow-y:auto}
+  #legItems:not([hidden])::before{content:"Legend";position:absolute;top:20px;left:26px;
+    font-size:17px;font-weight:700;color:var(--text)}
+  #legItems:not([hidden]) .vr{display:none}
+  #legItems:not([hidden]) #legClose{position:absolute;top:14px;right:18px;font-size:13px;min-height:32px;
+    padding:6px 14px;border:1px solid var(--line-strong);border-radius:8px;color:var(--text)}
+}
 .cap-chip{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.04em;border-radius:6px;padding:1px 7px}
 .cap-chip.cap-ok{background:#fff;color:#000}
 .cap-chip.cap-run{background:var(--brand-orange);color:#000}
@@ -1540,11 +1576,11 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
           <span class="qf"><select class="quiet" aria-label="Calendar view" data-default="Week">
             <option>Week</option><option>Month</option><option>Day</option></select></span>
         </div>
-      </div>
-      <div class="cal-legend">
         <button id="legToggle" title="Legend" aria-expanded="false" aria-controls="legItems">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="8" r=".5" fill="currentColor"/></svg>
         </button>
+      </div>
+      <div class="cal-legend">
         <div id="legItems" hidden>
           <span><span style="font-size:16px">🗓</span> meeting</span>
           <span><span style="color:var(--muted);font-size:16px">✉</span> email thread</span>
@@ -1552,12 +1588,11 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
           <span><span class="cap-chip cap-ok">PROCESSED</span> extracted &amp; searchable</span>
           <span><span class="cap-chip cap-run">PROCESSING</span> ingestion running</span>
           <span><span class="cap-chip cap-no">NO CAPTURE</span> add assets</span>
-          <span class="vr"></span>
-          <span style="color:var(--muted)">☑ select sources to build a cart</span>
           <button id="legClose" aria-label="Hide legend" title="Hide legend">✕</button>
         </div>
       </div>
       <div id="calSaved" class="cal-saved"></div>
+      <div id="wkStrip" class="wkstrip" role="tablist" aria-label="Day"></div>
       <div class="cal-grid" id="calGrid"></div>
     </section>
     <!-- ================= Chat ================= -->
@@ -3704,11 +3739,21 @@ let cart = new Set();
 const SAVED_CARTS = [];
 let cartsOpen = false;
 
+let calDay = "Fri 31";   // mobile day view: defaults to the in-world current day
 function calRender(){
   const days = ["Sun 26","Mon 27","Tue 28","Wed 29","Thu 30","Fri 31","Sat 1"];
+  // week strip (visible ≤700px): day letters · date · activity dots; tap to switch day
+  document.getElementById("wkStrip").innerHTML = days.map(d => {
+    const n = SRC.filter(s => s.day === d).length;
+    const [dw, dn] = d.split(" ");
+    return `<button role="tab" data-day="${d}" class="${d === calDay ? "on" : ""}" ${n ? "" : "disabled"}
+      aria-selected="${d === calDay}" aria-label="${d} — ${n} engagement${n === 1 ? "" : "s"}">
+      <span class="dw">${dw.toUpperCase()}</span><span class="dn">${dn}</span>
+      <span class="dots">${"<i></i>".repeat(Math.min(n, 3))}</span></button>`;
+  }).join("");
   document.getElementById("calGrid").innerHTML = days.map(d => {
     const items = SRC.filter(s => s.day === d);
-    return `<div style="min-width:0;${items.length ? "" : "opacity:.5"}">
+    return `<div class="${d === calDay ? "day-on" : ""}" style="min-width:0;${items.length ? "" : "opacity:.5"}">
       <div class="cal-dayhead ${items.length ? "" : "empty-day"}">${d}
         ${items.length ? `<span class="chip outline" style="font-size:9.5px;padding:0 6px">${items.length}</span>` : ""}</div>
       ${items.length ? items.map(s => {
@@ -3773,6 +3818,10 @@ document.getElementById("calGrid").addEventListener("click", e => {
   calRender();
 });
 document.getElementById("cartClear").addEventListener("click", () => { cart.clear(); calRender(); });
+document.getElementById("wkStrip").addEventListener("click", e => {
+  const d = e.target.closest("[data-day]");
+  if (d && !d.disabled && d.dataset.day !== calDay){ calDay = d.dataset.day; calRender(); }
+});
 function saveCart(){
   if (!cart.size) return;
   let name = (document.getElementById("synName").value || "").trim();
