@@ -839,8 +839,6 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .cal-mtg .body{padding:8px 10px 10px}
 .cal-mtg .ttl{font-size:13px;font-weight:700;line-height:1.3}
 .cal-stats{display:flex;gap:9px;margin-top:7px;font-size:10.5px;color:var(--muted);flex-wrap:wrap;align-items:center}
-.cal-add{background:none;border:1px dashed var(--line-strong);color:var(--brand-orange);border-radius:5px;
-  font-size:10px;padding:1px 7px;cursor:pointer}
 .cal-eml{display:flex;gap:8px;align-items:flex-start;padding:7px 8px;border-radius:7px;position:relative;
   border:1px dotted var(--faint);background:rgba(255,255,255,.015);margin-bottom:16px;cursor:pointer}
 .cal-eml .glyph{font-size:24px;color:var(--muted);flex-shrink:0;line-height:1}
@@ -1680,6 +1678,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
     <button class="syn-tab" role="tab" aria-selected="false" data-st="sig">Signals</button>
     <button class="syn-tab" role="tab" aria-selected="false" data-st="att">Attendees</button>
     <button class="syn-tab" role="tab" aria-selected="false" data-st="meta">Metadata</button>
+    <button class="syn-tab" role="tab" aria-selected="false" data-st="asset">＋ Add asset</button>
     <a href="#" id="srcOrig" class="src-orig">Original transcripts <span style="font-size:11px">↗</span></a>
   </div>
   <div class="src-body" id="srcBody"></div>
@@ -3571,8 +3570,7 @@ function calRender(){
         const sel = cart.has(s.id), cap = CAP[s.st];
         const stats = `<div class="cal-stats">
           ${s.sn.length ? `<span>⚡ ${s.sn.length} extraction${s.sn.length > 1 ? "s" : ""}</span>` : ""}
-          ${s.as.length ? `<span>📎 ${s.as.length}</span>` : ""}
-          ${s.st === "no" ? `<button class="cal-add">+ add what you have</button>` : ""}</div>`;
+          ${s.as.length ? `<span>📎 ${s.as.length}</span>` : ""}</div>`;
         return s.kind === "mtg" ? `
           <article class="card cal-mtg ${sel ? "sel" : ""}" data-src="${s.id}">
             <button class="cal-open" title="Open source — raw content, summary, attendees, metadata" aria-label="Open source for ${s.t}">↗</button>
@@ -3615,7 +3613,6 @@ function cartBarRender(){
   document.getElementById("cartNames").textContent = names.slice(0, 2).join(" · ") + (names.length > 2 ? ` +${names.length - 2}` : "");
 }
 document.getElementById("calGrid").addEventListener("click", e => {
-  if (e.target.closest(".cal-add")){ toast("Capture companion opens — drop files, links, or a quick note"); return; }
   const openB = e.target.closest(".cal-open");
   if (openB){
     const el2 = openB.closest("[data-src]");
@@ -3852,8 +3849,7 @@ function synRenderTab(){
         </div>
         ${s.tx.length ? s.tx.map(l => `<div class="tx-line"><span class="tc">${l[0]}</span><span class="sp">${l[1]}</span><span class="tx">${l[2]}</span></div>`).join("") +
           `<div style="font-size:11px;color:var(--faint);font-style:italic;margin-top:6px">Excerpt — full ${s.kind === "mtg" ? "transcript" : "thread"} opens from the source system.</div>`
-          : `<div class="cal-empty" style="padding:12px">No transcript — ${s.st === "up" ? "meeting hasn't happened yet" : "nothing was captured"}.
-             ${s.st === "no" ? `<button class="cal-add" style="margin-left:8px">+ add what you have</button>` : ""}</div>`}
+          : `<div class="cal-empty" style="padding:12px">No transcript — ${s.st === "up" ? "meeting hasn't happened yet" : "nothing was captured"}.</div>`}
       </div>`).join("");
   }
   if (synTab === "assets"){
@@ -4002,7 +3998,6 @@ document.getElementById("synContent").addEventListener("click", e => {
   const d = e.target.closest(".slide-dot"); if (d){ synSlideI = +d.dataset.sl; renderSlide(); }
   const mini = e.target.closest(".syn-mini");
   if (mini && !e.target.closest(".chip.sev, .menu, .qbtn")) openInsight(+mini.dataset.ins, mini);
-  if (e.target.closest(".cal-add")) toast("Capture companion opens — drop files, links, or a quick note");
   const av = e.target.closest(".as-view button");
   if (av){ synAsView = av.dataset.av; synRenderTab(); }
   const to = e.target.closest(".tx-orig");
@@ -4057,7 +4052,7 @@ const FULLNAME = { Scout:"Scout Underwood", Vu:"Vu Pham", Duc:"Duc Huy Tran", Sa
   Mitch:"Mitch Amos", Jeremy:"Jeremy Thomas", "External guest":"External guest", "(external)":"External sender" };
 const MEET_ICO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAhCAYAAACr8emlAAAFZ0lEQVR42sWYX4xcdRXHP+f8fneY7uy/jrVgSv8oaEhN1GoFmphOlyLW8iR0G5uQ2MYXTNDIiw+S2O6DJoQXHlUwbWJMaheIGJUuJE7HF+OTaFICBHD5UxFkW7rTnb079/5+x4eZ1i27Mzu77eiZTO4kc+fmc+4553u+d4QOYZWKl1ot/8dte3dtfujF37svzIxwSQQ14VpCiBRokHKCi3yfsxgTmIAtd7p2g/vn3Tt2jpTnn7VM1xMR4NrgAAwlpUSZhxjluzJBpIpbksapccdR1HeCe2v3zi8PqDyPMtqMMfoOyawxAgsoxn3A4+whLkpAEIyDkwHALwf3ZmXHzhGvpw1GGyGE9YjjekYL4b8JH2sfT407ZDIwPu74dvp1svhXvxzcsE+mTKSchjyoJNcXrlNUK56xyZwTd21i9NKvSJIK9WzaXwU39sUvDaufEpHyfAhBnTj7H7Ad/Ox2z1itycm772SdP0miW5lJcxLd5hfDjbhkCmjBibgOg3X9GtFQzORpkSaT+x6gIE8gFJnLAiqe3MxL7U/52b17d5Rk/vkgbTj1LgCIYeIISAQixmqYFek8WFHAKU1ETJ6558cU3Q9JA4QYkXbPC+Ltc3ZHyN75rVMtN0IMAyLOzFqComALjoFCUxlCUcCtKCOt32bA/PLClJlIgtHElTi175c2JA9wsRkwUUSuSsp/b/fvXhgiG2oEi17s6p6zGMUlekfj9PED9Z/+OcwV1LmFuKLOCRFjF0WOkBIX38nchCQxfX0m4Zv/+sztsklu52IzgLjlkpFNj5rlhqks/ToauS/hz11gnB/JUy1VynvT4ykOMMwks+QI3oBggk+M6oclDr20hfcKQya3ro8WO9fFDzWbJh02hGG4Bc8GSYderOJPTD/iD2+bWImwlUXG0OV+vdy6PjGefLfMd16/mTwabiCXYN2H0Udx0rlaBuJoUowyRl45eowjR7oDWhVkjNymWtshN/AKIvCDNz7BY2/fiPiIaiT0sNZ9P2UkmuCdMRuVb726hd98MIpLcqIJsUfP0TfAeZR1SeS1tMCBV7bxt/oAPsnJV2mG+ga4Lon85cIg9/59KzOZXxNcR7t1LbHnTAWAQ+du466XbmEmU5yPa4LrC2BtT+t4svRpGps3It4IwdbsJLVfJdaQIsNF7JM3wg0eQlwTZN8AI2B5hGICn9oIpSLkq4fUfsoMIhAMnMK2DbC+1IbsndJbFxU3wAzMZUq14qenT3iqlZWVoVqB8+2lL+2LAGwuQ8HB+/XeAb06um0S56FQL9YZq+VvUetlEbfOefqr9SXljAY3jULi4Z3zEO3yFuxYSX9+9sPOgBZV54pcKj93L89+pSxpWc2lK7gZUcQikV1kETC9qvHyCBsGQRXm5oWCCmkernjAjwK+98H7XXooKguDsOXsYQaTw7EASKG32mQR0sBH/R0CNIPx8ZJQSl4mDQsMFz7PbJYjSxeHly4lRgCv2EKM1LNIM6NlrnsyXEvM56LRjDhxOPc2A3KARv5rhpN91LMcw7HI+qnR7XWlvxURj7CKt+iKzhtK7D89yzdO72cuPE4p8e2hipeHoL8ys/JdDhjCqXHlvuceppE9SKKBglOiZSjyfwYEBGOy/Vx8/9TPWMi/BrzLx4oJZk2l38+WvcT27cZYLada8Rx84Y/U011k8SeY7veICNFit0fE619ZMWTR/zHHgAlgrJZjRxWZeBN4pKX6MfyBdeX9pBdsVTvo2srqKDjhUvYMAGfOaHt9g0xEjqLsqSj/3mjCg69txPgF4u8hNj2YXAGVCM1B2PFz2Fptfe5ZZjqsJsXw2iCLx4nDD3N20pig40X/A3kAXyHxl9KJAAAAAElFTkSuQmCC";
 const srcOvl = document.getElementById("srcOvl"), srcScrim = document.getElementById("srcScrim");
-let srcCur = null, srcTab = "raw";
+let srcCur = null, srcTab = "raw", srcAsView = "list";
 function sourceFor(c){
   const s = SRC.find(x => x.sn.includes(c.sn));
   if (s) return s;
@@ -4171,6 +4166,40 @@ function srcRenderTab(){
       <div class="k">Workspace</div><div class="v">93e9fa60-e607-449c-83d7-f5c033c4a930</div>
     </div>`;
   }
+  if (srcTab === "asset"){
+    /* mirrors the synthesis Assets capture pattern — one source instead of the cart */
+    const asKind = a => /\.pdf/i.test(a.n) ? "pdf"
+      : /photo|\.jpe?g|\.png|image/i.test(a.n) ? "img"
+      : /\.docx?|\.xlsx?|\.pptx?/i.test(a.n) ? "doc"
+      : a.ic === "🔗" ? "link" : "note";
+    const EXT = { pdf: "PDF", img: "JPG", doc: "DOC", link: "LINK", note: "NOTE" };
+    const thumb = a => {
+      const k = asKind(a);
+      if (k === "pdf") return `<div class="as-thumb pdf"><div class="page"><i style="width:70%"></i><i style="width:90%"></i><i style="width:80%"></i><i style="width:55%"></i><i style="width:85%"></i></div><span class="as-ext">PDF</span></div>`;
+      if (k === "img") return `<div class="as-thumb img"><span style="font-size:26px">🖼</span><span class="as-ext">JPG</span></div>`;
+      return `<div class="as-thumb"><span style="font-size:26px">${a.ic}</span><span class="as-ext">${EXT[k]}</span></div>`;
+    };
+    const listHTML = s.as.map(a => `<div class="as-row"><span class="ic">${a.ic}</span>
+      <span class="nm">${a.n}</span><span class="by">added by ${a.by}</span>
+      <button class="btn" style="min-height:26px;font-size:11.5px">Open</button></div>`).join("");
+    const galHTML = `<div class="as-gal">${s.as.map(a => `
+      <div class="as-tile" title="Open ${a.n}" role="button" tabindex="0">${thumb(a)}
+        <div class="nm2">${a.n}</div><div class="by2">${a.by}</div></div>`).join("")}</div>`;
+    el.innerHTML = `
+      <div class="as-add">＋ Add an asset to this source —
+        <button class="btn" style="min-height:28px">📄 File</button>
+        <button class="btn" style="min-height:28px">🔗 Link</button>
+        <button class="btn" style="min-height:28px">📝 Quick note</button>
+        <span class="as-view" role="group" aria-label="Assets view">
+          <button data-av="list" aria-pressed="${srcAsView === "list"}">☰ List</button>
+          <button data-av="gal" aria-pressed="${srcAsView === "gal"}">▦ Gallery</button></span></div>
+      <div class="tx-src">
+        <div class="tx-head"><span style="font-size:16px">${s.kind === "mtg" ? "🗓" : "✉"}</span>
+          <b style="font-size:14px">${s.t}</b><span style="font-size:11.5px;color:var(--faint)">${s.as.length} asset${s.as.length === 1 ? "" : "s"}</span></div>
+        ${s.as.length ? (srcAsView === "gal" ? galHTML : listHTML)
+          : `<div class="cal-empty" style="padding:12px">No assets yet — anyone invited can add files, links, or notes.</div>`}
+      </div>`;
+  }
 }
 document.querySelector(".src-tabs").addEventListener("click", e => {
   const t = e.target.closest(".syn-tab");
@@ -4185,6 +4214,9 @@ document.getElementById("srcOrig").addEventListener("click", e => {
 document.getElementById("srcClose").addEventListener("click", closeSource);
 srcScrim.addEventListener("click", closeSource);
 document.getElementById("srcBody").addEventListener("click", e => {
+  const av = e.target.closest(".as-view button");
+  if (av){ srcAsView = av.dataset.av; srcRenderTab(); return; }
+  if (e.target.closest(".as-add .btn")){ toast("Capture companion opens — drop files, links, or a quick note"); return; }
   const r = e.target.closest(".sig-row");
   if (r){ closeSource(); openInsight(+r.dataset.ins, null); }
 });
