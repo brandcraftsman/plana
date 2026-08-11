@@ -340,6 +340,15 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .details a{color:var(--brand-orange)}
 .details .conf{font-weight:700;color:var(--text);cursor:help}
 .details .det-row{display:flex;align-items:center;gap:12px}
+/* mini kanban — Tasks & Follow-ups action-item status; quiet until selected */
+.det-mid{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.det-mid-l{flex:1;min-width:0}
+.kb{display:flex;gap:10px;flex-shrink:0}
+.kb button{min-width:92px;min-height:58px;padding:6px 12px;background:none;border:1px solid var(--line-strong);
+  border-radius:9px;color:var(--muted);font-size:11.5px;font-weight:600;cursor:pointer}
+.kb button:hover{border-color:var(--muted)}
+.kb button[aria-pressed="true"]{border-color:var(--brand-orange);color:var(--brand-orange);font-weight:700}
+@media(max-width:480px){.kb{width:100%}.kb button{flex:1;min-width:0;min-height:44px;padding:6px 4px}}
 /* expanded card: RACI · Impact · Leadership action */
 .det-x{display:grid;grid-template-columns:1fr 1.45fr 1.45fr;gap:28px;margin-top:14px;
   border-top:1px solid var(--line);padding-top:14px}
@@ -755,6 +764,21 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
   border:1px solid var(--brand-orange);border-radius:9px;color:var(--text);padding:10px 14px;font-family:inherit}
 .ins-ed-sum{width:100%;min-height:96px;background:var(--bg);border:1px solid var(--line-strong);border-radius:9px;
   color:var(--muted);padding:11px 14px;font:inherit;font-size:13.5px;line-height:1.6;resize:vertical}
+/* insight editor: version history — v1 = AI extraction; every save/restore appends an immutable version */
+.vh{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}
+.vh .lb{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+.vh-row{display:flex;gap:10px;align-items:center;width:100%;background:none;border:none;padding:5px 8px;border-radius:6px;
+  text-align:left;cursor:pointer;font:inherit;min-height:30px}
+.vh-row:hover{background:var(--raised)}
+.vh-row.cur{background:rgba(229,98,3,.08)}
+.vh-row .vn{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:10.5px;color:var(--faint);font-weight:700}
+.vh-row.cur .vn{color:var(--brand-orange)}
+.vh-row .nm{font-size:12px;color:var(--text);font-weight:600}
+.vh-row .ts{font-size:11px;color:var(--faint)}
+.vh-row .tag{font-size:10px;margin-left:auto;color:var(--faint)}
+.vh-row.cur .tag{color:var(--brand-orange);font-weight:700;letter-spacing:.05em}
+.vh-viewbar{margin-top:12px;padding:9px 12px;border:1px solid rgba(229,98,3,.4);background:rgba(229,98,3,.08);
+  border-radius:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
 .ins-ed-sum:focus{outline:none;border-color:var(--brand-orange);color:var(--text)}
 .ins-ed-note{font-size:11.5px;color:var(--faint);margin-top:6px;font-style:italic}
 /* hover-reveal overflow menus on stream rows */
@@ -2663,6 +2687,23 @@ const firstNames = m => m.split("·").map(p => p.trim()).map(p => {
 
 /* shared editability primitives — one control, every surface */
 const edTag = c => c.edited ? `<span class="edited-tag" title="Text edited by ${c.editedBy || "a human"}${c.editedTs ? " · " + c.editedTs : ""}">Edited</span>` : "";
+/* mini kanban — Tasks & Follow-ups are action items; one tap sets status. New items start "To do". */
+const KB_STATES = [["todo", "To do"], ["prog", "In progress"], ["done", "Complete"]];
+const kbHTML = (c, ci) => (c.dsn === "Tasks" || c.dsn === "Follow-ups")
+  ? `<div class="kb" role="group" aria-label="Action status" data-kb="${ci}">${KB_STATES.map(([k, l]) =>
+      `<button data-kbs="${k}" aria-pressed="${(c.kb || "todo") === k}" title="${l}">${l}</button>`).join("")}</div>`
+  : "";
+document.addEventListener("click", e => {
+  const btn = e.target.closest(".kb [data-kbs]");
+  if (!btn) return;
+  const ci = +btn.closest(".kb").dataset.kb, c = ALL[ci]; if (!c) return;
+  if ((c.kb || "todo") === btn.dataset.kbs) return;
+  c.kb = btn.dataset.kbs;
+  // sync every rendered copy of this card's kanban
+  document.querySelectorAll(`.kb[data-kb="${ci}"] [data-kbs]`).forEach(x =>
+    x.setAttribute("aria-pressed", x.dataset.kbs === c.kb));
+  toast(`${c.sn} status — ${KB_STATES.find(s => s[0] === c.kb)[1]} · set by Scout Underwood`);
+});
 function provChip(c){
   // binary: a human touching the severity axes flips ✨ → green bust; text edits are marked at the title instead
   const ci = ALL.indexOf(c);
@@ -2811,11 +2852,16 @@ function cardHTML(c, i){
     <button class="details-toggle det-caret" aria-expanded="false" aria-label="Show members and details"
       title="Members & details"><span class="det-arr">▾</span><span class="det-lb">Details</span></button>
     <div class="details">
-      <div class="members"><b>Members</b>${firstNames(c.m)}
-        <span class="src has-tip" tabindex="0" data-tip="${c.ts}">${srcIcon(c.src)} ${c.src}</span></div>
-      <div class="det-row">
-        <span class="conf" title="AI extraction confidence">(${c.conf}%)</span>
-        <a href="#" class="open-src" data-ins="${ci}">Open source ↗</a>
+      <div class="det-mid">
+        <div class="det-mid-l">
+          <div class="members"><b>Members</b>${firstNames(c.m)}
+            <span class="src has-tip" tabindex="0" data-tip="${c.ts}">${srcIcon(c.src)} ${c.src}</span></div>
+          <div class="det-row">
+            <span class="conf" title="AI extraction confidence">(${c.conf}%)</span>
+            <a href="#" class="open-src" data-ins="${ci}">Open source ↗</a>
+          </div>
+        </div>
+        ${kbHTML(c, ci)}
       </div>
       ${detExtras(c)}
     </div>
@@ -3397,6 +3443,47 @@ ffRender();
 /* ---------- insight overlay (full record) ---------- */
 const insOvl = document.getElementById("insOvl"), insScrim = document.getElementById("insScrim");
 let insReturn = null, insIdx = null;
+/* Record-text version history: v1 is ALWAYS the AI extraction stamped with its extraction time;
+   every human save (or restore) appends an immutable version {v, by, ts, t, s, d} — never rewritten. */
+function insEnsureHist(c){
+  if (!c.vh) c.vh = [{ v: 1, by: "AI extraction", ts: c.ts, t: c.t, s: c.s, d: c.d ? [...c.d] : null }];
+  return c.vh;
+}
+let insViewV = null;   // version being viewed read-only; null = current
+const VH_BUST = `<span class="chip prov-ico" style="padding:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="#3fb950" aria-hidden="true"><path d="M12 12a4.8 4.8 0 1 0 0-9.6 4.8 4.8 0 0 0 0 9.6zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>`;
+function vhSection(c){
+  const hist = insEnsureHist(c), cur = hist[hist.length - 1];
+  return `<div class="vh"><div class="lb">Version history</div>` +
+    [...hist].reverse().map(h => {
+      const isCur = h.v === cur.v, viewing = insViewV ? h.v === insViewV : isCur;
+      return `<button class="vh-row ${viewing ? "cur" : ""}" data-vh="${h.v}" title="${isCur ? "Current version" : "View this version"}">
+        <span class="vn">v${h.v}</span>${h.v === 1 ? `<span style="font-size:12px">✨</span>` : VH_BUST}
+        <span class="nm">${h.by}</span><span class="ts">${h.ts}</span>
+        <span class="tag">${isCur ? "CURRENT" : "view"}</span></button>`;
+    }).join("") + `</div>`;
+}
+/* one commit path for edits AND restores: append a version, apply as current, patch cards */
+function insApplyText(c, t, s, d, what){
+  const hist = insEnsureHist(c);
+  const stamp = nowStamp();
+  hist.push({ v: hist[hist.length - 1].v + 1, by: "Scout Underwood", ts: stamp, t, s, d: d ? [...d] : null });
+  c.t = t; c.s = s; if (d) c.d = [...d];
+  c.edited = true;                       // universal: any text edit marks the title, official or not
+  c.editedBy = "Scout Underwood"; c.editedTs = stamp;
+  const ci = ALL.indexOf(c);
+  // patch dashboard card in place; streams re-render wholesale
+  document.querySelectorAll(`.groups-box .card[data-ins="${ci}"]`).forEach(card => {
+    const tt = card.querySelector("h4 .details-toggle"); if (tt) tt.textContent = c.t;
+    const h4 = card.querySelector("h4");
+    if (h4 && c.edited && !h4.querySelector(".edited-tag")) h4.insertAdjacentHTML("beforeend", edTag(c));
+    const sum = card.querySelector(".summary");
+    if (sum) sum.innerHTML = `${c.s} <button class="more-link" data-more="${ci}"
+      aria-haspopup="dialog" aria-controls="moreOvl">(more)</button>`;
+  });
+  if (typeof tlRender === "function") tlRender();
+  if (typeof ffRender === "function") ffRender();
+  toast(`${c.sn} — ${what} saved as v${hist[hist.length - 1].v}, attributed to Scout Underwood`);
+}
 function insRender(c, editing){
   const strips =
     (c.dir ? `<div class="blk-line ${c.dir}" style="margin-top:12px">${c.dir === "in"
@@ -3410,12 +3497,10 @@ function insRender(c, editing){
       <span class="when">${c.when}</span>
       <span class="when" title="AI extraction confidence"><b style="color:var(--text)">(${c.conf}%)</b> confidence</span>
     </div>`;
-  const detail = c.d ? `<div class="ins-sec ins-detail"><h6>Full context</h6>${c.d.map(p => `<p>${p}</p>`).join("")}</div>` : "";
-  const tail = `${detail}
-    <div class="ins-sec"><h6>Members</h6><div class="members" style="margin-top:2px">
-      ${firstNames(c.m)}<span class="src has-tip" tabindex="0" data-tip="${c.ts}">${srcIcon(c.src)} ${c.src}</span></div></div>
-    <div class="ins-sec">${detExtras(c)}</div>`;
+  const members = `<div class="ins-sec"><h6>Members</h6><div class="members" style="margin-top:2px">
+      ${firstNames(c.m)}<span class="src has-tip" tabindex="0" data-tip="${c.ts}">${srcIcon(c.src)} ${c.src}</span></div></div>`;
   if (editing){
+    const hist = insEnsureHist(c);
     document.getElementById("insBody").innerHTML = `
       <input class="ins-ed-title" id="insTitleEd" value="${c.t.replace(/"/g, "&quot;")}">
       ${strips}${meta}
@@ -3423,26 +3508,45 @@ function insRender(c, editing){
         <h6 style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:6px">Summary</h6>
         <textarea class="ins-ed-sum" id="insSumEd">${c.s}</textarea>
         <p class="ins-ed-note">Editing marks this record “Human edited” — the AI’s original text stays in the version history.</p>
-      </div>${tail}`;
+      </div>
+      ${c.d ? `<div style="margin-top:14px">
+        <h6 style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:6px">Full context</h6>
+        <textarea class="ins-ed-sum" id="insCtxEd" style="min-height:150px">${c.d.join("\n\n")}</textarea>
+        <p class="ins-ed-note">Separate paragraphs with a blank line — breaks are kept in the reading view and the (more) pop-up.</p>
+      </div>` : ""}
+      ${members}
+      <div class="ins-sec">${detExtras(c)}</div>`;
     document.getElementById("insFoot").innerHTML = `
-      <span class="ver-info">Editing ${c.sn} · original by ${c.edited ? c.editedBy : "AI extractor (v4)"} ·
+      <span class="ver-info">Editing ${c.sn} · original by AI extractor (v4) · saving creates v${hist[hist.length - 1].v + 1} ·
         your edit will be attributed to Scout Underwood</span>
       <button class="btn" id="insCancelBtn">Cancel</button>
       <button class="btn btn-publish" id="insSaveBtn">Save changes</button>`;
     document.getElementById("insTitleEd").focus();
   } else {
+    const hist = insEnsureHist(c), curV = hist[hist.length - 1];
+    const shown = insViewV && insViewV !== curV.v ? hist.find(h => h.v === insViewV) : null;
+    const T = shown ? shown.t : c.t, S = shown ? shown.s : c.s, D = shown ? shown.d : c.d;
+    const viewbar = shown ? `<div class="vh-viewbar">Viewing <b style="color:var(--text)">v${shown.v}</b> · ${shown.by} · ${shown.ts} — versions are immutable
+        <span style="flex:1"></span>
+        <button class="btn" id="vhRestore" style="min-height:26px;font-size:11.5px">Restore this version</button>
+        <button class="btn" id="vhBack" style="min-height:26px;font-size:11.5px">Back to v${curV.v}</button></div>` : "";
+    const detail = D ? `<div class="ins-sec ins-detail"><h6>Full context</h6>${D.map(p => `<p>${p}</p>`).join("")}</div>` : "";
     document.getElementById("insBody").innerHTML = `
-      <h3 id="insTitle">${c.t}${edTag(c)}</h3>${strips}${meta}
-      <p class="summary" id="insSummary" style="max-width:none;margin-top:14px">${c.s}</p>${tail}`;
+      <h3 id="insTitle">${T}${edTag(c)}</h3>${strips}${meta}${viewbar}
+      <p class="summary" id="insSummary" style="max-width:none;margin-top:14px">${S}</p>
+      ${detail}${members}
+      <div class="ins-sec">${detExtras(c)}</div>
+      ${vhSection(c)}`;
     document.getElementById("insFoot").innerHTML = `
       <span class="ver-info" id="insProv">${c.dsn} · extracted from ${c.src} · event ${c.ts} ·
         severity last set by ${c.setBy} (${c.setTs})${c.edited ? ` · text edited by ${c.editedBy} (${c.editedTs})` : ""}</span>
-      <button class="btn" id="insEditBtn">✎ Edit</button>
+      ${shown ? "" : `<button class="btn" id="insEditBtn">✎ Edit</button>`}
       <a href="#" class="btn open-src" data-ins="${ALL.indexOf(c)}" style="text-decoration:none">Open source ↗</a>`;
   }
 }
 function openInsight(i, trigger, editing = false){
   const c = ALL[i]; if (!c) return;
+  insViewV = null;
   insReturn = trigger || insReturn; insIdx = i;
   document.getElementById("insType").textContent = c.tag;
   document.getElementById("insSn").textContent = c.sn;
@@ -3455,25 +3559,36 @@ function openEditor(i, trigger){ openInsight(i, trigger, true); }
 document.getElementById("insFoot").addEventListener("click", e => {
   const c = ALL[insIdx];
   if (e.target.id === "insCancelBtn"){ insRender(c, false); }
-  if (e.target.id === "insEditBtn"){ insRender(c, true); }
+  if (e.target.id === "insEditBtn"){ insViewV = null; insRender(c, true); }
   if (e.target.id === "insSaveBtn"){
-    c.t = document.getElementById("insTitleEd").value.trim() || c.t;
-    c.s = document.getElementById("insSumEd").value.trim() || c.s;
-    c.edited = true;                       // universal: any text edit marks the title, official or not
-    c.editedBy = "Scout Underwood"; c.editedTs = nowStamp();
-    // patch dashboard card in place; streams re-render wholesale
-    document.querySelectorAll(`.groups-box .card[data-ins="${insIdx}"]`).forEach(card => {
-      const tt = card.querySelector("h4 .details-toggle"); if (tt) tt.textContent = c.t;
-      const h4 = card.querySelector("h4");
-      if (h4 && c.edited && !h4.querySelector(".edited-tag")) h4.insertAdjacentHTML("beforeend", edTag(c));
-      const sum = card.querySelector(".summary");
-      if (sum) sum.innerHTML = `${c.s} <button class="more-link" data-more="${insIdx}"
-        aria-haspopup="dialog" aria-controls="moreOvl">(more)</button>`;
-    });
-    if (typeof tlRender === "function") tlRender();
-    if (typeof ffRender === "function") ffRender();
-    toast(`${c.sn} updated — attributed to Scout Underwood`);
+    const t = document.getElementById("insTitleEd").value.trim() || c.t;
+    const s = document.getElementById("insSumEd").value.trim() || c.s;
+    const ctxEl = document.getElementById("insCtxEd");
+    const d = ctxEl
+      ? (ctxEl.value.trim().split(/\n\s*\n/).map(x => x.trim()).filter(Boolean).length
+          ? ctxEl.value.trim().split(/\n\s*\n/).map(x => x.trim()).filter(Boolean) : c.d)
+      : (c.d ? [...c.d] : null);
+    const changed = t !== c.t || s !== c.s || JSON.stringify(d) !== JSON.stringify(c.d);
+    if (!changed){ toast("No changes to save"); insRender(c, false); return; }
+    insApplyText(c, t, s, d, "Edit");
+    insViewV = null;
     insRender(c, false);
+  }
+});
+/* version-history rows + view-mode actions inside the insight overlay */
+document.getElementById("insBody").addEventListener("click", e => {
+  const c = ALL[insIdx]; if (!c) return;
+  const vr = e.target.closest(".vh-row");
+  if (vr){
+    const hist = insEnsureHist(c), cur = hist[hist.length - 1], v = +vr.dataset.vh;
+    insViewV = v === cur.v ? null : v;
+    insRender(c, false); return;
+  }
+  if (e.target.id === "vhBack"){ insViewV = null; insRender(c, false); return; }
+  if (e.target.id === "vhRestore"){
+    const hist = insEnsureHist(c), src = hist.find(h => h.v === insViewV);
+    if (src) insApplyText(c, src.t, src.s, src.d ? [...src.d] : null, `Restored v${src.v}`);
+    insViewV = null; insRender(c, false); return;
   }
 });
 /* ✎ Edit from any ⋯ menu */
