@@ -508,8 +508,21 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .drafted-banner b{font-size:13.5px}
 .drafted-banner p{font-size:12.5px;color:var(--muted);margin-top:2px;max-width:74ch}
 .drafted-banner .btn{margin-left:auto}
+.drafted-banner > div{flex:1 1 240px;min-width:0}   /* text takes the row and WRAPS — never shrinks to one word per line */
 .pr-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:16px;align-items:start}
-@media(max-width:980px){.pr-layout{grid-template-columns:1fr}}
+@media(max-width:980px){.pr-layout{grid-template-columns:minmax(0,1fr)}}
+/* phone: the profile editor gets room and its header rows wrap instead of squeezing */
+@media(max-width:700px){
+  #profOvl{inset:1.5vh 2vw}
+  .pr-head{flex-wrap:wrap;row-gap:8px}
+  .pg-head{flex-wrap:wrap;row-gap:6px}
+  .pg-head b{font-size:19px}
+  .pr-body{padding:14px 12px}
+  .drafted-banner .btn{margin-left:0}
+  .pr-foot{flex-wrap:wrap;padding:10px 12px;row-gap:8px}
+  .pr-foot .note{flex:1 1 100%;margin-right:0}
+  .pr-foot .btn{flex:1;justify-content:center;white-space:nowrap}
+}
 .pgroup{background:rgba(255,255,255,.015);border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}
 .pg-head{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--raised)}
 .pg-head b{font-size:27px;font-weight:700;line-height:1.2;letter-spacing:-.01em}
@@ -698,6 +711,20 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
   color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px;flex:none}
 .co-ext{font-size:11px;color:var(--faint);flex:none}
 .co-note{color:var(--faint);font-size:10.5px;text-align:center;margin-top:14px;line-height:1.6}
+/* Team chat: user-curated chat index — manual membership, live unread badges */
+.co-row{position:relative}
+.co-row .unpin{position:static;margin-left:2px}
+.co-row:hover .unpin,.co-row .unpin:focus-visible{opacity:1}
+.tc-add{display:flex;align-items:center;gap:8px;width:100%;background:none;border:1px dashed var(--line-strong);
+  border-radius:8px;padding:8px 10px;margin-top:8px;color:var(--faint);font-size:12px;cursor:pointer;font-family:inherit}
+.tc-add:hover{color:var(--muted);border-color:var(--muted)}
+#tcForm{margin-top:8px;border:1px solid var(--line-strong);border-radius:9px;padding:10px;background:var(--raised)}
+#tcForm[hidden]{display:none}
+#tcForm label{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+#tcUrl{width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:7px;color:var(--text);
+  font:inherit;font-size:12.5px;padding:8px 10px}
+#tcUrl:focus{outline:none;border-color:var(--brand-orange)}
+.co-row.tc-flash{background:rgba(229,98,3,.14)}
 /* global furniture clears the strip */
 #jumpTop{right:74px}
 #askViewFab{right:74px}
@@ -927,6 +954,11 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .cal-mtg .body{padding:8px 10px 10px}
 .cal-mtg .ttl{font-size:13px;font-weight:700;line-height:1.3}
 .cal-stats{display:flex;gap:9px;margin-top:7px;font-size:10.5px;color:var(--muted);flex-wrap:wrap;align-items:center}
+/* desktop-app launcher — quiet box glyph in the stats row; launches the native companion */
+.cal-app{margin-left:auto;width:24px;height:24px;min-height:24px;padding:0;display:inline-flex;align-items:center;
+  justify-content:center;background:none;border:1px solid var(--line-strong);border-radius:6px;cursor:pointer;
+  font-size:12px;line-height:1;filter:grayscale(1) brightness(1.2)}
+.cal-app:hover{border-color:var(--brand-orange);filter:none}
 .cal-eml{display:flex;gap:8px;align-items:flex-start;padding:7px 8px;border-radius:7px;position:relative;
   border:1px dotted var(--faint);background:rgba(255,255,255,.015);margin-bottom:16px;cursor:pointer}
 .cal-eml .glyph{font-size:24px;color:var(--muted);flex-shrink:0;line-height:1}
@@ -2191,27 +2223,20 @@ Tool notifications with no decision attached.</textarea>
 
     <div class="co-sec" data-sec="chat" hidden>
     <div class="co-lb" style="margin-top:18px">💬 Team chat
-      <span style="font-weight:600;letter-spacing:0;text-transform:none;color:var(--faint)">· read-only — rows open Google Chat</span></div>
+      <span style="font-weight:600;letter-spacing:0;text-transform:none;color:var(--faint)">· your chat index — rows open Google Chat</span></div>
     <div class="co-rule" style="margin-bottom:4px"></div>
-    <a class="co-row" href="https://chat.google.com" target="_blank" rel="noopener" title="Opens this conversation in Google Chat">
-      <span class="co-av">VP</span>
-      <span class="co-main"><span style="display:flex;gap:8px;align-items:baseline"><b style="font-size:12px;color:#fff">Vu Pham</b>
-        <span style="margin-left:auto;font-size:10px;color:var(--faint)">9:41 AM</span></span>
-        <span style="display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">sizing both defects now — estimate by Fri</span></span>
-      <span class="co-n">2</span><span class="co-ext">↗</span></a>
-    <a class="co-row" href="https://chat.google.com" target="_blank" rel="noopener" title="Opens this conversation in Google Chat">
-      <span class="co-av">DT</span>
-      <span class="co-main"><span style="display:flex;gap:8px;align-items:baseline"><b style="font-size:12px;color:#fff">Duc Huy Tran · WP-01</b>
-        <span style="margin-left:auto;font-size:10px;color:var(--faint)">Yesterday</span></span>
-        <span style="display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">can we move the weekly to Thu?</span></span>
-      <span class="co-ext">↗</span></a>
-    <a class="co-row" href="https://chat.google.com" target="_blank" rel="noopener" title="Opens this conversation in Google Chat">
-      <span class="co-av">SO</span>
-      <span class="co-main"><span style="display:flex;gap:8px;align-items:baseline"><b style="font-size:12px;color:#fff">#wp-13-standup</b>
-        <span style="margin-left:auto;font-size:10px;color:var(--faint)">Yesterday</span></span>
-        <span style="display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sally: paused the tester checklist until…</span></span>
-      <span class="co-n">5</span><span class="co-ext">↗</span></a>
-    <div class="co-note">A window, not a chat app — reading happens here, replying happens in Google Chat.</div>
+    <div id="tcList"></div>
+    <button class="tc-add" id="tcAddBtn" aria-expanded="false" aria-controls="tcForm"><span style="font-size:13px">＋</span>Add chat</button>
+    <div id="tcForm" hidden>
+      <label for="tcUrl">Paste the chat URL</label>
+      <input id="tcUrl" placeholder="https://chat.google.com/room/…" aria-label="Chat URL">
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <span style="font-size:10.5px;color:var(--faint);flex:1">Adds a shortcut here — the chat itself stays in Google Chat.</span>
+        <button class="btn" id="tcCancel" style="min-height:28px;font-size:11.5px">Cancel</button>
+        <button class="btn btn-publish" id="tcSave" style="min-height:28px;font-size:11.5px">Add</button>
+      </div>
+    </div>
+    <div class="co-note">Your chat index — unread counts sync from Google Chat; reading and replying happen there.</div>
     </div><!-- /co-sec chat -->
   </div>
 </aside>
@@ -3054,10 +3079,24 @@ document.addEventListener("click", e => {
     if (prov) prov.textContent =
       `${c.dsn} · extracted from ${c.src} · event ${c.ts} · severity last set by ${c.setBy} (${c.setTs})${c.edited ? ` · text edited by ${c.editedBy} (${c.editedTs})` : ""}`;
   }
-  // serial — click to copy
+  // serials — extraction serials copy to clipboard; ENGAGEMENT serials open the
+  // engagement modal (same overlay as the calendar ↗). The one in the modal's own
+  // header stays a copy button — that's where you grab the ID.
   const sn = e.target.closest(".serial, .eser");
   if (sn){
     const id = sn.textContent.trim();
+    if (sn.classList.contains("eser") && !sn.closest("#srcOvl")){
+      const src = SRC.find(x => x.es === id);
+      const rec = src ? null : ALL.find(r => r.esCache === id);
+      if (src || rec){
+        const pk = document.getElementById("serPeek");
+        if (pk && pk.classList.contains("show") && typeof window.closeSerPeek === "function") window.closeSerPeek();
+        if (src) openSourceForEngagement(src.id);
+        else srcOpen(rec, sourceFor(rec));
+        return;
+      }
+      // unresolvable serial (shouldn't happen) — fall through to copy
+    }
     const done = () => toast(`${id} copied to clipboard`);
     if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(id).then(done, () => fallbackCopy(id, done));
@@ -3739,7 +3778,7 @@ function esFor(c){
 /* surface the engagement serial on every already-rendered card accordion (source row) */
 document.querySelectorAll('.card[data-ins] .det-row').forEach(row => {
   const a = row.querySelector(".open-src"); if (!a) return;
-  a.insertAdjacentHTML("afterend", `<span class="eser" title="Copy engagement ID">${esFor(ALL[+a.dataset.ins])}</span>`);
+  a.insertAdjacentHTML("afterend", `<span class="eser" title="Open engagement — raw content, summary, attendees, metadata">${esFor(ALL[+a.dataset.ins])}</span>`);
 });
 const srcByI = id => SRC.find(s => s.id === id);
 const srcRecs = s => s.sn.map(x => ALL.find(c => c.sn === x)).filter(Boolean);
@@ -3769,21 +3808,22 @@ function calRender(){
         const sel = cart.has(s.id), cap = CAP[s.st];
         const stats = `<div class="cal-stats">
           ${s.sn.length ? `<span>⚡ ${s.sn.length} extraction${s.sn.length > 1 ? "s" : ""}</span>` : ""}
-          ${s.as.length ? `<span>📎 ${s.as.length}</span>` : ""}</div>`;
+          ${s.as.length ? `<span>📎 ${s.as.length}</span>` : ""}
+          <button class="cal-app" data-app="${s.es || s.id}" title="Open in the desktop app — launches the native capture companion for this engagement">📥</button></div>`;
         return s.kind === "mtg" ? `
           <article class="card cal-mtg ${sel ? "sel" : ""}" data-src="${s.id}">
             <button class="cal-open" title="Open source — raw content, summary, attendees, metadata" aria-label="Open source for ${s.t}">↗</button>
             <div class="band"><span class="glyph">🗓</span><span class="tm">${s.tm}</span></div>
             <div class="body"><div class="ttl">${s.t}</div>
               <div style="margin-top:7px"><span class="cap-chip ${cap[0]}">${cap[1]}</span></div>${stats}</div>
-            <button class="cal-addbtn ${sel ? "added" : ""}" aria-pressed="${sel}" aria-label="${sel ? "Remove" : "Add"} ${s.t} ${sel ? "from" : "to"} the cart">${sel ? "✓ Added" : "＋ Add"}</button>
+            <button class="cal-addbtn ${sel ? "added" : ""}" aria-pressed="${sel}" aria-label="${sel ? "Remove" : "Include"} ${s.t} ${sel ? "from" : "in"} the cart">${sel ? "✓ Included" : "＋ Include"}</button>
           </article>` : `
           <div class="cal-eml ${sel ? "sel" : ""}" data-src="${s.id}">
             <button class="cal-open" title="Open source — raw content, summary, attendees, metadata" aria-label="Open source for ${s.t}">↗</button>
             <span class="glyph">✉</span>
             <div style="min-width:0;flex:1"><div class="ttl">${s.t}</div>
               <div class="sub">${s.tm} · ${s.msgs} msg${s.msgs > 1 ? "s" : ""}${s.sn.length ? ` · ⚡ ${s.sn.length}` : ""}</div></div>
-            <button class="cal-addbtn ${sel ? "added" : ""}" aria-pressed="${sel}" aria-label="${sel ? "Remove" : "Add"} ${s.t} ${sel ? "from" : "to"} the cart">${sel ? "✓ Added" : "＋ Add"}</button>
+            <button class="cal-addbtn ${sel ? "added" : ""}" aria-pressed="${sel}" aria-label="${sel ? "Remove" : "Include"} ${s.t} ${sel ? "from" : "in"} the cart">${sel ? "✓ Included" : "＋ Include"}</button>
           </div>`;
       }).join("") : `<div class="cal-empty">No activity</div>`}
     </div>`;
@@ -3816,6 +3856,14 @@ document.getElementById("calGrid").addEventListener("click", e => {
   if (openB){
     const el2 = openB.closest("[data-src]");
     if (el2 && typeof openSourceForEngagement === "function") openSourceForEngagement(el2.dataset.src);
+    return;
+  }
+  // desktop-app launcher — prod: navigate to the custom protocol (plana://engagement/<E-serial>);
+  // the OS hands off to the installed native companion. Mocked here as a toast.
+  const app = e.target.closest(".cal-app");
+  if (app){
+    // prod still launches plana://engagement/<E-serial> — the toast just speaks human
+    toast("Launching the Desktop Meeting Asset Capture App");
     return;
   }
   const ab = e.target.closest(".cal-addbtn");
@@ -4043,7 +4091,7 @@ function synRenderTab(){
       <div class="tx-src">
         <div class="tx-head">
           <span style="font-size:16px">${s.kind === "mtg" ? "🗓" : "✉"}</span><b style="font-size:14px">${s.t}</b>
-          <span class="eser" title="Copy engagement ID">${s.es}</span>
+          <span class="eser" title="Open engagement — raw content, summary, attendees, metadata">${s.es}</span>
           <span class="cap-chip ${CAP[s.st][0]}">${CAP[s.st][1]}</span>
           <span style="font-size:11.5px;color:var(--faint)">${s.day} · ${s.tm}</span>
           ${s.sn.map(x => `<span class="chip outline" style="font-size:10px">${x}</span>`).join("")}
@@ -4664,7 +4712,7 @@ document.addEventListener("click", e => {
         <span class="sp-kind">${c.dsn.replace(/s$/, "")}</span>${quadChip(c, "spQuad")}</div>
       <div class="sp-title">${c.t}${edTag(c)}</div>
       <div class="sp-sum">${c.s}</div>
-      <div class="sp-meta"><span class="eser" title="Copy engagement ID">${esFor(c)}</span>
+      <div class="sp-meta"><span class="eser" title="Open engagement — raw content, summary, attendees, metadata">${esFor(c)}</span>
         <span>${c.src === "Gmail" ? "✉" : "🎥"} ${c.src} · ${c.ts}</span>
         <span>Confidence ${c.conf}%</span>${provChip(c)}</div>
       <div class="sp-acts"><button class="sp-rec">Open record</button>
@@ -5453,6 +5501,79 @@ document.querySelectorAll("section.feed[data-view] .controls").forEach(ct =>
   const set = open => { items.hidden = !open; t.setAttribute("aria-expanded", open); };
   t.addEventListener("click", () => set(items.hidden));
   document.getElementById("legClose").addEventListener("click", () => set(false));
+})();
+
+/* ---------- Team chat: user-curated chat index (manual membership, live unread badges) ----------
+   Engineering contract: the index is a per-user preference (like saved views) — persisted keyed
+   to the user, synced across devices. Membership is MANUAL (paste a URL); decoration is LIVE —
+   once added, the platform resolves the room name and subscribes to unread state via the
+   Chat integration (mocked here: seeds carry counts, new rows sync on the next poll).
+   Adding is navigation, not ingestion — it never changes extraction scope. UI copy uses
+   add/remove language deliberately: every row is user-added, so "pin" would imply a
+   contrast with unpinned rows that doesn't exist. */
+(() => {
+  // seeds mock the synced state of previously added chats
+  const TC_PINS = [
+    { label: "Vu Pham", av: "VP", url: "https://chat.google.com", sub: "sizing both defects now — estimate by Fri", time: "9:41 AM", n: 2 },
+    { label: "Duc Huy Tran · WP-01", av: "DT", url: "https://chat.google.com", sub: "can we move the weekly to Thu?", time: "Yesterday", n: 0 },
+    { label: "#wp-13-standup", av: "SO", url: "https://chat.google.com", sub: "Sally: paused the tester checklist until…", time: "Yesterday", n: 5 }
+  ];
+  const list = document.getElementById("tcList");
+  function tcRender(flashUrl){
+    list.innerHTML = TC_PINS.map(p => `
+      <a class="co-row ${flashUrl === p.url ? "tc-flash" : ""}" href="${p.url}" target="_blank" rel="noopener"
+         title="Opens this conversation in Google Chat" data-tc="${p.url}">
+        <span class="co-av"${p.av === "#" ? ' style="color:var(--brand-orange)"' : ""}>${p.av}</span>
+        <span class="co-main"><span style="display:flex;gap:8px;align-items:baseline"><b style="font-size:12px;color:#fff">${p.label}</b>
+          <span style="margin-left:auto;font-size:10px;color:var(--faint)">${p.time}</span></span>
+          <span style="display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.sub}</span></span>
+        ${p.n ? `<span class="co-n">${p.n}</span>` : ""}
+        <button class="unpin" aria-label="Remove ${p.label} from your index" title="Remove from your index">✕</button><span class="co-ext">↗</span></a>`).join("") ||
+      `<div class="co-note" style="margin:10px 0 2px">No chats yet — ＋ Add chat builds your index.</div>`;
+    if (flashUrl) setTimeout(() => list.querySelectorAll(".tc-flash").forEach(r => r.classList.remove("tc-flash")), 1200);
+  }
+  tcRender();
+  const form = document.getElementById("tcForm"), addBtn = document.getElementById("tcAddBtn"),
+        urlIn = document.getElementById("tcUrl");
+  const setForm = open => { form.hidden = !open; addBtn.setAttribute("aria-expanded", open); if (open) urlIn.focus(); };
+  addBtn.addEventListener("click", () => setForm(form.hidden));
+  document.getElementById("tcCancel").addEventListener("click", () => { urlIn.value = ""; setForm(false); });
+  // fresh form every time the section is (re)opened
+  document.querySelector('.co-chic[data-co="chat"]').addEventListener("click", () => { urlIn.value = ""; setForm(false); });
+  function tcAdd(){
+    let raw = urlIn.value.trim();
+    if (!raw){ toast("Paste a chat URL first"); return; }
+    if (!/^https?:\/\//i.test(raw)) raw = "https://" + raw;
+    let u = null;
+    try { u = new URL(raw); } catch {}
+    if (!u || /\s/.test(urlIn.value.trim()) || !u.hostname.includes(".")){
+      toast("That doesn't look like a URL — check the paste and try again"); return;
+    }
+    if (TC_PINS.some(p => p.url === u.href)){ toast("Already in your index — it's highlighted below"); tcRender(u.href); return; }
+    // label: room segment for Google Chat links, hostname otherwise (prod: resolve via the Chat API)
+    const seg = u.pathname.split("/").filter(Boolean).pop();
+    const label = u.hostname.includes("chat.google") ? (seg ? `room ${seg.slice(0, 12)}…` : "Google Chat") : u.hostname;
+    TC_PINS.push({ label, av: "#", url: u.href, sub: `Added by you · ${u.hostname} · unreads sync from Google Chat`, time: "added", n: 0 });
+    urlIn.value = ""; setForm(false);
+    tcRender(u.href);
+    toast(`Added — the room name and unread count sync from Google Chat`);
+  }
+  document.getElementById("tcSave").addEventListener("click", tcAdd);
+  urlIn.addEventListener("keydown", e => {
+    if (e.key === "Enter"){ e.preventDefault(); tcAdd(); }
+    if (e.key === "Escape"){ e.stopPropagation(); urlIn.value = ""; setForm(false); }
+  });
+  list.addEventListener("click", e => {
+    const un = e.target.closest(".unpin");
+    if (!un) return;
+    e.preventDefault(); e.stopPropagation();          // don't follow the chat link
+    const url = un.closest("[data-tc]").dataset.tc;
+    const i = TC_PINS.findIndex(p => p.url === url);
+    const name = i >= 0 ? TC_PINS[i].label : "chat";
+    if (i >= 0) TC_PINS.splice(i, 1);
+    tcRender();
+    toast(`“${name}” removed from your index — add it back any time with ＋ Add chat`);
+  });
 })();
 
 /* ---------- Launchpad: unpin a folder shortcut ---------- */
