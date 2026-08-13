@@ -2756,12 +2756,12 @@ const firstNames = m => m.split("·").map(p => p.trim()).map(p => {
 
 /* shared editability primitives — one control, every surface */
 const edTag = c => c.edited ? `<span class="edited-tag" title="Text edited by ${c.editedBy || "a human"}${c.editedTs ? " · " + c.editedTs : ""}">Edited</span>` : "";
-/* mini kanban — Tasks & Follow-ups are action items; one tap sets status. New items start "To do". */
+/* mini kanban — action-item status on EVERY category (per Scout, Aug 12). One tap sets status.
+   New items start "To do". */
 const KB_STATES = [["todo", "To do"], ["prog", "In progress"], ["done", "Complete"]];
-const kbHTML = (c, ci) => (c.dsn === "Tasks" || c.dsn === "Follow-ups")
-  ? `<div class="kb" role="group" aria-label="Action status" data-kb="${ci}">${KB_STATES.map(([k, l]) =>
-      `<button data-kbs="${k}" aria-pressed="${(c.kb || "todo") === k}" title="${l}">${l}</button>`).join("")}</div>`
-  : "";
+const kbHTML = (c, ci) =>
+  `<div class="kb" role="group" aria-label="Action status" data-kb="${ci}">${KB_STATES.map(([k, l]) =>
+      `<button data-kbs="${k}" aria-pressed="${(c.kb || "todo") === k}" title="${l}">${l}</button>`).join("")}</div>`;
 document.addEventListener("click", e => {
   const btn = e.target.closest(".kb [data-kbs]");
   if (!btn) return;
