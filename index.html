@@ -128,8 +128,8 @@ a.side-item.ext{text-decoration:none}
 .btn-danger-ghost:hover{border-color:var(--brand-red);color:#ff6b69}
 
 /* ============ Header / chrome (collapsed to 3 slim rows) ============ */
-.main{min-width:0;padding-right:52px}   /* clears the fixed 52px Company strip everywhere */
-.topbar{display:flex;align-items:center;gap:14px;padding:10px 24px;border-bottom:1px solid var(--line);
+.main{min-width:0}
+.topbar{display:flex;align-items:center;gap:14px;padding:10px 66px 10px 24px;border-bottom:1px solid var(--line);
   background:var(--bg);position:sticky;top:0;z-index:40}
 .crumbs{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted);white-space:nowrap}
 .crumbs b{color:var(--text);font-weight:600}
@@ -657,28 +657,59 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 #jumpTop.fab-neighbor{bottom:84px}   /* stack above the FAB on Insights */
 /* narrow viewports: the Ask-this-view panel and filter rail overlay the feed instead of squeezing it */
 @media(max-width:900px){
-  .dash-wrap.chat-open #insChat{position:fixed;top:114px;bottom:14px;right:64px;left:auto;
-    width:min(380px,calc(100vw - 88px));z-index:60;box-shadow:0 24px 70px rgba(0,0,0,.6)}
+  .dash-wrap.chat-open #insChat{position:fixed;top:114px;bottom:14px;right:12px;left:auto;
+    width:min(380px,calc(100vw - 24px));z-index:60;box-shadow:0 24px 70px rgba(0,0,0,.6)}
   .dash-wrap.rail-open .ff-rail{position:fixed;left:12px;top:114px;bottom:12px;width:min(300px,86vw);
     max-height:none;z-index:60;background:var(--surface);box-shadow:0 24px 70px rgba(0,0,0,.6);overflow-y:auto}
 }
 
 /* ============ Company rail (global right strip + drawer) ============ */
-#coStrip{position:fixed;top:0;right:0;bottom:0;width:52px;z-index:70;background:var(--surface);
-  border-left:1px solid var(--line);display:flex;flex-direction:column;align-items:center;padding-top:14px;gap:8px}
-.co-chic{position:relative;width:36px;height:36px;border-radius:9px;cursor:pointer;font-size:16px;
-  display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--muted)}
-.co-chic:hover{background:var(--raised);color:var(--text)}
-.co-chic.on{background:linear-gradient(120deg,rgba(229,6,2,.25),rgba(229,98,3,.25));color:#fff;
-  box-shadow:inset 0 0 0 1px var(--brand-orange)}
-.co-chic svg{display:block}
-.co-chic img{display:block;opacity:.62;transition:opacity .12s}
-.co-chic:hover img,.co-chic.on img{opacity:1}
-.co-chic:disabled{opacity:.4;cursor:default}
-.co-chic:disabled:hover{background:none;color:var(--muted)}
+/* The Company rail, collapsed (per Scout, Aug 14): the star logo is the only persistent
+   hotspot — a hamburger-pattern dropdown replaces the 52px strip on every breakpoint. */
+#coStar{position:fixed;top:10px;right:14px;z-index:71;width:38px;height:38px;border-radius:10px;
+  background:var(--surface);border:1px solid var(--line-strong);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;padding:0}
+#coStar:hover{background:var(--raised)}
+#coStar img{width:20px;height:20px;display:block;opacity:.85;transition:opacity .12s}
+#coStar:hover img{opacity:1}
+#coStar .co-dot{top:3px;right:3px}
+#coMenu{position:fixed;top:54px;right:14px;z-index:71;width:232px;background:var(--raised);
+  border:1px solid var(--line-strong);border-radius:12px;padding:6px;
+  box-shadow:0 18px 44px rgba(0,0,0,.5)}
+#coMenu[hidden]{display:none}
+#coMenu .cm-lb{font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--brand-orange);padding:7px 10px 4px}
+.cm-it{position:relative;display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;
+  color:var(--text);font:inherit;font-size:12.5px;font-weight:600;padding:9px 10px;border-radius:8px;
+  cursor:pointer;text-align:left}
+.cm-it:hover{background:rgba(255,255,255,.06)}
+.cm-it.on{background:linear-gradient(120deg,rgba(229,6,2,.25),rgba(229,98,3,.25));color:#fff}
+.cm-it svg{color:var(--muted);flex:none}
+.cm-it:hover svg,.cm-it.on svg{color:var(--text)}
+.cm-it .co-dot{position:static;margin-left:auto;width:8px;height:8px;border:none}
+.cm-sep{height:1px;background:var(--line);margin:5px 8px}
+/* Bug reporter — reached from the Company menu; prod posts to the platform issue tracker */
+#bugScrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:86;display:none}
+#bugScrim.show{display:block}
+#bugOvl{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(480px,94vw);z-index:87;display:none;
+  background:linear-gradient(180deg,#1e1e21,#161618);border:1px solid var(--line-strong);border-radius:14px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6)}
+#bugOvl.show{display:block}
+.bug-head{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.bug-head svg{color:var(--brand-orange);flex:none}
+.bug-body{padding:16px 18px}
+#bugTxt{width:100%;min-height:110px;background:var(--bg);border:1px solid var(--line-strong);border-radius:9px;
+  color:var(--text);font:inherit;font-size:12.5px;line-height:1.55;padding:10px 12px;resize:vertical}
+#bugTxt:focus{outline:none;border-color:var(--brand-orange)}
+.bug-meta{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:12px;color:var(--muted);cursor:pointer}
+.bug-meta input{accent-color:var(--brand-orange)}
+.bug-foot{display:flex;gap:10px;justify-content:flex-end;padding:12px 18px;border-top:1px solid var(--line)}
+.bug-send{background:linear-gradient(120deg,var(--brand-red),var(--brand-orange));border:none;color:#fff;
+  font:inherit;font-size:12.5px;font-weight:700;border-radius:9px;padding:9px 16px;cursor:pointer}
+.bug-send:hover{filter:brightness(1.1)}
 .co-dot{position:absolute;top:2px;right:2px;width:9px;height:9px;border-radius:50%;background:var(--brand-red);
   border:2px solid var(--surface);box-shadow:0 0 6px rgba(229,6,2,.6)}
-#coDrawer{position:fixed;top:0;right:52px;bottom:0;width:404px;z-index:69;display:flex;flex-direction:column;
+#coDrawer{position:fixed;top:0;right:0;bottom:0;width:404px;z-index:69;display:flex;flex-direction:column;
   background:linear-gradient(180deg,#1e1e21,#161618);border-left:1px solid var(--line-strong);
   box-shadow:-18px 0 50px rgba(0,0,0,.45);font-size:13px;transform:translateX(115%);transition:transform .22s;visibility:hidden}
 #coDrawer.open{transform:none;visibility:visible}
@@ -725,9 +756,9 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
   font:inherit;font-size:12.5px;padding:8px 10px}
 #tcUrl:focus{outline:none;border-color:var(--brand-orange)}
 .co-row.tc-flash{background:rgba(229,98,3,.14)}
-/* global furniture clears the strip */
-#jumpTop{right:74px}
-#askViewFab{right:74px}
+/* strip removed — furniture sits at the true edge */
+#jumpTop{right:22px}
+#askViewFab{right:22px}
 .ff-rail{background:rgba(255,255,255,.015);border:1px solid var(--line);border-radius:10px;
   padding:16px 14px;position:sticky;top:120px;max-height:calc(100vh - 140px);overflow-y:auto}
 .ff-rail input[type=text]{width:100%;min-height:34px;background:var(--bg);border:1px solid var(--line-strong);
@@ -1075,7 +1106,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .oc-adv .oc-node .av{display:none}
 #ocBanner{border:1px dashed rgba(229,98,3,.5);background:rgba(229,98,3,.05);border-radius:10px;
   padding:10px 14px;font-size:11.5px;color:var(--muted);margin:0 0 18px;max-width:900px}
-#ocTray{position:fixed;left:255px;right:76px;bottom:14px;background:linear-gradient(180deg,var(--raised),#1c1c1f);
+#ocTray{position:fixed;left:255px;right:24px;bottom:14px;background:linear-gradient(180deg,var(--raised),#1c1c1f);
   border:1px solid var(--line-strong);border-radius:14px;padding:13px 18px;z-index:20;box-shadow:0 -10px 40px rgba(0,0,0,.5)}
 .oc-menu{position:absolute;z-index:30;background:var(--raised);border:1px solid var(--line-strong);border-radius:10px;
   min-width:200px;box-shadow:0 14px 40px rgba(0,0,0,.6);padding:5px;font-size:12px;text-align:left}
@@ -1278,7 +1309,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .chat-acts{display:flex;gap:10px;margin-top:10px}
 .chat-acts button{background:none;border:none;color:var(--faint);cursor:pointer;font-size:12px;padding:0}
 .chat-acts button:hover{color:var(--text)}
-.chat-pill{position:fixed;left:calc((100vw - 52px)/2);transform:translateX(-50%);bottom:24px;
+.chat-pill{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;
   width:min(800px,calc(100vw - 76px));   /* centered in the content area, clear of the Company strip */
   background:linear-gradient(180deg,var(--raised),#1c1c1f);border:1px solid var(--line-strong);
   border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;
@@ -1355,7 +1386,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 .scb-foot{display:flex;justify-content:flex-end;gap:10px;padding:12px 22px;border-top:1px solid var(--line)}
 
 /* jump to top */
-#jumpTop{position:fixed;right:74px;bottom:22px;z-index:50;width:42px;height:42px;border-radius:50%;
+#jumpTop{position:fixed;right:22px;bottom:22px;z-index:50;width:42px;height:42px;border-radius:50%;
   background:var(--raised);border:1px solid var(--line-strong);color:var(--text);font-size:17px;
   display:grid;place-items:center;box-shadow:0 8px 26px rgba(0,0,0,.5);cursor:pointer;
   opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .2s,transform .2s}
@@ -1482,7 +1513,7 @@ select.quiet.changed{color:var(--brand-orange);font-weight:600}
 
     <!-- Row 1: identity + ask + sync -->
     <header class="topbar">
-      <button class="btn" id="sideExpand" aria-label="Expand sidebar" title="Expand sidebar">»</button>
+      <button class="btn" id="sideExpand" aria-label="Open menu" title="Menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
       <h1 class="sr-only">PLANA Co. Brain — Advanced Dashboard</h1>
       <div class="sync" role="status" style="margin-left:auto">
         <span class="dot" aria-hidden="true"></span> Never synced
@@ -2225,13 +2256,28 @@ Tool notifications with no decision attached.</textarea>
 </div>
 
 <!-- ============ Company rail: global right strip + drawer ============ -->
-<div id="coStrip" aria-label="Company rail">
-  <button class="co-chic co-mark" data-co="vision" title="Vision" aria-controls="coDrawer"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAC2ElEQVR42tWYv0scURDH3+ytglgoKNwZU1xjYa+ItY2NYO0/ECwC+i8E/wHBKpDW0krS5g+Q2FgHFGIUSTAKIf64vU8K5yVzw+2xd666GVh2dt68me/Oe2/evBfCIwkQw38GPndrezGKIIBR4Kc+o2UBTErAGEFMhBBG9JlwbS8KMNJkCGFYn8myjJYZwYaRNaoUwQhiysimqjjEr3P4R1HqVmMthNAWkfYAtl7l8P1khESDlokIHQBV0FLFWgiBgkDR97SRTbu2IsBERLIQQofPxOSxMeAt0BSRTETaQKJge1E0WDeyumvLA1YDEhFpi0gGNBXD2N9RBVL9WOeBLoH3wHwXY5KTpIeBY/7RMTDcLVkD4n8amFefl9p/XeVp7JAAdWDHOLkHPgIrOgTRWBq/DcA6cGX6XgF1p5PEYJjvFfVxb/ruqL2k604ErAEXdNIh8AYYdxEdUn4WyIx+Bsxq25CNGDCutg6djwtgreeeGg0BM8AnE8lIJ8A7oOkisWSARaBLLvJN7XviRgn1NZM3lTzQ1DjeMsZuDH8NfAAWVXfVOIxOV7VtUXWvc2xtmSmTFs5HZu4sm7++cxEF2AN2u0RwV9twEbszo7FsRi/pN2mKiWbDOWvpU5S8/h7QMItu8C3RTfBN4NbNn5ZbIHahtJzuDbDRzfaji1IzTxaAI3XYLhC9qHMELPgpVHb1HId8BNhW51kPcJnqbAMjfS2EJ6hmipRkT3fuqOwQu0WyYXLYIIvkFtgsZZFUOs1UOlFXdqv7n4qFapVblS9Ye5T8c89Y8s/1LPn9ocn9Za3g5dGBAXhQ5PIoHprcPO08NBXpWCSRA/sG4H4/ibhXIPIO7tkA++ypkZ32swfH83fhg/uA9C2HL/6nD0DbT1XNfM3hX/zyKF5vnBnZWT9XH88F8NzIzssCmJY4xN9DCHeGL/f6rYQI/ggh/DZ8tSIoIr+AL5Evy+4foNXCqRDHDIEAAAAASUVORK5CYII=" alt="" width="19" height="19"><span class="co-dot"></span></button>
-  <button class="co-chic" data-co="pri" title="Company priorities" aria-controls="coDrawer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg><span class="co-dot"></span></button>
-  <button class="co-chic" data-co="chat" title="Team chat" aria-controls="coDrawer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="co-dot"></span></button>
-  <button class="co-chic" data-co="wins" title="Wins" aria-controls="coDrawer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10v5.5a5 5 0 0 1-10 0V3z"/><path d="M7 4.5H3.8c0 3 1.6 5 3.7 5.5M17 4.5h3.2c0 3-1.6 5-3.7 5.5M12 13.5V18M8.5 21h7M12 18v3"/></svg><span class="co-dot"></span></button>
-  <div style="flex:1"></div>
-  <button class="co-chic" disabled aria-disabled="true" title="Notifications — coming soon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+<button id="coStar" title="Company" aria-haspopup="menu" aria-expanded="false"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAC2ElEQVR42tWYv0scURDH3+ytglgoKNwZU1xjYa+ItY2NYO0/ECwC+i8E/wHBKpDW0krS5g+Q2FgHFGIUSTAKIf64vU8K5yVzw+2xd666GVh2dt68me/Oe2/evBfCIwkQw38GPndrezGKIIBR4Kc+o2UBTErAGEFMhBBG9JlwbS8KMNJkCGFYn8myjJYZwYaRNaoUwQhiysimqjjEr3P4R1HqVmMthNAWkfYAtl7l8P1khESDlokIHQBV0FLFWgiBgkDR97SRTbu2IsBERLIQQofPxOSxMeAt0BSRTETaQKJge1E0WDeyumvLA1YDEhFpi0gGNBXD2N9RBVL9WOeBLoH3wHwXY5KTpIeBY/7RMTDcLVkD4n8amFefl9p/XeVp7JAAdWDHOLkHPgIrOgTRWBq/DcA6cGX6XgF1p5PEYJjvFfVxb/ruqL2k604ErAEXdNIh8AYYdxEdUn4WyIx+Bsxq25CNGDCutg6djwtgreeeGg0BM8AnE8lIJ8A7oOkisWSARaBLLvJN7XviRgn1NZM3lTzQ1DjeMsZuDH8NfAAWVXfVOIxOV7VtUXWvc2xtmSmTFs5HZu4sm7++cxEF2AN2u0RwV9twEbszo7FsRi/pN2mKiWbDOWvpU5S8/h7QMItu8C3RTfBN4NbNn5ZbIHahtJzuDbDRzfaji1IzTxaAI3XYLhC9qHMELPgpVHb1HId8BNhW51kPcJnqbAMjfS2EJ6hmipRkT3fuqOwQu0WyYXLYIIvkFtgsZZFUOs1UOlFXdqv7n4qFapVblS9Ye5T8c89Y8s/1LPn9ocn9Za3g5dGBAXhQ5PIoHprcPO08NBXpWCSRA/sG4H4/ibhXIPIO7tkA++ypkZ32swfH83fhg/uA9C2HL/6nD0DbT1XNfM3hX/zyKF5vnBnZWT9XH88F8NzIzssCmJY4xN9DCHeGL/f6rYQI/ggh/DZ8tSIoIr+AL5Evy+4foNXCqRDHDIEAAAAASUVORK5CYII=" alt="" width="20" height="20"><span class="co-dot" id="coStarDot"></span></button>
+<div id="coMenu" hidden role="menu" aria-label="Company menu">
+  <div class="cm-lb">Company</div>
+  <button class="cm-it" data-co="vision" role="menuitem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2l2.4 6.2L21 9l-5 4.4 1.6 6.6L12 16.4 6.4 20l1.6-6.6L3 9l6.6-.8z"/></svg>Vision<span class="co-dot"></span></button>
+  <button class="cm-it" data-co="pri" role="menuitem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>Company priorities<span class="co-dot"></span></button>
+  <button class="cm-it" data-co="chat" role="menuitem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Team chat<span class="co-dot"></span></button>
+  <button class="cm-it" data-co="wins" role="menuitem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10v5.5a5 5 0 0 1-10 0V3z"/><path d="M7 4.5H3.8c0 3 1.6 5 3.7 5.5M17 4.5h3.2c0 3-1.6 5-3.7 5.5M12 13.5V18M8.5 21h7M12 18v3"/></svg>Wins<span class="co-dot"></span></button>
+  <div class="cm-sep"></div>
+  <button class="cm-it" id="bugBtn" role="menuitem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg>Report a bug</button>
+</div>
+<div id="bugScrim"></div>
+<div id="bugOvl" role="dialog" aria-modal="true" aria-labelledby="bugTitle">
+  <div class="bug-head"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg><b id="bugTitle" style="font-size:13.5px">Report a bug</b>
+    <button id="bugClose" aria-label="Close"
+      style="margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px">✕</button></div>
+  <div class="bug-body">
+    <textarea id="bugTxt" placeholder="What went wrong? What did you expect to happen?"></textarea>
+    <label class="bug-meta"><input type="checkbox" id="bugSnap" checked>
+      Attach a snapshot of this view (page, filters, serials)</label>
+  </div>
+  <div class="bug-foot"><button class="btn" id="bugCancel">Cancel</button>
+    <button class="bug-send" id="bugSend">Send report</button></div>
 </div>
 <aside id="coDrawer" aria-label="Company" aria-hidden="true">
   <div class="co-head"><b style="font-size:13.5px" id="coTitle">Company</b>
@@ -3231,6 +3277,8 @@ document.addEventListener("keydown", e => {
     const sb = document.getElementById("scbOvl");
     if (sb && sb.classList.contains("show")){ if (typeof window.closeScopeBuilder === "function") window.closeScopeBuilder(); return; }
     if (typeof window.coEditActive === "function" && window.coEditActive()){ window.coEditCancel(); return; }
+    if (typeof window.bugOvlOpen === "function" && window.bugOvlOpen()){ window.bugOvlClose(); return; }
+    if (typeof window.coMenuOpen === "function" && window.coMenuOpen()){ window.coMenuClose(); return; }
     const co = document.getElementById("coDrawer");
     if (co && co.classList.contains("open")){ if (typeof window.closeCoDrawer === "function") window.closeCoDrawer(); return; }
     closeDrawer();
@@ -5513,32 +5561,69 @@ document.querySelectorAll("section.feed[data-view] .controls").forEach(ct =>
   });
 })();
 
-/* ---------- Company rail drawer — independent sections, per-section unread dots ---------- */
+/* ---------- Company menu — star hotspot + dropdown (the rail, collapsed; per Scout Aug 14).
+     Sections keep independent unread dots; the star's dot aggregates them. ---------- */
 (() => {
   const drawer = document.getElementById("coDrawer");
-  const chics = [...document.querySelectorAll("#coStrip .co-chic[data-co]")];
+  const star = document.getElementById("coStar"), menu = document.getElementById("coMenu");
+  const items = [...document.querySelectorAll("#coMenu .cm-it[data-co]")];
   const TITLES = { vision: "Vision", pri: "Company priorities", chat: "Team chat", wins: "Wins" };
   let coActive = null;
+  const starDot = document.getElementById("coStarDot");
+  const updateStarDot = () => { starDot.hidden = !menu.querySelector(".cm-it .co-dot"); };
+  const setMenu = open => { menu.hidden = !open; star.setAttribute("aria-expanded", open); };
+  window.coMenuOpen = () => !menu.hidden;
+  window.coMenuClose = () => setMenu(false);
+  star.addEventListener("click", () => setMenu(menu.hidden));
+  document.addEventListener("click", e => {
+    if (!menu.hidden && !e.target.closest("#coMenu, #coStar")) setMenu(false);
+  });
   function openCo(sec){
     coActive = sec;
     drawer.classList.add("open"); drawer.setAttribute("aria-hidden", "false");
     document.getElementById("coTitle").textContent = TITLES[sec];
     document.querySelectorAll("#coDrawer .co-sec").forEach(s => s.hidden = s.dataset.sec !== sec);
-    chics.forEach(c => c.classList.toggle("on", c.dataset.co === sec));
-    const chic = chics.find(c => c.dataset.co === sec);
-    const dot = chic && chic.querySelector(".co-dot");
+    items.forEach(c => c.classList.toggle("on", c.dataset.co === sec));
+    const it = items.find(c => c.dataset.co === sec);
+    const dot = it && it.querySelector(".co-dot");
     if (dot) dot.remove();                       // this section is read — clear ITS dot only
+    updateStarDot();
     drawer.querySelector(".co-body").scrollTop = 0;
   }
   function closeCo(){
     coActive = null;
     drawer.classList.remove("open"); drawer.setAttribute("aria-hidden", "true");
-    chics.forEach(c => c.classList.remove("on"));
+    items.forEach(c => c.classList.remove("on"));
   }
   window.closeCoDrawer = closeCo;
-  chics.forEach(c => c.addEventListener("click", () =>
-    coActive === c.dataset.co ? closeCo() : openCo(c.dataset.co)));
+  items.forEach(c => c.addEventListener("click", () => {
+    setMenu(false);
+    coActive === c.dataset.co ? closeCo() : openCo(c.dataset.co);
+  }));
   document.getElementById("coClose").addEventListener("click", closeCo);
+  updateStarDot();
+
+  /* --- Bug reporter (prod: posts description + console/state snapshot to the issue tracker) --- */
+  const bScrim = document.getElementById("bugScrim"), bOvl = document.getElementById("bugOvl"),
+        bTxt = document.getElementById("bugTxt");
+  const bugOpen = () => {
+    setMenu(false);
+    bTxt.value = ""; document.getElementById("bugSnap").checked = true;
+    bScrim.classList.add("show"); bOvl.classList.add("show");
+    setTimeout(() => bTxt.focus(), 30);
+  };
+  const bugClose = () => { bScrim.classList.remove("show"); bOvl.classList.remove("show"); };
+  window.bugOvlOpen = () => bOvl.classList.contains("show");
+  window.bugOvlClose = bugClose;
+  document.getElementById("bugBtn").addEventListener("click", bugOpen);
+  document.getElementById("bugClose").addEventListener("click", bugClose);
+  document.getElementById("bugCancel").addEventListener("click", bugClose);
+  bScrim.addEventListener("click", bugClose);
+  document.getElementById("bugSend").addEventListener("click", () => {
+    if (!bTxt.value.trim()){ bTxt.focus(); return; }
+    bugClose();
+    toast("Bug report sent — thank you. The platform team will take a look.");
+  });
 })();
 
 /* ---------- RACI pop-up editor — tag-style people picker (who + when tracked) ---------- */
@@ -5731,7 +5816,7 @@ document.querySelectorAll("section.feed[data-view] .controls").forEach(ct =>
   addBtn.addEventListener("click", () => setForm(form.hidden));
   document.getElementById("tcCancel").addEventListener("click", () => { urlIn.value = ""; setForm(false); });
   // fresh form every time the section is (re)opened
-  document.querySelector('.co-chic[data-co="chat"]').addEventListener("click", () => { urlIn.value = ""; setForm(false); });
+  document.querySelector('.cm-it[data-co="chat"]').addEventListener("click", () => { urlIn.value = ""; setForm(false); });
   function tcAdd(){
     let raw = urlIn.value.trim();
     if (!raw){ toast("Paste a chat URL first"); return; }
