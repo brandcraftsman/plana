@@ -5574,7 +5574,10 @@ document.querySelectorAll("section.feed[data-view] .controls").forEach(ct =>
   const setMenu = open => { menu.hidden = !open; star.setAttribute("aria-expanded", open); };
   window.coMenuOpen = () => !menu.hidden;
   window.coMenuClose = () => setMenu(false);
-  star.addEventListener("click", () => setMenu(menu.hidden));
+  star.addEventListener("click", () => {
+    if (drawer.classList.contains("open")){ closeCo(); return; }   // star toggles: drawer open -> close it
+    setMenu(menu.hidden);
+  });
   document.addEventListener("click", e => {
     if (!menu.hidden && !e.target.closest("#coMenu, #coStar")) setMenu(false);
   });
