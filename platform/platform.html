@@ -6,10 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HiFi Interactive Prototype</title>
 <!-- PWA: installable app shell (manifest + icons); service worker registered at end of body -->
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="../manifest.webmanifest">
 <meta name="theme-color" content="#0f0f10">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../icon-192.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -6644,7 +6644,7 @@ document.querySelector('.tab[data-pview="chat"]').click();
 
 /* ---------- PWA: register the service worker only over http(s) — file:// keeps working unchanged ---------- */
 if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0){
-  addEventListener("load", () => { navigator.serviceWorker.register("./sw.js").catch(() => {}); });
+  addEventListener("load", () => { navigator.serviceWorker.register("../sw.js").catch(() => {}); });
 }
 </script>
 </body>
