@@ -3,7 +3,7 @@
   "short_name": "PLANA Brain",
   "description": "Traceable company knowledge — issues, risks, tasks, decisions and follow-ups, grounded in your engagements and cited by serial.",
   "id": "./",
-  "start_url": "./",
+  "start_url": "./platform/platform.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
