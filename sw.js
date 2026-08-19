@@ -1,10 +1,9 @@
 /* PLANA Brain service worker — network-first with offline cache fallback.
    Network-first keeps testers on the newest committed build; the cache only
    answers when the network can't. Bump CACHE on breaking asset renames. */
-const CACHE = "plana-brain-v1";
+const CACHE = "plana-brain-v2";
 const ASSETS = [
-  "./",
-  "./index.html",
+  "./platform/platform.html",
   "./manifest.webmanifest",
   "./icon-192.png",
   "./icon-512.png",
@@ -42,7 +41,7 @@ self.addEventListener("fetch", e => {
       .catch(() =>
         caches.match(e.request, { ignoreSearch: true }).then(hit => {
           if (hit) return hit;
-          if (e.request.mode === "navigate") return caches.match("./index.html");
+          if (e.request.mode === "navigate") return caches.match("./platform/platform.html");
           return new Response("", { status: 504, statusText: "offline" });
         })
       )
